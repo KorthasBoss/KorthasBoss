@@ -22,7 +22,7 @@ Change dialogue, HP, damage ranges and abilities in CONFIG.
 ==========================================================
 */
 
-const BACKGROUND_IMAGE = "assets/background.gif"; // <<< CHANGE YOUR BACKGROUND HERE
+const BACKGROUND_IMAGE = "assets/Background.gif"; // <<< CHANGE YOUR BACKGROUND HERE
 
 const CONFIG = {
   bossName: "KORTHAS",
