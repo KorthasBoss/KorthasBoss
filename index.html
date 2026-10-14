@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#070911">
+  <title>KORTHAS // The Tome Encounter</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+  <div id="scanlines" aria-hidden="true"></div>
+
+  <main id="game" class="game-shell">
+    <header class="site-header">
+      <a class="brand" href="#" aria-label="Korthas encounter home">
+        <span class="brand-mark">K</span>
+        <span><strong>KORTHAS</strong><small>THE TOME ENCOUNTER</small></span>
+      </a>
+      <div class="header-status"><span class="status-dot"></span><span id="phase-label">ENCOUNTER WAITING</span></div>
+    </header>
+
+    <section id="intro-screen" class="intro-layout">
+      <div class="intro-art-panel">
+        <div class="art-corner corner-tl"></div><div class="art-corner corner-br"></div>
+        <div class="art-orbit orbit-one"></div><div class="art-orbit orbit-two"></div>
+        <div class="art-caption"><span>THE SLEEPING KING</span><span>NO. 001</span></div>
+        <img id="intro-boss" class="character-art idle-art" src="assets/korthas-idle.png" alt="Korthas idle stance">
+        <div class="art-floor"></div>
+      </div>
+
+      <div class="dialogue-card">
+        <div class="section-kicker"><span class="tiny-diamond"></span> AN UNWELCOME VISITOR</div>
+        <div class="speaker-row"><div class="speaker-icon">K</div><div><h1>Korthas</h1><p>Keeper of the Tome</p></div><span class="speaker-state">IDLE</span></div>
+        <div class="dialogue-window">
+          <div class="dialogue-topline"><span>INCOMING DIALOGUE</span><span id="dialogue-count">01 / 06</span></div>
+          <p id="intro-line" class="dialogue-text">Hm...</p>
+          <div class="dialogue-caret">▼</div>
+        </div>
+        <div id="choice-row" class="choice-row hidden">
+          <button class="choice-button choice-yes" data-choice="yes"><span>YES</span><span class="button-arrow">↗</span></button>
+          <button class="choice-button choice-no" data-choice="no"><span>NO</span><span class="button-arrow">↗</span></button>
+        </div>
+        <p class="micro-hint">CHOOSE CAREFULLY. SOME ANSWERS CANNOT BE TAKEN BACK.</p>
+      </div>
+    </section>
+
+    <section id="battle-screen" class="battle-screen hidden">
+      <div class="battle-heading"><div><div class="section-kicker"><span class="tiny-diamond"></span> HOSTILE ENTITY DETECTED</div><h2>THE KING HAS AWAKENED</h2></div><div class="battle-tag">BOSS FIGHT <span>///</span> LIVE</div></div>
+      <div class="boss-panel">
+        <div class="boss-panel-grid"></div>
+        <div class="boss-art-wrap">
+          <div id="boss-aura" class="boss-aura"></div>
+          <img id="battle-boss" class="character-art battle-art" src="assets/korthas-fight.png" alt="Korthas battle stance">
+          <div class="boss-sigil">✦</div>
+        </div>
+        <div class="boss-info">
+          <div class="boss-name-line"><div><span class="info-kicker">THE OATHBOUND</span><h2 id="boss-name">KORTHAS</h2></div><span class="boss-level">LV ??</span></div>
+          <div class="hp-title"><span>VITALITY</span><span id="boss-hp-text">700,000 / 700,000</span></div>
+          <div class="hp-track boss-track"><div id="boss-hp-fill" class="hp-fill boss-fill"></div><div class="hp-shine"></div></div>
+          <div class="hp-meta"><span>ANCIENT SOUL SIGNATURE</span><span id="boss-hp-percent">100%</span></div>
+          <div class="boss-status"><span class="status-dot"></span><span id="boss-status-text">DORMANT POWER AWAKENED</span></div>
+        </div>
+      </div>
+
+      <div class="combat-grid">
+        <section class="combat-main">
+          <div class="panel-heading"><span class="tiny-diamond"></span><span>COMBAT LOG</span><span class="panel-line"></span><span class="live-pill">LIVE</span></div>
+          <div class="battle-log" aria-live="polite"><span class="log-marker">›</span><p id="battle-message">Korthas watches you in silence.</p></div>
+          <div class="panel-heading attack-heading"><span class="tiny-diamond red-diamond"></span><span>CHOOSE YOUR ATTACK</span><span class="panel-line"></span><span id="attack-count" class="attack-count">08 AVAILABLE</span></div>
+          <div id="attack-grid" class="attack-grid"></div>
+        </section>
+        <aside class="player-panel">
+          <div class="player-emblem">✧</div>
+          <div class="section-kicker">PLAYER STATUS</div>
+          <h3>YOUR SOUL</h3>
+          <div class="player-hp-numbers"><strong id="player-hp-text">180,000</strong><span>/ 180,000 HP</span></div>
+          <div class="hp-track player-track"><div id="player-hp-fill" class="hp-fill player-fill"></div></div>
+          <div class="player-status-row"><span class="player-status-dot"></span><span id="player-status-text">STILL STANDING</span></div>
+          <div class="player-divider"></div>
+          <div class="player-stat"><span>ATTACKS REMAINING</span><strong id="player-attacks-remain">08</strong></div>
+          <div class="player-stat"><span>ENCOUNTER</span><strong id="encounter-count">01</strong></div>
+          <div class="player-warning">Korthas is unpredictable. Watch the combat log.</div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="gameover-screen" class="full-overlay hidden">
+      <div class="overlay-emblem">✕</div><p class="section-kicker">SIGNAL LOST // SOUL DEPLETED</p>
+      <h1 class="game-over-title">GAME OVER</h1><p id="gameover-copy" class="overlay-copy">Korthas has won. Will you face him again?</p>
+      <div class="choice-row overlay-choices"><button id="retry-yes" class="choice-button choice-yes"><span>YES, AGAIN</span><span class="button-arrow">↗</span></button><button id="retry-no" class="choice-button choice-no"><span>NO, I'M DONE</span><span class="button-arrow">↗</span></button></div>
+    </section>
+
+    <section id="static-screen" class="full-overlay static-screen hidden">
+      <div class="static-noise"></div><p class="section-kicker">UNAUTHORIZED PRESENCE</p><h1>GET OUT.</h1><p class="static-subtitle">CONNECTION TERMINATED</p>
+    </section>
+
+    <footer class="site-footer"><span>© KORTHAS // THE TOME ENCOUNTER</span><span>AN UNFORGIVING LITTLE WORLD <i>✦</i></span></footer>
+  </main>
+  <audio id="boss-music" src="assets/korthas-theme.mp3" loop preload="auto"></audio>
+  <script src="script.js"></script>
+</body>
+</html>
