@@ -27,7 +27,7 @@ const BACKGROUND_IMAGE = "assets/background.gif"; // <<< CHANGE YOUR BACKGROUND 
 const CONFIG = {
   bossName: "KORTHAS",
   bossMaxHP: 700000,
-  playerMaxHP: 18000000000000,
+  playerMaxHP: 180000,
   phaseTwoAtHP: 610000,
   empressMaxHP: 1000000,
   empressParryChance: 0.72,
@@ -87,7 +87,7 @@ const CONFIG = {
     { name: "TOME SHARD", min: 8000, max: 24000, messages: ["A shard of the Tome cuts through the air.", "The shard detonates on impact.", "Ancient lettering burns across his armor."] },
     { name: "STARFALL", min: 10000, max: 22000, messages: ["A star falls directly onto Korthas.", "The arena flashes as the star connects.", "The impact sends a ripple through the floor."] },
     { name: "DREAD WAVE", min: 5000, max: 30000, messages: ["A wave of dread crashes into the boss.", "The attack surges with unstable power.", "Korthas absorbs the hit with a growl."] },
-    { name: "LAST WORD", min: 1200000, max: 1200000, messages: ["Your final word strikes like a curse.", "The attack lands with brutal precision.", "The air cracks around Korthas."] }
+    { name: "LAST WORD", min: 20000000, max: 20000000, messages: ["Your final word strikes like a curse.", "The attack lands with brutal precision.", "The air cracks around Korthas."] }
   ],
   bossAttacks: [
     { name: "TRIDENT ARC", min: 12000, max: 23000, messages: ["Korthas sweeps his trident across the arena!", "A blue arc slams into you!", "His trident cuts through the air with a roar!"] },
@@ -184,10 +184,23 @@ function screenShake() {
   $("game").classList.add("shake-screen");
 }
 function applyBackground() {
-  document.body.style.backgroundImage = `linear-gradient(rgba(3,5,12,.70), rgba(3,4,9,.86)), url("${BACKGROUND_IMAGE}")`;
+  // Keep the original dark arena background visible even when the optional
+  // background.gif is not bundled yet. If the image exists, it is layered
+  // over the fallback without changing the rest of the site.
+  const fallback = "radial-gradient(ellipse at 50% 0%, #17243d 0%, #090d17 45%, #05060b 100%)";
+  document.body.style.backgroundImage = fallback;
   document.body.style.backgroundSize = "cover";
   document.body.style.backgroundPosition = "center";
   document.body.style.backgroundAttachment = "fixed";
+
+  const image = new Image();
+  image.onload = () => {
+    document.body.style.backgroundImage = `linear-gradient(rgba(3,5,12,.70), rgba(3,4,9,.86)), url("${BACKGROUND_IMAGE}")`;
+  };
+  image.onerror = () => {
+    // Leave the original arena gradient in place if the optional file is absent.
+  };
+  image.src = BACKGROUND_IMAGE;
 }
 function showIntro() {
   introRun++;
@@ -270,6 +283,10 @@ async function startBattle() {
 }
 function buildAttackButtons() {
   const grid = $("attack-grid");
+  // The Finish Him state is only for Korthas's defeat screen. Always clear it
+  // before rebuilding the normal four-column attack layout for the next phase.
+  grid.classList.remove("finishing-state");
+  grid.classList.remove("empress-state");
   grid.innerHTML = "";
   CONFIG.playerAttacks.forEach((attack, id) => {
     const button = document.createElement("button");
@@ -299,20 +316,24 @@ async function usePlayerAttack(id) {
   }
 
   const damage = Math.min(bossHP, randomInt(attack.min, attack.max));
-  bossHP -= damage;
+  bossHP = Math.max(0, bossHP - damage);
   updateHP();
   setMessage(`${pick(attack.messages)} ${CONFIG.bossName} has taken ${formatHP(damage)} damage.`);
   const button = document.querySelector(`[data-attack-id="${id}"]`);
   if (button) button.animate([{transform:"scale(1)"},{transform:"scale(1.05)"},{transform:"scale(1)"}], {duration:280});
-  await wait(850);
-  if (!phaseTwo && bossHP <= CONFIG.phaseTwoAtHP) {
-    await triggerPhaseTwo();
-    if (playerHP <= 0 || bossHP <= 0) { busy = false; return; }
-  }
+
+  // HP 0 is an absolute state check. Korthas cannot take another turn or
+  // enter an intermediate phase once his HP has actually reached zero.
   if (bossHP <= 0) {
     await triggerKorthasDefeat();
     busy = false;
     return;
+  }
+
+  await wait(850);
+  if (!phaseTwo && bossHP <= CONFIG.phaseTwoAtHP) {
+    await triggerPhaseTwo();
+    if (playerHP <= 0 || bossHP <= 0) { busy = false; return; }
   }
   await bossTurn();
   busy = false;
@@ -374,12 +395,43 @@ async function finishKorthas() {
 }
 
 async function playParryEffect() {
-  const audio = $("parry-sound");
-  if (audio) {
-    audio.currentTime = 0;
+  // Use a fresh audio node for every successful parry so a new parry can
+  // always restart the sound instead of being swallowed by the previous one.
+  const source = $("parry-sound");
+  if (source) {
+    const audio = source.cloneNode(true);
     audio.volume = 0.9;
-    try { await audio.play(); } catch (e) { console.warn("[Korthas] Empress parry sound could not play.", e); }
+    audio.currentTime = 0;
+    audio.preload = "auto";
+    audio.addEventListener("ended", () => audio.remove(), { once: true });
+    document.body.appendChild(audio);
+    try {
+      await audio.play();
+    } catch (e) {
+      audio.remove();
+      // Fallback metallic parry tone if the custom sound file is missing or
+      // cannot be decoded. This keeps every parry audible.
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (AudioCtx) {
+          const ctx = new AudioCtx();
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = "square";
+          osc.frequency.setValueAtTime(780, ctx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(170, ctx.currentTime + 0.12);
+          gain.gain.setValueAtTime(0.0001, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.22, ctx.currentTime + 0.008);
+          gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.14);
+          osc.connect(gain).connect(ctx.destination);
+          osc.start();
+          osc.stop(ctx.currentTime + 0.15);
+          setTimeout(() => ctx.close(), 250);
+        }
+      } catch (_) {}
+    }
   }
+
   const shield = document.createElement("div");
   shield.className = "parry-burst";
   const target = $("battle-boss");
@@ -409,6 +461,7 @@ async function summonEmpress() {
   screenShake();
   updateHP();
   buildAttackButtons();
+  $("attack-grid").classList.add("empress-state");
   setMessage(CONFIG.empressLines[0]);
   await wait(1200);
   for (let i = 1; i < CONFIG.empressLines.length; i++) {

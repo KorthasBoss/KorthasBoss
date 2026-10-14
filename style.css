@@ -7,6 +7,7 @@
 }
 *{box-sizing:border-box}
 html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text)}
+body{background-color:#05060b;background-image:radial-gradient(ellipse at 50% 0%,#17243d 0%,#090d17 45%,#05060b 100%);background-size:cover;background-position:center;background-attachment:fixed}
 body{font-family:var(--display);overflow-x:hidden;background:radial-gradient(ellipse at 50% 0%,#17243d 0%,#090d17 45%,#05060b 100%)}
 button{font:inherit;cursor:pointer}
 .hidden{display:none!important}
@@ -159,6 +160,9 @@ button{font:inherit;cursor:pointer}
 .defeat-text{color:#dcecff!important;text-shadow:0 0 12px #8fc8ff;animation:defeatFlicker .18s infinite alternate}
 @keyframes defeatFlicker{from{opacity:.72;transform:translateX(-1px)}to{opacity:1;transform:translateX(1px)}}
 .finishing-state{grid-template-columns:1fr!important;position:relative;min-height:90px}
+.empress-state{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:9px!important;min-height:0!important;position:relative}
+.empress-state .attack-button{min-height:68px}
+@media(max-width:850px){.empress-state{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 .finish-him-button{position:relative;min-height:82px;border:1px solid #e8efff;background:linear-gradient(145deg,#111724,#05070d);color:#f4f7ff;overflow:hidden;cursor:pointer;box-shadow:0 0 0 transparent, inset 0 0 30px #8abfff08;transition:.2s}
 .finish-him-button::before{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 15%,#fff 48%,transparent 70%);opacity:.08;transform:translateX(-120%);animation:finishSweep 1.7s linear infinite}
 .finish-him-button span{display:block;font:24px var(--mono);font-weight:700;letter-spacing:.16em;text-shadow:0 0 15px #fff;position:relative;z-index:1}

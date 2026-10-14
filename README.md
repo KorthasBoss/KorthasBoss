@@ -54,7 +54,3 @@ If an image does not show, check its exact spelling and file extension. Filename
 5. Wait for GitHub Pages to publish.
 
 Browsers usually block `window.close()` for tabs opened directly by a user. The `GET OUT` static sequence still plays; the site then attempts to close the tab.
-perry_sheild.web
-
- 
-    music: "assets/Boss_Start_Music.mp3"
