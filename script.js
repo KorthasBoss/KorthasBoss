@@ -27,7 +27,7 @@ const BACKGROUND_IMAGE = "assets/background.gif"; // <<< CHANGE YOUR BACKGROUND 
 const CONFIG = {
   bossName: "KORTHAS",
   bossMaxHP: 700000,
-  playerMaxHP: 180000,
+  playerMaxHP: 18000000000000,
   phaseTwoAtHP: 610000,
   empressMaxHP: 1000000,
   empressParryChance: 0.72,
