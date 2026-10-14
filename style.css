@@ -151,3 +151,44 @@ button{font:inherit;cursor:pointer}
 @keyframes spearThrow{0%{left:50%;top:40%;transform:translate(-50%,-50%) rotate(-18deg) scale(1.1);opacity:1}65%{opacity:1}100%{left:var(--target-x);top:var(--target-y);transform:translate(-50%,-50%) rotate(72deg) scale(.8);opacity:0}}
 @media(max-width:850px){.intro-layout{grid-template-columns:1fr;gap:28px;padding:26px 0 36px}.intro-art-panel{min-height:360px}.idle-art{height:315px}.dialogue-card{max-width:620px;width:100%;margin:auto}.combat-grid{grid-template-columns:1fr}.player-panel{display:grid;grid-template-columns:1fr 1fr;column-gap:20px}.player-emblem{right:20px}.player-panel .section-kicker,.player-panel h3,.player-hp-numbers,.player-track,.player-status-row,.player-divider,.player-stat,.player-warning{grid-column:span 2}.player-panel h3{margin-bottom:10px}.boss-panel{grid-template-columns:.7fr 1.3fr;padding:18px}.battle-art{height:205px}}
 @media(max-width:560px){.game-shell{padding:0 14px}.site-header{height:69px}.brand-mark{width:34px;height:34px}.brand strong{font-size:12px}.brand small{font-size:8px}.header-status{font-size:8px;letter-spacing:0}.intro-art-panel{min-height:300px}.idle-art{height:265px}.dialogue-window{padding:15px;min-height:190px}.dialogue-text{font-size:28px}.battle-screen{padding-top:22px}.battle-heading{align-items:start}.battle-tag{font-size:8px;padding:7px}.boss-panel{grid-template-columns:1fr;gap:0;padding:12px 18px 20px}.boss-art-wrap{min-height:190px}.battle-art{height:185px}.boss-info{padding:0}.boss-name-line{margin-bottom:18px}.combat-main{padding:14px}.attack-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.attack-button{min-height:58px}.player-panel{padding:18px}.site-footer{font-size:7px;line-height:1.5}.site-footer span:last-child{text-align:right}}
+
+
+/* ==========================================================
+   EMPRESS PHASE // added without replacing the original UI
+   ========================================================== */
+.defeat-text{color:#dcecff!important;text-shadow:0 0 12px #8fc8ff;animation:defeatFlicker .18s infinite alternate}
+@keyframes defeatFlicker{from{opacity:.72;transform:translateX(-1px)}to{opacity:1;transform:translateX(1px)}}
+.finishing-state{grid-template-columns:1fr!important;position:relative;min-height:90px}
+.finish-him-button{position:relative;min-height:82px;border:1px solid #e8efff;background:linear-gradient(145deg,#111724,#05070d);color:#f4f7ff;overflow:hidden;cursor:pointer;box-shadow:0 0 0 transparent, inset 0 0 30px #8abfff08;transition:.2s}
+.finish-him-button::before{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 15%,#fff 48%,transparent 70%);opacity:.08;transform:translateX(-120%);animation:finishSweep 1.7s linear infinite}
+.finish-him-button span{display:block;font:24px var(--mono);font-weight:700;letter-spacing:.16em;text-shadow:0 0 15px #fff;position:relative;z-index:1}
+.finish-him-button small{display:block;margin-top:6px;color:#7d8da5;font:8px var(--mono);letter-spacing:.22em;position:relative;z-index:1}
+.finish-him-button:hover{border-color:#fff;box-shadow:0 0 24px #a9d5ff2b,inset 0 0 35px #8abfff12}
+.finish-him-button.shaking-letters span{animation:finishLetters .1s infinite alternate}
+@keyframes finishLetters{from{transform:translate(-1px,1px) rotate(-1deg)}to{transform:translate(1px,-1px) rotate(1deg)}}
+@keyframes finishSweep{to{transform:translateX(120%)}}
+.parry-text{color:#eaf9ff!important;text-shadow:0 0 10px #6eeaff,0 0 25px #168bff!important;animation:parryText .07s infinite alternate}
+@keyframes parryText{from{transform:translateX(-2px) scale(1)}to{transform:translateX(2px) scale(1.03)}}
+.parry-burst{position:fixed;left:50%;top:42%;width:80px;height:80px;z-index:70;pointer-events:none;border:4px solid #dffcff;border-radius:50%;transform:translate(-50%,-50%) rotate(45deg);box-shadow:0 0 18px #55ddff,0 0 45px #168bff,inset 0 0 22px #fff;animation:parryBurst .85s ease-out forwards}
+.parry-burst::before,.parry-burst::after{content:"";position:absolute;left:50%;top:50%;width:145px;height:2px;background:#dffcff;box-shadow:0 0 12px #168bff;transform:translate(-50%,-50%) rotate(45deg)}
+.parry-burst::after{transform:translate(-50%,-50%) rotate(-45deg)}
+@keyframes parryBurst{0%{opacity:0;transform:translate(-50%,-50%) rotate(45deg) scale(.25)}18%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) rotate(135deg) scale(1.8)}}
+.empress-aura{background:radial-gradient(circle,#bfeeff55 0,#4bbcff2d 28%,#7d42ff17 55%,transparent 72%)!important;box-shadow:0 0 45px #52d7ff44,0 0 90px #7b4dff22!important;animation:empressAura 2s ease-in-out infinite alternate}
+@keyframes empressAura{from{transform:scale(.94);opacity:.65}to{transform:scale(1.1);opacity:1}}
+.empress-name{color:#e7faff!important;text-shadow:0 0 10px #63dfff,0 0 30px #5a77ff;animation:empressName .35s ease-in-out infinite alternate}
+@keyframes empressName{from{letter-spacing:.12em}to{letter-spacing:.18em}}
+.empress-rage{color:#fff!important;text-shadow:0 0 10px #bceeff,0 0 28px #3aaeff,0 0 55px #7a5cff!important;animation:empressRage .08s infinite alternate}
+@keyframes empressRage{from{transform:translateX(-3px) skewX(-2deg)}to{transform:translateX(3px) skewX(2deg)}}
+.empress-slash{position:fixed;z-index:69;left:50%;top:50%;width:min(62vw,720px);height:7px;pointer-events:none;background:linear-gradient(90deg,transparent,#e9fbff 18%,#fff 50%,#8eeaff 82%,transparent);box-shadow:0 0 12px #fff,0 0 28px #27baff,0 0 55px #5870ff;transform:translate(-50%,-50%) rotate(-18deg) scaleX(.05);animation:empressSlash .52s cubic-bezier(.2,.8,.2,1) forwards}
+.empress-slash::after{content:"";position:absolute;inset:-12px 0;background:linear-gradient(90deg,transparent,#72dfff44,transparent);filter:blur(8px)}
+@keyframes empressSlash{0%{opacity:0;transform:translate(-50%,-50%) rotate(-18deg) scaleX(.05)}25%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) rotate(-18deg) scaleX(1.15)}}
+.attack-button.skill-cooldown{opacity:.28!important;border-color:#62b7d0!important;box-shadow:inset 0 0 18px #3fbde81a!important;filter:grayscale(.35)}
+.attack-button.skill-cooldown::before{content:attr(data-cooldown);display:grid;place-items:center;position:absolute;inset:0;z-index:3;background:#050a12c9;color:#b9f0ff;font:11px var(--mono);letter-spacing:.12em}
+.attack-button.parried-skill{animation:skillKnockAway .55s ease-in-out}
+@keyframes skillKnockAway{0%{transform:translateX(0) rotate(0);opacity:1}35%{transform:translateX(12px) rotate(5deg);filter:brightness(2)}100%{transform:translateX(-20px) rotate(-8deg);opacity:.35}}
+@media(max-width:560px){.finish-him-button span{font-size:19px}.parry-burst{width:58px;height:58px}.empress-slash{width:90vw}}
+
+.defeat-fade{animation:defeatButtonFade .62s cubic-bezier(.2,.8,.2,1) forwards!important;pointer-events:none!important}
+@keyframes defeatButtonFade{0%{opacity:1;transform:scale(1);filter:none}35%{opacity:.75;transform:translateY(-3px) scale(.98);filter:blur(.5px)}100%{opacity:0;transform:translateY(10px) scale(.72);filter:blur(7px)}}
+.finish-him-button.knocked-away{animation:finishKnockedAway .58s cubic-bezier(.2,.8,.2,1) forwards!important}
+@keyframes finishKnockedAway{0%{opacity:1;transform:scale(1)}35%{opacity:1;transform:translate(18px,-8px) rotate(4deg) scale(1.04)}100%{opacity:0;transform:translate(-130px,45px) rotate(-10deg) scale(.2);filter:blur(6px)}}
