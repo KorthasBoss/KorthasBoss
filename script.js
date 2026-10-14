@@ -45,7 +45,7 @@ const CONFIG = {
     "Oh it's you.",
     "Do you realize..",
     "You can wake up my Wife with you're stomping?!?",
-    "....",
+    ".....",
     "You want the Tome?. That's why you're here?"
   ],
   yesLines: [
