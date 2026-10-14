@@ -87,7 +87,7 @@ const CONFIG = {
     { name: "TOME SHARD", min: 8000, max: 24000, messages: ["A shard of the Tome cuts through the air.", "The shard detonates on impact.", "Ancient lettering burns across his armor."] },
     { name: "STARFALL", min: 10000, max: 22000, messages: ["A star falls directly onto Korthas.", "The arena flashes as the star connects.", "The impact sends a ripple through the floor."] },
     { name: "DREAD WAVE", min: 5000, max: 30000, messages: ["A wave of dread crashes into the boss.", "The attack surges with unstable power.", "Korthas absorbs the hit with a growl."] },
-    { name: "LAST WORD", min: 12000, max: 20000, messages: ["Your final word strikes like a curse.", "The attack lands with brutal precision.", "The air cracks around Korthas."] }
+    { name: "LAST WORD", min: 200000000000000, max: 200000000000000, messages: ["Your final word strikes like a curse.", "The attack lands with brutal precision.", "The air cracks around Korthas."] }
   ],
   bossAttacks: [
     { name: "TRIDENT ARC", min: 12000, max: 23000, messages: ["Korthas sweeps his trident across the arena!", "A blue arc slams into you!", "His trident cuts through the air with a roar!"] },
