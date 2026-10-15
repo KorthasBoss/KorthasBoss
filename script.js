@@ -52,8 +52,8 @@ const CONFIG = {
     argus: {
       id: "argus", name: "ARGUS", stars: 79, title: "THE LAST GUNNER",
       maxHP: 2000000, playerMaxHP: 180000, reward: 5000000,
-      shield: 3000, cardImage: "assets/argus.png", idle: "assets/argus.png", fight: "assetsargus.png",
-      music: "assets/korthas-theme.mp3", battleBackground: "assets/argus-battle-background.jpg", parrySound: "assets/perry.mp3", reloadSound: "assets/argus-reload.mp3", gunImage: "assets/argus-gun.png",
+      shield: 3000, cardImage: "assets/argus.png", idle: "assets/argus.png", fight: "assets/argus.png",
+      music: "assets/korthas-theme.mp3", battleBackground: "assets/argus-battle-background.jpg", parrySound: "assets/argus-gun.mp3", reloadSound: "assets/argus-reload.mp3", gunImage: "assets/argus-gun.png",
       parryChance: .52,
       rapidBlastChance: .42, extraShotChance: .38, healChance: .20,
       playerAttacks: [
@@ -72,7 +72,7 @@ const CONFIG = {
     }
   },
   merchant: {
-    image: "assetsMerchant_Idle.png", background: "assets/Merchant_background.gif", music: "assets/merchant-theme.mp3",
+    image: "assets/Merchant_Idle.png", background: "assets/Merchant_background.gif", music: "assets/merchant-theme.mp3",
     lines: [
       "Oh you're back.","Welcome back, hunter.","You look like somebody who needs a better skill.","I don't ask where you got that DOX.","You survived. That's enough for me.","The vault is open. Try not to go broke.","I've seen your type before.","You fight loud. I sell louder.","Pick something nasty.","Some skills bite back.","Enchanted ones cost what they cost.","Don't stare at the price. Earn more.","You want power? Pay for it.","I keep the good stuff behind the expensive stuff.","A cheap skill can still save your life.","A rare skill can ruin somebody else's.","The vault has four thousand answers.","You only need one.","Unless you're greedy.","Greedy is fine here.","That one? Interesting choice.","I wouldn't use it against Argus first.","Korthas hates flashy skills.","Argus hates everything.","The enchanted stock is temperamental.","Buy before the price feels worse.","You came back with more DOX.","Now you're speaking my language.","A hunter without skills is just target practice.","A hunter with too many skills is expensive target practice.","I've got something mean today.","I've got something beautiful today.","I've got something that should probably be illegal.","Relax. It's only a game.","Probably.","You want the vault? Hit the button.","Don't make me repeat myself.","The good stuff is glowing for a reason.","That purple glow means trouble.","The gold ones hurt wallets.","The red ones hurt bosses.","The blue ones save mistakes.","Buy wisely.","Or don't. I still get paid.","You look ready.","You're almost dangerous.","Almost.","Come back after another boss.","I'll have more bad ideas waiting.","Now go make me proud.","Welcome back, hunter."
     ]
