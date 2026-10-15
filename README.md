@@ -77,3 +77,42 @@ The server creates `players.db` beside `server.js`. This SQLite file stores priv
 To use the game from another device on the same Wi-Fi, open it using the computer running the server's local network IP, for example `http://192.168.1.25:8080`. Replace that example IP with the server computer's actual LAN IP and allow Node through the computer's firewall for private networks. The server must stay running. This is local-network access, not public internet hosting.
 
 The game saves after purchases and boss rewards. If a server save fails, YEN! displays a warning instead of silently claiming the database was updated. Browser storage may hold a recovery copy, but it is not a replacement for the SQLite database.
+
+
+## Script-defined accounts (no account server)
+
+The sign-in form reads accounts from `accounts.js`. Open that file and add one
+object per account inside `window.YEN_ACCOUNTS`:
+
+```js
+{
+  username: "playername",
+  password: "choose-a-password",
+  dox: 500000,
+  ownedSkills: ["0"],
+  attacks: [
+    {
+      id: "my-attack",
+      name: "MY ATTACK",
+      power: 42000,
+      rarity: "CUSTOM",
+      color: "#ff355e",
+      description: "What this attack does."
+    }
+  ]
+}
+```
+
+- `username` and `password` are the sign-in credentials.
+- `dox` sets the account's starting DOX balance.
+- `ownedSkills` lists existing skill catalog IDs to show as attack buttons.
+- Each entry in `attacks` adds an account-specific attack button. `power` is its
+  base damage; `color`, `rarity`, and `description` are optional.
+- DOX rewards and purchases only affect the current session. Edit `accounts.js`
+  to set the amount/skills for the next sign-in.
+- This is intended for a private/trusted site: account credentials are delivered
+  to the browser and are visible to anyone who can inspect the site files. It is
+  not secure authentication for a public website.
+
+Argus's rapid-blast sequence now plays `assets/argus-gun.mp3` for each shot and
+`assets/argus-reload.mp3` when the sequence finishes.

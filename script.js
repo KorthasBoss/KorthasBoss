@@ -14,9 +14,8 @@ CUSTOM FILES TO DROP INTO /assets:
  background.gif (optional arena fallback)
 
 ACCOUNT MODE:
- - When served by server.js, accounts are saved server-side and can be
-   signed into from other devices.
- - If opened as a plain static file, a localStorage fallback is used.
+ - Accounts are defined in accounts.js and loaded directly by username/password.
+ - Progress is session-only; edit accounts.js to change starting DOX/skills.
 ==========================================================
 */
 
@@ -84,12 +83,11 @@ const wait = ms => new Promise(r => setTimeout(r, ms));
 const pick = a => a[Math.floor(Math.random()*a.length)];
 const randomInt = (a,b) => Math.floor(Math.random()*(b-a+1))+a;
 const fmt = n => Math.max(0,Math.floor(n)).toLocaleString("en-US");
-const tokenKey = "yen_session_token";
 const localAccountKey = "yen_local_account";
 
 let account = null;
-let sessionToken = localStorage.getItem(tokenKey) || "";
-let authMode = "register";
+let sessionToken = "script-accounts";
+let authMode = "login";
 let currentBoss = null;
 let bossHP = 0, bossShield = 0, playerHP = 0;
 let phaseTwo = false, empressPhase = false, empressHP = 0;
@@ -98,22 +96,9 @@ let encounterNumber = 0, busy = false, introRun = 0, battleFinished = false;
 let bossAttackEnabled = false, pendingBoss = null;
 let merchantIndex = 0, skillCatalog = null, selectedSkill = null;
 
-const fallbackLocal = () => {
-  try { return JSON.parse(localStorage.getItem(localAccountKey) || "null"); } catch { return null; }
-};
-const saveLocal = () => localStorage.setItem(localAccountKey, JSON.stringify(account));
+const saveLocal = () => {}; // Script-defined accounts are the source of truth; progress is not persisted.
 async function api(path, options={}) {
-  try {
-    const headers = {"Content-Type":"application/json", ...(options.headers||{})};
-    if (sessionToken) headers.Authorization = `Bearer ${sessionToken}`;
-    const res = await fetch(`${CONFIG.apiBase}${path}`, {...options, headers});
-    const data = await res.json().catch(()=>({}));
-    if (!res.ok) throw new Error(data.error || `Request failed (${res.status})`);
-    return data;
-  } catch (e) {
-    if (location.protocol === "file:") throw e;
-    throw e;
-  }
+  throw new Error("This build uses accounts.js and does not connect to a server.");
 }
 function showSaveWarning(message) {
   let toast = document.getElementById("yen-save-warning");
@@ -127,25 +112,9 @@ function showSaveWarning(message) {
   toast.style.display = "block";
 }
 async function saveAccount() {
-  if (!account) return false;
-  // Only use browser storage for the explicit file:// fallback. When signed in
-  // to the server, a failed request must be visible instead of pretending to save.
-  if (sessionToken === "local" || location.protocol === "file:") {
-    saveLocal();
-    return true;
-  }
-  try {
-    const data = await api("/save", {method:"POST", body:JSON.stringify({dox:account.dox, defeated:account.defeated, ownedSkills:account.ownedSkills})});
-    account = data.account;
-    const toast = document.getElementById("yen-save-warning");
-    if (toast) toast.remove();
-    saveLocal();
-    return true;
-  } catch (error) {
-    saveLocal();
-    showSaveWarning(`SAVE FAILED — your latest progress is only cached in this browser. Check that the YEN! mini server is running, then sign in again. (${error.message})`);
-    return false;
-  }
+  // DOX and purchased skills can change while playing, but are intentionally
+  // not written anywhere. Change accounts.js to set the next login's values.
+  return true;
 }
 async function transition(fn) {
   const el = document.createElement("div"); el.className="fade-transition"; document.body.appendChild(el);
@@ -178,31 +147,44 @@ $("settings-save").addEventListener("click",()=>{settings.effects=$("setting-eff
 loadSettings();
 
 async function registerOrLogin(){
-  const username=$("auth-username").value.trim(), password=$("auth-password").value;
+  const username=$("auth-username").value.trim();
+  const password=$("auth-password").value;
   $("auth-status").textContent="";
-  try{
-    const endpoint=authMode==="register"?"/register":"/login";
-    const data=await api(endpoint,{method:"POST",body:JSON.stringify({username,password})});
-    sessionToken=data.token;localStorage.setItem(tokenKey,sessionToken);account=data.account;saveLocal();
-    await transition(()=>showScreen("lobby-screen"));renderLobby();
-  }catch(e){
-    // Static fallback keeps the site playable, but server mode is what enables other-device login.
-    if(location.protocol==="file:" && authMode==="register"){
-      if(fallbackLocal() && fallbackLocal().username.toLowerCase()===username.toLowerCase()) { $("auth-status").textContent="That local username already exists."; return; }
-      account={username,dox:CONFIG.accountStartingDox,defeated:{},ownedSkills:[],createdAt:new Date().toISOString()};saveLocal();sessionToken="local";await transition(()=>showScreen("lobby-screen"));renderLobby();return;
-    }
-    if(location.protocol==="file:" && authMode==="login"){
-      const a=fallbackLocal();if(a&&a.username.toLowerCase()===username.toLowerCase()&&password){account=a;sessionToken="local";await transition(()=>showScreen("lobby-screen"));renderLobby();return;}
-    }
-    $("auth-status").textContent=e.message;
+  const accounts=Array.isArray(window.YEN_ACCOUNTS)?window.YEN_ACCOUNTS:[];
+  const found=accounts.find(a=>String(a.username||"").trim().toLowerCase()===username.toLowerCase()
+    && String(a.password??"")===password);
+  if(!found){
+    $("auth-status").textContent=accounts.length
+      ? "That username or password is incorrect."
+      : "No accounts are configured yet. Add an account in accounts.js first.";
+    return;
   }
+  account={
+    username:String(found.username),
+    dox:Math.max(0,Math.floor(Number(found.dox)||0)),
+    defeated:{},
+    ownedSkills:Array.isArray(found.ownedSkills)?[...found.ownedSkills].map(String):[],
+    attacks:Array.isArray(found.attacks)?found.attacks.map((a,i)=>({
+      id:String(a.id||`custom-${i}`),
+      name:String(a.name||`CUSTOM ATTACK ${i+1}`),
+      power:Math.max(1,Math.floor(Number(a.power)||10000)),
+      rarity:String(a.rarity||"CUSTOM"),
+      color:String(a.color||"#ff5573"),
+      description:String(a.description||"A custom account-only attack."),
+      enchanted:false
+    })):[],
+    createdAt:null
+  };
+  sessionToken="script-accounts";
+  await transition(()=>showScreen("lobby-screen"));
+  renderLobby();
 }
 $("auth-form").addEventListener("submit",e=>{e.preventDefault();registerOrLogin()});
-document.querySelectorAll("[data-auth-mode]").forEach(b=>b.addEventListener("click",()=>{authMode=b.dataset.authMode;document.querySelectorAll(".auth-tab").forEach(x=>x.classList.toggle("active",x===b));$("auth-submit").innerHTML=authMode==="register"?"CREATE ACCOUNT <span>↗</span>":"SIGN IN <span>↗</span>";$("auth-password").setAttribute("autocomplete",authMode==="register"?"new-password":"current-password")}));
+document.querySelectorAll("[data-auth-mode]").forEach(b=>b.addEventListener("click",()=>{}));
 
 document.querySelectorAll("[data-screen]").forEach(b=>b.addEventListener("click",async()=>{const id=b.dataset.screen;if(id==="lobby-screen"&&!account){showScreen("auth-screen");return;}await transition(()=>showScreen(id));if(id==="merchant-screen")openMerchant();if(id==="lobby-screen")renderLobby();}));
 $("brand-home").addEventListener("click",async e=>{e.preventDefault();if(account){await transition(()=>showScreen("lobby-screen"));renderLobby()}else showScreen("start-screen")});
-$("logout-button").addEventListener("click",async()=>{try{await api("/logout",{method:"POST"})}catch{}sessionToken="";localStorage.removeItem(tokenKey);account=null;await transition(()=>showScreen("start-screen"));});
+$("logout-button").addEventListener("click",async()=>{sessionToken="script-accounts";account=null;await transition(()=>showScreen("start-screen"));});
 
 function bossCard(b){
   const el=document.createElement("article");el.className="boss-card";el.style.setProperty("--card-bg",`url("${b.cardImage}")`);el.innerHTML=`<div class="boss-card-bg"></div><div class="boss-card-badge">BOSS // ${String(b.stars).padStart(2,"0")} ★</div><img class="boss-card-art" src="${b.idle}" alt="${b.name} idle"><div class="boss-card-info"><div class="stars">${"★".repeat(Math.min(8,Math.ceil(b.stars/10)))} ${b.stars} STARS</div><h2>${b.name}</h2><p>${b.title} // REWARD ${fmt(b.reward)} DOX</p></div>`;el.addEventListener("click",()=>askBoss(b));return el;
@@ -248,6 +230,16 @@ function buildAttackButtons(){
   const grid=$("attack-grid");grid.classList.remove("finishing-state","empress-state");grid.innerHTML="";
   currentBoss.playerAttacks.forEach((a,id)=>{const b=document.createElement("button");b.className="attack-button";b.dataset.attackId=id;b.textContent=a[0];b.onclick=()=>usePlayerAttack(id,false);if(brokenAttackIds.has(id))b.disabled=true;grid.appendChild(b);});
   const owned=account?.ownedSkills||[];if(owned.length){buildSkillCatalog();owned.forEach(skillId=>{const s=skillCatalog.find(x=>x.id===skillId);if(!s)return;const b=document.createElement("button");b.className=`attack-button owned-skill ${s.enchanted?"enchanted-skill":""}`;b.dataset.skillId=s.id;b.textContent=s.name;b.style.setProperty("--rarity",s.color);b.title=s.description;b.onclick=()=>usePlayerAttack(s.id,true,s);grid.appendChild(b);});}
+  (account?.attacks||[]).forEach((attack,i)=>{
+    const b=document.createElement("button");
+    b.className="attack-button owned-skill custom-account-attack";
+    b.dataset.customAttack=attack.id;
+    b.textContent=attack.name;
+    b.title=attack.description;
+    b.style.setProperty("--rarity",attack.color);
+    b.onclick=()=>usePlayerAttack(`custom-${i}`,true,attack);
+    grid.appendChild(b);
+  });
 }
 function getAvailableAttackIds(){return currentBoss.playerAttacks.map((_,i)=>i).filter(i=>!brokenAttackIds.has(i));}
 function updateCooldowns(){const now=Date.now();document.querySelectorAll("[data-attack-id]").forEach(b=>{const id=Number(b.dataset.attackId),until=empressSkillCooldowns.get(id);if(until&&until>now){b.disabled=true;b.classList.add("skill-cooldown");b.dataset.cooldown=`${Math.ceil((until-now)/1000)}s`;}else{if(!brokenAttackIds.has(id))b.disabled=false;b.classList.remove("skill-cooldown");delete b.dataset.cooldown;}})}
@@ -285,7 +277,7 @@ async function empressParry(id,name){setMessage("EMPRESS PARRIES YOUR ATTACK.");
 /* ARGUS */
 async function argusParryCheck(id,isSkill,skill){if(Math.random()>=currentBoss.parryChance)return false;const name=isSkill?skill.name:currentBoss.playerAttacks[id][0];setMessage(`ARGUS raises his weapon. ${name} is caught in the sightline.`);const line=document.createElement("div");line.className="gun-line";document.body.appendChild(line);await wait(150);line.remove();await playAudio(currentBoss.parrySound,.95,true,true);showFlash();shake();const b=document.querySelector(`[data-attack-id="${id}"]`);if(b){b.classList.add("parried-skill");b.disabled=true;b.classList.add("skill-cooldown");b.dataset.cooldown="20s";}if(typeof id==="number")empressSkillCooldowns.set(id,Date.now()+20000);playerHP=Math.max(0,playerHP-30000);updateHP();setMessage("ARGUS: Reloading.");await playAudio(currentBoss.reloadSound,.7);setMessage("He reloaded.");await wait(350);if(playerHP<=0)showGameOver();return true;}
 async function argusTurn(){if(Math.random()<currentBoss.healChance){const heal=randomInt(100000,260000);bossHP=Math.min(currentBoss.maxHP,bossHP+heal);updateHP();setMessage(`ARGUS repairs himself. +${fmt(heal)} HP.`);showFlash();await wait(700);return;}
-  if(Math.random()<currentBoss.rapidBlastChance){setMessage(currentBoss.rapid);$("battle-message").classList.add("argus-rage");shake();await wait(700);$("battle-message").classList.remove("argus-rage");let shots=3+(Math.random()<currentBoss.extraShotChance?1:0);for(let i=0;i<shots;i++){const x=document.createElement("div");x.className="rapid-flash";document.body.appendChild(x);setTimeout(()=>x.remove(),280);const d=Math.min(playerHP,19000);playerHP-=d;updateHP();setMessage(`RAPID BLAST // SHOT ${i+1} OF ${shots}. You take ${fmt(d)} damage.`);shake();await wait(420);if(playerHP<=0){showGameOver();return;}}await playAudio(currentBoss.reloadSound,.7);setMessage("Argus reloads.");return;}
+  if(Math.random()<currentBoss.rapidBlastChance){setMessage(currentBoss.rapid);$("battle-message").classList.add("argus-rage");shake();await wait(700);$("battle-message").classList.remove("argus-rage");let shots=3+(Math.random()<currentBoss.extraShotChance?1:0);for(let i=0;i<shots;i++){const x=document.createElement("div");x.className="rapid-flash";document.body.appendChild(x);setTimeout(()=>x.remove(),280);void playAudio("assets/argus-gun.mp3",.9,true,true);const d=Math.min(playerHP,19000);playerHP-=d;updateHP();setMessage(`RAPID BLAST // SHOT ${i+1} OF ${shots}. You take ${fmt(d)} damage.`);shake();await wait(420);if(playerHP<=0){showGameOver();return;}}await playAudio("assets/argus-reload.mp3",.7,true,true);setMessage("Argus reloads.");return;}
   const d=Math.min(playerHP,randomInt(15000,27000));playerHP-=d;updateHP();setMessage(`Argus fires once. You take ${fmt(d)} damage.`);shake();await wait(700);if(playerHP<=0)showGameOver();}
 
 async function completeBoss(isEmpress=false){if(battleFinished)return;battleFinished=true;bossAttackEnabled=false;$("boss-status-text").textContent="ENCOUNTER CLEARED";setPhaseLabel("ENCOUNTER CLEARED // REWARD ACQUIRED");const reward=isEmpress?currentBoss.reward+500000:currentBoss.reward;account.dox=(account.dox||0)+reward;account.defeated[currentBoss.id]=(account.defeated[currentBoss.id]||0)+1;await saveAccount();updateWallet();showReward(reward,currentBoss.name);setMessage(`${currentBoss.name} has fallen. You earned ${fmt(reward)} DOX.`);showFlash();await wait(1700);}
@@ -298,11 +290,6 @@ setInterval(updateCooldowns,250);
 /* ------------------------- BOOT ------------------------- */
 async function boot(){
   setBackground("assets/menu-background.jpg");
-  // Restore server session when possible.
-  if(sessionToken&&sessionToken!=="local"){
-    try{const data=await api("/me");account=data.account;renderLobby();showScreen("lobby-screen");return;}catch{sessionToken="";localStorage.removeItem(tokenKey);}
-  }
-  if(sessionToken==="local"&&fallbackLocal()){account=fallbackLocal();renderLobby();showScreen("lobby-screen");return;}
   showScreen("start-screen");
 }
 boot();

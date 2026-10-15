@@ -20,9 +20,8 @@
 
 <!-- AUTH -->
 <section id="auth-screen" class="portal-subscreen hidden">
-  <div class="subscreen-card"><p class="section-kicker">WAIT JUST A SEC.</p><h1>YOU WANT TO EARN COINS AND BETTER SKILLS, RIGHT?</h1><p class="lead-copy">Make an account. Every boss you defeat pays a massive amount of <b>DOX</b>. No profile setup. No extra nonsense. Just a username and password.</p>
-  <div class="auth-tabs"><button class="auth-tab active" data-auth-mode="register">CREATE ACCOUNT</button><button class="auth-tab" data-auth-mode="login">SIGN IN</button></div>
-  <form id="auth-form"><label>USERNAME<input id="auth-username" required minlength="3" maxlength="24" autocomplete="username"></label><label>PASSWORD<input id="auth-password" type="password" required minlength="6" maxlength="72" autocomplete="new-password"></label><button class="menu-button primary" type="submit" id="auth-submit">CREATE ACCOUNT <span>↗</span></button></form><p id="auth-status" class="form-status"></p>
+  <div class="subscreen-card"><p class="section-kicker">ECHO ACCOUNT ACCESS</p><h1>GET YOUR ACCOUNT FROM ECHO</h1><p class="lead-copy">Use the username and password assigned to you. Accounts are created in the site's <code>accounts.js</code> script; there is no public account-creation form.</p>
+  <form id="auth-form"><label>USERNAME<input id="auth-username" required minlength="3" maxlength="24" autocomplete="username"></label><label>PASSWORD<input id="auth-password" type="password" required maxlength="128" autocomplete="current-password"></label><button class="menu-button primary" type="submit" id="auth-submit">SIGN IN <span>↗</span></button></form><p id="auth-status" class="form-status"></p>
   <div class="sub-actions"><button class="text-button" data-screen="start-screen">← BACK</button></div></div>
 </section>
 
@@ -61,5 +60,5 @@
 <footer class="site-footer"><span>© YEN! // BOSS WORLD</span><span>EARN. FIGHT. BUY SOMETHING STUPID. <i>✦</i></span></footer>
 </main>
 <audio id="boss-music" src="assets/korthas-theme.mp3" loop preload="auto"></audio><audio id="parry-sound" src="assets/empress-parry.mp3" preload="auto"></audio>
-<script src="script.js"></script>
+<script src="accounts.js"></script><script src="script.js"></script>
 </body></html>
