@@ -21,7 +21,7 @@ ACCOUNT MODE:
 */
 
 const CONFIG = {
-  background: "assets/Background.gif",
+  background: "assets/79909.gif",
   apiBase: "/api",
   accountStartingDox: 500000,
   bosses: {
