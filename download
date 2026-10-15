@@ -1,4 +1,5 @@
 node_modules/
-.DS_Store
-npm-debug.log*
-data/accounts.json
+players.db
+players.db-shm
+players.db-wal
+.env

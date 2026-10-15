@@ -62,21 +62,18 @@ Drop these into `assets/` when you have them:
 
 `background.gif` remains an optional arena fallback.
 
-## Run locally
+## Run YEN! on your mini server (local SQLite saves)
 
-This version includes a tiny Express server because true cross-device accounts require a server. Install dependencies and run:
+**Requirements:** Node.js 22.5 or newer.
 
-```bash
-npm install
-npm start
-```
+1. Extract this folder to your computer.
+2. Open a terminal in the `KorthasBoss-main` folder.
+3. Run `npm install` once.
+4. Run `npm start`.
+5. Open `http://localhost:8080` in your browser.
 
-Then open `http://localhost:3000`.
+The server creates `players.db` beside `server.js`. This SQLite file stores private accounts, password hashes, DOX, defeated-boss counts, and purchased skills. Keep this file and back it up; deleting it deletes the saved accounts. The old `data/accounts.json` is imported automatically the first time the new database is created, and the JSON file is left untouched. If a `players.db` from the previous mini server exists, its old `users` rows are imported into the new account table without deleting the old table.
 
-The server stores account data in `data/accounts.json`. Passwords are stored as salted scrypt hashes, not plain text.
+To use the game from another device on the same Wi-Fi, open it using the computer running the server's local network IP, for example `http://192.168.1.25:8080`. Replace that example IP with the server computer's actual LAN IP and allow Node through the computer's firewall for private networks. The server must stay running. This is local-network access, not public internet hosting.
 
-### Deployment note
-
-For a hosted deployment such as Render, keep `data/accounts.json` on persistent storage (for example a persistent disk). Without persistent storage, a server restart/redeploy can erase the local JSON account database.
-
-If the HTML is opened directly as a file, the site has a localStorage fallback so the battle and menu can still be tested, but that fallback is not a cross-device account system.
+The game saves after purchases and boss rewards. If a server save fails, YEN! displays a warning instead of silently claiming the database was updated. Browser storage may hold a recovery copy, but it is not a replacement for the SQLite database.

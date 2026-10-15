@@ -115,12 +115,37 @@ async function api(path, options={}) {
     throw e;
   }
 }
+function showSaveWarning(message) {
+  let toast = document.getElementById("yen-save-warning");
+  if (!toast) {
+    toast = document.createElement("div");
+    toast.id = "yen-save-warning";
+    toast.style.cssText = "position:fixed;z-index:99999;left:50%;bottom:22px;transform:translateX(-50%);max-width:min(92vw,560px);padding:12px 16px;border:1px solid #ff647c;background:#170b12;color:#fff;border-radius:10px;font:600 13px/1.45 system-ui;box-shadow:0 8px 34px #0009;text-align:center";
+    document.body.appendChild(toast);
+  }
+  toast.textContent = message;
+  toast.style.display = "block";
+}
 async function saveAccount() {
-  if (!account) return;
+  if (!account) return false;
+  // Only use browser storage for the explicit file:// fallback. When signed in
+  // to the server, a failed request must be visible instead of pretending to save.
+  if (sessionToken === "local" || location.protocol === "file:") {
+    saveLocal();
+    return true;
+  }
   try {
     const data = await api("/save", {method:"POST", body:JSON.stringify({dox:account.dox, defeated:account.defeated, ownedSkills:account.ownedSkills})});
     account = data.account;
-  } catch { saveLocal(); }
+    const toast = document.getElementById("yen-save-warning");
+    if (toast) toast.remove();
+    saveLocal();
+    return true;
+  } catch (error) {
+    saveLocal();
+    showSaveWarning(`SAVE FAILED — your latest progress is only cached in this browser. Check that the YEN! mini server is running, then sign in again. (${error.message})`);
+    return false;
+  }
 }
 async function transition(fn) {
   const el = document.createElement("div"); el.className="fade-transition"; document.body.appendChild(el);
