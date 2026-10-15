@@ -1,645 +1,283 @@
 /*
 ==========================================================
- KORTHAS WEBSITE — EASY CUSTOMIZATION
+ YEN! BOSS WORLD // MASTER CONFIG
 ==========================================================
-Put your own files in the /assets folder, then change only
-the filenames below if you want different names.
+CUSTOM FILES TO DROP INTO /assets:
+ menu-idle.png, menu-background.jpg
+ korthas-idle.png, korthas-fight.png, korthas-defeat.png,
+ korthas-stage2.png, korthas-attack.png, korthas-lobby.jpg,
+ korthas-theme.mp3
+ empress.png, empress-parry.mp3
+ argus-idle.png, argus-fight.png, argus-lobby.jpg,
+ argus-theme.mp3, argus-parry.mp3, argus-reload.mp3, argus-gun.png
+ merchant-idle.png, merchant-background.jpg, merchant-theme.mp3
+ background.gif (optional arena fallback)
 
-IMAGE FILES:
-  assets/korthas-idle.png
-  assets/korthas-fight.png
-  assets/korthas-defeat.png
-  assets/korthas-stage2.png
-  assets/korthas-attack.png
-
-BACKGROUND:
-  assets/background.gif  (change BACKGROUND_IMAGE below)
-
-MUSIC:
-  assets/korthas-theme.mp3
-
-Change dialogue, HP, damage ranges and abilities in CONFIG.
+ACCOUNT MODE:
+ - When served by server.js, accounts are saved server-side and can be
+   signed into from other devices.
+ - If opened as a plain static file, a localStorage fallback is used.
 ==========================================================
 */
 
-const BACKGROUND_IMAGE = "assets/Background.gif"; // <<< CHANGE YOUR BACKGROUND HERE
-
 const CONFIG = {
-  bossName: "KORTHAS",
-  bossMaxHP: 700000,
-  playerMaxHP: 180000,
-  phaseTwoAtHP: 610000,
-  empressMaxHP: 1000000,
-  empressParryChance: 0.72,
-  empressSkillCooldown: 19000,
-
-  // <<< CHARACTER IMAGE FILES: replace these filenames if needed
-  assets: {
-    idle: "assets/idle.png",
-    fight: "assets/Fight_Idle.png",
-    defeat: "assets/Defeat.png",
-    stageTwo: "assets/Stage_2.png",
-    attack: "assets/Stage_2_Attack.png",
-    empress: "assets/empress.png",
-    music: "assets/Boss_Start_Music.mp3",
-    parrySound: "assets/perry.mp3"
+  background: "assets/Background.gif",
+  apiBase: "/api",
+  accountStartingDox: 500000,
+  bosses: {
+    korthas: {
+      id: "korthas", name: "KORTHAS", stars: 56, title: "THE OATHBOUND",
+      maxHP: 700000, playerMaxHP: 180000, reward: 1500000,
+      cardImage: "assets/korthas-idle.png", idle: "assets/korthas-idle.png", fight: "assets/korthas-fight.png",
+      defeat: "assets/korthas-defeat.png", stageTwo: "assets/korthas-stage2.png", attack: "assets/korthas-attack.png",
+      music: "assets/korthas-theme.mp3", battleBackground: "assets/Background.gif", parrySound: "assets/perry.mp3", shield: 0,
+      phaseTwoAtHP: 610000,
+      playerAttacks: [
+        ["VOID SLASH",9000,21000,["Your void slash tears through the dark.","A clean hit. Korthas staggers.","Blue sparks scatter from the impact."]],
+        ["RUNE BURST",7000,26000,["Runes detonate around Korthas.","The rune burst hits harder than expected.","A ring of light snaps shut around the boss."]],
+        ["SOUL PIERCE",11000,19000,["Your strike pierces his guard.","The hit lands with a sharp crack.","Korthas's aura flickers from the impact."]],
+        ["ECHO BOLT",6000,28000,["An echo bolt ricochets into Korthas.","The blast hits twice in quick succession.","Blue energy bursts across the arena."]],
+        ["TOME SHARD",8000,24000,["A shard of the Tome cuts through the air.","The shard detonates on impact.","Ancient lettering burns across his armor."]],
+        ["STARFALL",10000,22000,["A star falls directly onto Korthas.","The arena flashes as the star connects.","The impact sends a ripple through the floor."]],
+        ["DREAD WAVE",5000,30000,["A wave of dread crashes into the boss.","The attack surges with unstable power.","Korthas absorbs the hit with a growl."]],
+        ["LAST WORD",12000,20000,["Your final word strikes like a curse.","The attack lands with brutal precision.","The air cracks around Korthas."]]
+      ],
+      bossAttacks: [["TRIDENT ARC",12000,23000],["TOME SHOCK",8000,28000],["KING'S JUDGMENT",15000,32000]],
+      intro: ["....","I see. You think you have what it takes.","Have it you're way, dumb ass."],
+      phaseTwo: ["Heh..","I guess this is it..","You fucking.","BASTARD!!!!!!"],
+      phaseFinal: "WE'RE FIGHTING FOR REAAALLLL, THIS TIME!",
+      defeat: [".....","You... did it..."],
+      empress: ["You dare to hurt my husband in my own castle.","I didn't know magnet's can go this low.","Yet","Here you are.","I WILL","MAKE","SURE","YOU WIISH YOU NEVER DONE THIS"]
+    },
+    argus: {
+      id: "argus", name: "ARGUS", stars: 79, title: "THE LAST GUNNER",
+      maxHP: 2000000, playerMaxHP: 180000, reward: 5000000,
+      shield: 3000, cardImage: "assets/argus.png", idle: "assets/argus.png", fight: "assetsargus.png",
+      music: "assets/korthas-theme.mp3", battleBackground: "assets/argus-battle-background.jpg", parrySound: "assets/perry.mp3", reloadSound: "assets/argus-reload.mp3", gunImage: "assets/argus-gun.png",
+      parryChance: .52,
+      rapidBlastChance: .42, extraShotChance: .38, healChance: .20,
+      playerAttacks: [
+        ["VOID SLASH",9000,21000,["Your void slash tears through the dark.","The slash catches Argus clean.","A blue wound of light opens across his guard."]],
+        ["RUNE BURST",7000,26000,["Runes detonate around Argus.","The burst rattles his shield.","Ancient symbols burn through the smoke."]],
+        ["SOUL PIERCE",11000,19000,["You pierce the gunner's guard.","The hit lands with a brutal crack.","Argus's stance breaks for a second."]],
+        ["ECHO BOLT",6000,28000,["An echo bolt snaps across the arena.","The bolt punches into Argus.","The shot is answered by a burst of blue light."]],
+        ["TOME SHARD",8000,24000,["A Tome shard cuts through the air.","The shard detonates against his armor.","Ancient lettering flashes across his weapon."]],
+        ["STARFALL",10000,22000,["A star crashes down on Argus.","The arena flashes white.","The impact sends a shock through his shield."]],
+        ["DREAD WAVE",5000,30000,["A wave of dread rolls over the gunner.","Argus is forced backward.","The wave tears through his firing line."]],
+        ["LAST WORD",12000,20000,["Your final word hits like a sentence.","The air cracks around Argus.","The gunner finally looks worried."]]
+      ],
+      bossAttacks: [["HAND CANNON",15000,27000],["BLACK ROUND",12000,24000],["EXECUTION SHOT",18000,30000]],
+      intro: ["I have watched a thousand like you fall. You will be no different."],
+      rapid: "That's all you got? Fuck it."
+    }
   },
-
-  introLines: [
-    "Hm...",
-    "Oh it's you.",
-    "Do you realize..",
-    "You can wake up my Wife with you're stomping?!?",
-    "....",
-    "You want the Tome?. That's why you're here?"
-  ],
-  yesLines: [
-    "....",
-    "I see.",
-    "You think you have what it takes.",
-    "Have it you're way, dumb ass."
-  ],
-  phaseTwoLines: [
-    "Heh..",
-    "I guess this is it..",
-    "You fucking.",
-    "BASTARD!!!!!!"
-  ],
-  phaseTwoFinalLine: "WE'RE FIGHTING FOR REAAALLLL, THIS TIME!",
-  defeatLines: [".....", "You... did it..."],
-  empressLines: [
-    "You dare to hurt my husband in my own castle.",
-    "I didn't know magnet's can go this low.",
-    "Yet",
-    "Here you are.",
-    "I WILL",
-    "MAKE",
-    "SURE",
-    "YOU WIISH YOU NEVER DONE THIS"
-  ],
-
-  // Each move has its own randomized damage range and dialogue.
-  playerAttacks: [
-    { name: "VOID SLASH", min: 9000, max: 21000, messages: ["Your void slash tears through the dark.", "A clean hit. Korthas staggers.", "Blue sparks scatter from the impact."] },
-    { name: "RUNE BURST", min: 7000, max: 26000, messages: ["Runes detonate around Korthas.", "The rune burst hits harder than expected.", "A ring of light snaps shut around the boss."] },
-    { name: "SOUL PIERCE", min: 11000, max: 19000, messages: ["Your strike pierces his guard.", "The hit lands with a sharp crack.", "Korthas's aura flickers from the impact."] },
-    { name: "ECHO BOLT", min: 6000, max: 28000, messages: ["An echo bolt ricochets into Korthas.", "The blast hits twice in quick succession.", "Blue energy bursts across the arena."] },
-    { name: "TOME SHARD", min: 8000, max: 24000, messages: ["A shard of the Tome cuts through the air.", "The shard detonates on impact.", "Ancient lettering burns across his armor."] },
-    { name: "STARFALL", min: 10000, max: 22000, messages: ["A star falls directly onto Korthas.", "The arena flashes as the star connects.", "The impact sends a ripple through the floor."] },
-    { name: "DREAD WAVE", min: 5000, max: 30000, messages: ["A wave of dread crashes into the boss.", "The attack surges with unstable power.", "Korthas absorbs the hit with a growl."] },
-   { name: "LAST WORD", min: 12000, max: 20000, messages: ["Your final word strikes like a curse.", "The attack lands with brutal precision.", "The air cracks around Korthas."] }
-  bossAttacks: [
-    { name: "TRIDENT ARC", min: 12000, max: 23000, messages: ["Korthas sweeps his trident across the arena!", "A blue arc slams into you!", "His trident cuts through the air with a roar!"] },
-    { name: "TOME SHOCK", min: 8000, max: 28000, messages: ["Korthas releases a shockwave from the Tome!", "The floor flashes blue beneath your feet!", "A burst of ancient power catches you!"] },
-    { name: "KING'S JUDGMENT", min: 15000, max: 32000, messages: ["Korthas brings down the King's Judgment!", "The hit rattles the whole arena!", "A crushing wave of energy strikes you!"] }
-  ]
+  merchant: {
+    image: "assetsMerchant_Idle.png", background: "assets/Merchant_background.gif", music: "assets/merchant-theme.mp3",
+    lines: [
+      "Oh you're back.","Welcome back, hunter.","You look like somebody who needs a better skill.","I don't ask where you got that DOX.","You survived. That's enough for me.","The vault is open. Try not to go broke.","I've seen your type before.","You fight loud. I sell louder.","Pick something nasty.","Some skills bite back.","Enchanted ones cost what they cost.","Don't stare at the price. Earn more.","You want power? Pay for it.","I keep the good stuff behind the expensive stuff.","A cheap skill can still save your life.","A rare skill can ruin somebody else's.","The vault has four thousand answers.","You only need one.","Unless you're greedy.","Greedy is fine here.","That one? Interesting choice.","I wouldn't use it against Argus first.","Korthas hates flashy skills.","Argus hates everything.","The enchanted stock is temperamental.","Buy before the price feels worse.","You came back with more DOX.","Now you're speaking my language.","A hunter without skills is just target practice.","A hunter with too many skills is expensive target practice.","I've got something mean today.","I've got something beautiful today.","I've got something that should probably be illegal.","Relax. It's only a game.","Probably.","You want the vault? Hit the button.","Don't make me repeat myself.","The good stuff is glowing for a reason.","That purple glow means trouble.","The gold ones hurt wallets.","The red ones hurt bosses.","The blue ones save mistakes.","Buy wisely.","Or don't. I still get paid.","You look ready.","You're almost dangerous.","Almost.","Come back after another boss.","I'll have more bad ideas waiting.","Now go make me proud.","Welcome back, hunter."
+    ]
+  }
 };
 
 const $ = id => document.getElementById(id);
-const introScreen = $("intro-screen");
-const battleScreen = $("battle-screen");
-const gameoverScreen = $("gameover-screen");
-const staticScreen = $("static-screen");
-const introLine = $("intro-line");
-const choiceRow = $("choice-row");
-const bossMusic = $("boss-music");
+const wait = ms => new Promise(r => setTimeout(r, ms));
+const pick = a => a[Math.floor(Math.random()*a.length)];
+const randomInt = (a,b) => Math.floor(Math.random()*(b-a+1))+a;
+const fmt = n => Math.max(0,Math.floor(n)).toLocaleString("en-US");
+const tokenKey = "yen_session_token";
+const localAccountKey = "yen_local_account";
 
-let bossHP = CONFIG.bossMaxHP;
-let playerHP = CONFIG.playerMaxHP;
-let phaseTwo = false;
-let busy = false;
-let brokenAttackIds = new Set();
-let encounterNumber = 0;
-let introRun = 0;
-let empressPhase = false;
-let empressHP = 0;
-let empressSkillCooldowns = new Map();
-let empressAttackEnabled = false;
+let account = null;
+let sessionToken = localStorage.getItem(tokenKey) || "";
+let authMode = "register";
+let currentBoss = null;
+let bossHP = 0, bossShield = 0, playerHP = 0;
+let phaseTwo = false, empressPhase = false, empressHP = 0;
+let brokenAttackIds = new Set(), empressSkillCooldowns = new Map();
+let encounterNumber = 0, busy = false, introRun = 0, battleFinished = false;
+let bossAttackEnabled = false, pendingBoss = null;
+let merchantIndex = 0, skillCatalog = null, selectedSkill = null;
 
-const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
-const pick = list => list[Math.floor(Math.random() * list.length)];
-const randomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
-const formatHP = value => Math.max(0, Math.floor(value)).toLocaleString("en-US");
-
-function setMessage(message) { $("battle-message").textContent = message; }
-function setPhaseLabel(message) { $("phase-label").textContent = message; }
-
-function setCharacterImage(elementId, path) {
-  const img = $(elementId);
-  img.src = path;
-  img.onerror = () => {
-    img.onerror = null;
-    img.alt = `Missing image: ${path}. Add this file to the assets folder.`;
-    img.style.opacity = "0.18";
-    console.warn(`[Korthas] Image not found: ${path}. Add the file to your assets folder.`);
-  };
-}
-function updateHP() {
-  const maxHP = empressPhase ? CONFIG.empressMaxHP : CONFIG.bossMaxHP;
-  const currentHP = empressPhase ? empressHP : bossHP;
-  const name = empressPhase ? "EMPRESS" : CONFIG.bossName;
-  $("boss-hp-text").textContent = `${formatHP(currentHP)} / ${formatHP(maxHP)}`;
-  $("boss-hp-fill").style.width = `${Math.max(0, currentHP / maxHP * 100)}%`;
-  $("boss-hp-percent").textContent = `${Math.ceil(Math.max(0, currentHP / maxHP * 100))}%`;
-  $("boss-name").textContent = name;
-  $("player-hp-text").textContent = formatHP(playerHP);
-  $("player-hp-fill").style.width = `${Math.max(0, playerHP / CONFIG.playerMaxHP * 100)}%`;
-  $("player-status-text").textContent = playerHP < CONFIG.playerMaxHP * .25 ? "SOUL CRITICAL" : "STILL STANDING";
-  const available = getAvailableAttackIds().length;
-  $("player-attacks-remain").textContent = String(available).padStart(2, "0");
-  $("attack-count").textContent = `${String(available).padStart(2, "0")} AVAILABLE`;
-}
-
-function updateEmpressCooldowns() {
-  const now = Date.now();
-  for (const [id, expiresAt] of empressSkillCooldowns) {
-    if (expiresAt <= now) empressSkillCooldowns.delete(id);
+const fallbackLocal = () => {
+  try { return JSON.parse(localStorage.getItem(localAccountKey) || "null"); } catch { return null; }
+};
+const saveLocal = () => localStorage.setItem(localAccountKey, JSON.stringify(account));
+async function api(path, options={}) {
+  try {
+    const headers = {"Content-Type":"application/json", ...(options.headers||{})};
+    if (sessionToken) headers.Authorization = `Bearer ${sessionToken}`;
+    const res = await fetch(`${CONFIG.apiBase}${path}`, {...options, headers});
+    const data = await res.json().catch(()=>({}));
+    if (!res.ok) throw new Error(data.error || `Request failed (${res.status})`);
+    return data;
+  } catch (e) {
+    if (location.protocol === "file:") throw e;
+    throw e;
   }
-  document.querySelectorAll("[data-attack-id]").forEach(button => {
-    const id = Number(button.dataset.attackId);
-    const expiresAt = empressSkillCooldowns.get(id);
-    if (expiresAt) {
-      const seconds = Math.ceil((expiresAt - now) / 1000);
-      button.disabled = true;
-      button.classList.add("skill-cooldown");
-      button.dataset.cooldown = `${seconds}s`;
-    } else {
-      button.disabled = false;
-      button.classList.remove("skill-cooldown");
-      delete button.dataset.cooldown;
+}
+async function saveAccount() {
+  if (!account) return;
+  try {
+    const data = await api("/save", {method:"POST", body:JSON.stringify({dox:account.dox, defeated:account.defeated, ownedSkills:account.ownedSkills})});
+    account = data.account;
+  } catch { saveLocal(); }
+}
+async function transition(fn) {
+  const el = document.createElement("div"); el.className="fade-transition"; document.body.appendChild(el);
+  await wait(210); await fn(); await wait(120); el.remove();
+}
+function showScreen(id) {
+  document.querySelectorAll(".portal-screen,.portal-subscreen,.battle-screen").forEach(x=>x.classList.add("hidden"));
+  $(id)?.classList.remove("hidden");
+  setPhaseLabel(id === "lobby-screen" ? "HUNTER LOBBY" : id === "merchant-screen" ? "MERCHANT // OPEN" : id === "start-screen" ? "WELCOME" : "YEN! // READY");
+}
+function showReward(amount, bossName) {
+  const t=document.createElement("div");t.className="reward-toast";t.innerHTML=`<small>${bossName} DEFEATED // DOX ACQUIRED</small><strong>+${fmt(amount)} DOX</strong>`;document.body.appendChild(t);setTimeout(()=>t.remove(),2500);
+}
+function updateWallet(){ $("wallet-dox").textContent=fmt(account?.dox||0); $("battle-dox").textContent=fmt(account?.dox||0); }
+function setMessage(m){$("battle-message").textContent=m;}
+function setPhaseLabel(m){$("phase-label").textContent=m;}
+function setCharacter(id,path){const el=$(id);if(!el)return;el.src=path;el.onerror=()=>{el.onerror=null;el.style.opacity=".15";console.warn("Missing asset:",path)}}
+function showFlash(){if(!settings.effects)return;const x=document.createElement("div");x.className="flash-white";document.body.appendChild(x);setTimeout(()=>x.remove(),1100)}
+function shake(){if(!settings.effects)return;$("game").classList.remove("shake-screen");void $("game").offsetWidth;$("game").classList.add("shake-screen")}
+function setBackground(path, fallback){document.body.style.backgroundImage=fallback||"radial-gradient(ellipse at 50% 0%,#17243d,#090d17 45%,#05060b)";if(!path)return;const im=new Image();im.onload=()=>document.body.style.backgroundImage=`linear-gradient(#03050a99,#03040ae6),url("${path}")`;im.src=path;}
+
+const settings = JSON.parse(localStorage.getItem("yen_settings")||'{"effects":true,"music":true,"motion":false}');
+function playAudio(src, volume=.7, restart=true, waitForEnd=false){
+  if(!settings.music||!src)return Promise.resolve();
+  const a=new Audio(src); a.volume=volume; if(restart)a.currentTime=0; document.body.appendChild(a);
+  return new Promise(resolve=>{let done=false;const finish=()=>{if(done)return;done=true;a.remove();resolve()};a.addEventListener("ended",finish,{once:true});a.addEventListener("error",finish,{once:true});a.play().catch(finish);if(!waitForEnd)setTimeout(finish,180);});
+}
+function loadSettings(){ $("setting-effects").checked=settings.effects;$("setting-music").checked=settings.music;$("setting-motion").checked=settings.motion;document.body.classList.toggle("reduced-motion",settings.motion); }
+$("settings-save").addEventListener("click",()=>{settings.effects=$("setting-effects").checked;settings.music=$("setting-music").checked;settings.motion=$("setting-motion").checked;localStorage.setItem("yen_settings",JSON.stringify(settings));loadSettings();});
+loadSettings();
+
+async function registerOrLogin(){
+  const username=$("auth-username").value.trim(), password=$("auth-password").value;
+  $("auth-status").textContent="";
+  try{
+    const endpoint=authMode==="register"?"/register":"/login";
+    const data=await api(endpoint,{method:"POST",body:JSON.stringify({username,password})});
+    sessionToken=data.token;localStorage.setItem(tokenKey,sessionToken);account=data.account;saveLocal();
+    await transition(()=>showScreen("lobby-screen"));renderLobby();
+  }catch(e){
+    // Static fallback keeps the site playable, but server mode is what enables other-device login.
+    if(location.protocol==="file:" && authMode==="register"){
+      if(fallbackLocal() && fallbackLocal().username.toLowerCase()===username.toLowerCase()) { $("auth-status").textContent="That local username already exists."; return; }
+      account={username,dox:CONFIG.accountStartingDox,defeated:{},ownedSkills:[],createdAt:new Date().toISOString()};saveLocal();sessionToken="local";await transition(()=>showScreen("lobby-screen"));renderLobby();return;
     }
-  });
-}
-
-function showFlash() {
-  const flash = document.createElement("div");
-  flash.className = "flash-white";
-  document.body.appendChild(flash);
-  setTimeout(() => flash.remove(), 1200);
-}
-function screenShake() {
-  $("game").classList.remove("shake-screen");
-  void $("game").offsetWidth;
-  $("game").classList.add("shake-screen");
-}
-function applyBackground() {
-  // Keep the original dark arena background visible even when the optional
-  // background.gif is not bundled yet. If the image exists, it is layered
-  // over the fallback without changing the rest of the site.
-  const fallback = "radial-gradient(ellipse at 50% 0%, #17243d 0%, #090d17 45%, #05060b 100%)";
-  document.body.style.backgroundImage = fallback;
-  document.body.style.backgroundSize = "cover";
-  document.body.style.backgroundPosition = "center";
-  document.body.style.backgroundAttachment = "fixed";
-
-  const image = new Image();
-  image.onload = () => {
-    document.body.style.backgroundImage = `linear-gradient(rgba(3,5,12,.70), rgba(3,4,9,.86)), url("${BACKGROUND_IMAGE}")`;
-  };
-  image.onerror = () => {
-    // Leave the original arena gradient in place if the optional file is absent.
-  };
-  image.src = BACKGROUND_IMAGE;
-}
-function showIntro() {
-  introRun++;
-  const thisRun = introRun;
-  bossHP = CONFIG.bossMaxHP;
-  playerHP = CONFIG.playerMaxHP;
-  phaseTwo = false;
-  empressPhase = false;
-  empressHP = 0;
-  empressSkillCooldowns = new Map();
-  empressAttackEnabled = false;
-  busy = false;
-  brokenAttackIds = new Set();
-  introScreen.classList.remove("hidden");
-  battleScreen.classList.add("hidden");
-  gameoverScreen.classList.add("hidden");
-  staticScreen.classList.add("hidden");
-  setCharacterImage("intro-boss", CONFIG.assets.idle);
-  setCharacterImage("battle-boss", CONFIG.assets.fight);
-  $("boss-aura").style.opacity = "";
-  $("boss-name").classList.remove("angry-text");
-  $("boss-status-text").textContent = "DORMANT POWER AWAKENED";
-  $("intro-line").textContent = CONFIG.introLines[0];
-  $("dialogue-count").textContent = `01 / ${String(CONFIG.introLines.length).padStart(2, "0")}`;
-  choiceRow.classList.add("hidden");
-  setPhaseLabel("ENCOUNTER WAITING");
-  bossMusic.pause();
-  bossMusic.currentTime = 0;
-  runIntroText(thisRun);
-}
-async function runIntroText(runId) {
-  for (let i = 0; i < CONFIG.introLines.length; i++) {
-    if (runId !== introRun || introScreen.classList.contains("hidden")) return;
-    introLine.textContent = CONFIG.introLines[i];
-    $("dialogue-count").textContent = `${String(i + 1).padStart(2, "0")} / ${String(CONFIG.introLines.length).padStart(2, "0")}`;
-    await wait(i === 0 ? 950 : 1150);
-  }
-  if (runId === introRun) choiceRow.classList.remove("hidden");
-}
-async function getOutEffect() {
-  introScreen.classList.add("hidden");
-  battleScreen.classList.add("hidden");
-  gameoverScreen.classList.add("hidden");
-  staticScreen.classList.remove("hidden");
-  await wait(1900);
-  // Most browsers only allow closing a tab if this page opened it.
-  window.close();
-}
-async function startBattle() {
-  if (busy) return;
-  busy = true;
-  introRun++;
-  encounterNumber++;
-  $("encounter-count").textContent = String(encounterNumber).padStart(2, "0");
-  introScreen.classList.add("hidden");
-  battleScreen.classList.remove("hidden");
-  setPhaseLabel("PHASE ONE // THE TOME");
-  bossHP = CONFIG.bossMaxHP;
-  playerHP = CONFIG.playerMaxHP;
-  phaseTwo = false;
-  empressPhase = false;
-  empressHP = 0;
-  empressSkillCooldowns = new Map();
-  empressAttackEnabled = false;
-  brokenAttackIds = new Set();
-  setCharacterImage("battle-boss", CONFIG.assets.fight);
-  $("boss-name").textContent = CONFIG.bossName;
-  $("boss-name").classList.remove("angry-text");
-  $("boss-aura").style.opacity = "";
-  $("boss-status-text").textContent = "DORMANT POWER AWAKENED";
-  buildAttackButtons();
-  updateHP();
-  setMessage(CONFIG.yesLines.join(" "));
-  bossMusic.src = CONFIG.assets.music;
-  bossMusic.volume = 0.65;
-  await wait(2200);
-  try { await bossMusic.play(); } catch (e) { console.warn("[Korthas] Music playback blocked or file missing.", e); }
-  setMessage("Korthas raises his trident. Choose your attack.");
-  busy = false;
-}
-function buildAttackButtons() {
-  const grid = $("attack-grid");
-  // The Finish Him state is only for Korthas's defeat screen. Always clear it
-  // before rebuilding the normal four-column attack layout for the next phase.
-  grid.classList.remove("finishing-state");
-  grid.classList.remove("empress-state");
-  grid.innerHTML = "";
-  CONFIG.playerAttacks.forEach((attack, id) => {
-    const button = document.createElement("button");
-    button.className = "attack-button";
-    button.dataset.attackId = String(id);
-    button.textContent = attack.name;
-    button.addEventListener("click", () => usePlayerAttack(id));
-    grid.appendChild(button);
-  });
-}
-function getAvailableAttackIds() {
-  return CONFIG.playerAttacks.map((_, id) => id).filter(id => !brokenAttackIds.has(id));
-}
-async function usePlayerAttack(id) {
-  if (busy || brokenAttackIds.has(id) || playerHP <= 0) return;
-  if (empressSkillCooldowns.has(id) && empressSkillCooldowns.get(id) > Date.now()) return;
-  if (!empressPhase && bossHP <= 0) return;
-  if (empressPhase && empressHP <= 0) return;
-
-  busy = true;
-  const attack = CONFIG.playerAttacks[id];
-
-  if (empressPhase) {
-    await useAttackAgainstEmpress(id, attack);
-    busy = false;
-    return;
-  }
-
-  const damage = Math.min(bossHP, randomInt(attack.min, attack.max));
-  bossHP = Math.max(0, bossHP - damage);
-  updateHP();
-  setMessage(`${pick(attack.messages)} ${CONFIG.bossName} has taken ${formatHP(damage)} damage.`);
-  const button = document.querySelector(`[data-attack-id="${id}"]`);
-  if (button) button.animate([{transform:"scale(1)"},{transform:"scale(1.05)"},{transform:"scale(1)"}], {duration:280});
-
-  // HP 0 is an absolute state check. Korthas cannot take another turn or
-  // enter an intermediate phase once his HP has actually reached zero.
-  if (bossHP <= 0) {
-    await triggerKorthasDefeat();
-    busy = false;
-    return;
-  }
-
-  await wait(850);
-  if (!phaseTwo && bossHP <= CONFIG.phaseTwoAtHP) {
-    await triggerPhaseTwo();
-    if (playerHP <= 0 || bossHP <= 0) { busy = false; return; }
-  }
-  await bossTurn();
-  busy = false;
-}
-
-async function triggerKorthasDefeat() {
-  empressPhase = false;
-  empressAttackEnabled = false;
-  brokenAttackIds = new Set(CONFIG.playerAttacks.map((_, id) => id));
-  setCharacterImage("battle-boss", CONFIG.assets.defeat);
-  $("boss-status-text").textContent = "DEFEATED // BARELY BREATHING";
-  setPhaseLabel("KORTHAS DEFEATED // FINISH HIM");
-  showFlash();
-  screenShake();
-
-  for (const line of CONFIG.defeatLines) {
-    setMessage(line);
-    $("battle-message").classList.add("defeat-text");
-    await wait(line === "....." ? 900 : 1500);
-  }
-  $("battle-message").classList.remove("defeat-text");
-  await showFinishHimButton();
-}
-
-async function showFinishHimButton() {
-  const grid = $("attack-grid");
-  const oldButtons = [...grid.querySelectorAll(".attack-button")];
-  oldButtons.forEach(button => button.classList.add("defeat-fade"));
-  await wait(620);
-  grid.classList.add("finishing-state");
-  grid.innerHTML = "";
-  const button = document.createElement("button");
-  button.className = "finish-him-button";
-  button.innerHTML = '<span>FINISH HIM</span><small>THE FINAL BLOW</small>';
-  button.addEventListener("click", finishKorthas);
-  grid.appendChild(button);
-  $("attack-count").textContent = "01 FINAL BLOW";
-  await wait(80);
-  button.classList.add("shaking-letters");
-}
-
-async function finishKorthas() {
-  if (busy) return;
-  busy = true;
-  const button = document.querySelector(".finish-him-button");
-  if (button) button.disabled = true;
-  setMessage("FINISH HIM...");
-  await wait(650);
-  if (button) button.classList.add("knocked-away");
-  await playParryEffect();
-  setMessage("— PARRY —");
-  $("battle-message").classList.add("parry-text");
-  screenShake();
-  showFlash();
-  await wait(650);
-  $("battle-message").classList.remove("parry-text");
-  await summonEmpress();
-  busy = false;
-}
-
-async function playParryEffect() {
-  // Use a fresh audio node for every successful parry so a new parry can
-  // always restart the sound instead of being swallowed by the previous one.
-  const source = $("parry-sound");
-  if (source) {
-    const audio = source.cloneNode(true);
-    audio.volume = 0.9;
-    audio.currentTime = 0;
-    audio.preload = "auto";
-    audio.addEventListener("ended", () => audio.remove(), { once: true });
-    document.body.appendChild(audio);
-    try {
-      await audio.play();
-    } catch (e) {
-      audio.remove();
-      // Fallback metallic parry tone if the custom sound file is missing or
-      // cannot be decoded. This keeps every parry audible.
-      try {
-        const AudioCtx = window.AudioContext || window.webkitAudioContext;
-        if (AudioCtx) {
-          const ctx = new AudioCtx();
-          const osc = ctx.createOscillator();
-          const gain = ctx.createGain();
-          osc.type = "square";
-          osc.frequency.setValueAtTime(780, ctx.currentTime);
-          osc.frequency.exponentialRampToValueAtTime(170, ctx.currentTime + 0.12);
-          gain.gain.setValueAtTime(0.0001, ctx.currentTime);
-          gain.gain.exponentialRampToValueAtTime(0.22, ctx.currentTime + 0.008);
-          gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.14);
-          osc.connect(gain).connect(ctx.destination);
-          osc.start();
-          osc.stop(ctx.currentTime + 0.15);
-          setTimeout(() => ctx.close(), 250);
-        }
-      } catch (_) {}
+    if(location.protocol==="file:" && authMode==="login"){
+      const a=fallbackLocal();if(a&&a.username.toLowerCase()===username.toLowerCase()&&password){account=a;sessionToken="local";await transition(()=>showScreen("lobby-screen"));renderLobby();return;}
     }
+    $("auth-status").textContent=e.message;
   }
-
-  const shield = document.createElement("div");
-  shield.className = "parry-burst";
-  const target = $("battle-boss");
-  if (target) {
-    const rect = target.getBoundingClientRect();
-    shield.style.left = `${rect.left + rect.width / 2}px`;
-    shield.style.top = `${rect.top + rect.height * 0.43}px`;
-  }
-  document.body.appendChild(shield);
-  setTimeout(() => shield.remove(), 900);
 }
+$("auth-form").addEventListener("submit",e=>{e.preventDefault();registerOrLogin()});
+document.querySelectorAll("[data-auth-mode]").forEach(b=>b.addEventListener("click",()=>{authMode=b.dataset.authMode;document.querySelectorAll(".auth-tab").forEach(x=>x.classList.toggle("active",x===b));$("auth-submit").innerHTML=authMode==="register"?"CREATE ACCOUNT <span>↗</span>":"SIGN IN <span>↗</span>";$("auth-password").setAttribute("autocomplete",authMode==="register"?"new-password":"current-password")}));
 
-async function summonEmpress() {
-  empressPhase = true;
-  empressAttackEnabled = false;
-  empressHP = CONFIG.empressMaxHP;
-  empressSkillCooldowns = new Map();
-  brokenAttackIds = new Set();
-  $("boss-name").textContent = "EMPRESS";
-  $("boss-status-text").textContent = "THE EMPRESS HAS ARRIVED";
-  setPhaseLabel("PHASE THREE // THE EMPRESS");
-  setCharacterImage("battle-boss", CONFIG.assets.empress);
-  $("boss-aura").classList.add("empress-aura");
-  $("boss-aura").style.opacity = "1";
-  $("boss-aura").style.filter = "blur(11px)";
-  $("boss-name").classList.add("empress-name");
-  screenShake();
-  updateHP();
-  buildAttackButtons();
-  $("attack-grid").classList.add("empress-state");
-  setMessage(CONFIG.empressLines[0]);
-  await wait(1200);
-  for (let i = 1; i < CONFIG.empressLines.length; i++) {
-    setMessage(CONFIG.empressLines[i]);
-    if (i >= 4) {
-      $("battle-message").classList.add("empress-rage");
-      screenShake();
-    }
-    await wait(i >= 4 ? 520 : 1050);
-  }
-  $("battle-message").classList.remove("empress-rage");
-  setMessage("Empress raises her sword. She is watching every move.");
-  empressAttackEnabled = true;
-  updateHP();
+document.querySelectorAll("[data-screen]").forEach(b=>b.addEventListener("click",async()=>{const id=b.dataset.screen;if(id==="lobby-screen"&&!account){showScreen("auth-screen");return;}await transition(()=>showScreen(id));if(id==="merchant-screen")openMerchant();if(id==="lobby-screen")renderLobby();}));
+$("brand-home").addEventListener("click",async e=>{e.preventDefault();if(account){await transition(()=>showScreen("lobby-screen"));renderLobby()}else showScreen("start-screen")});
+$("logout-button").addEventListener("click",async()=>{try{await api("/logout",{method:"POST"})}catch{}sessionToken="";localStorage.removeItem(tokenKey);account=null;await transition(()=>showScreen("start-screen"));});
+
+function bossCard(b){
+  const el=document.createElement("article");el.className="boss-card";el.style.setProperty("--card-bg",`url("${b.cardImage}")`);el.innerHTML=`<div class="boss-card-bg"></div><div class="boss-card-badge">BOSS // ${String(b.stars).padStart(2,"0")} ★</div><img class="boss-card-art" src="${b.idle}" alt="${b.name} idle"><div class="boss-card-info"><div class="stars">${"★".repeat(Math.min(8,Math.ceil(b.stars/10)))} ${b.stars} STARS</div><h2>${b.name}</h2><p>${b.title} // REWARD ${fmt(b.reward)} DOX</p></div>`;el.addEventListener("click",()=>askBoss(b));return el;
 }
+function renderLobby(){$("boss-music").pause();setBackground("assets/lobby-background.jpg");updateWallet();const list=$("boss-list");list.innerHTML="";Object.values(CONFIG.bosses).forEach(b=>list.appendChild(bossCard(b)));const merchant=document.createElement("article");merchant.className="boss-card merchant-lobby-card";merchant.innerHTML=`<div class="boss-card-bg" style="background-image:url("${CONFIG.merchant.background}")"></div><div class="boss-card-badge">MERCHANT // SAFE</div><img class="boss-card-art" src="${CONFIG.merchant.image}" alt="Merchant"><div class="boss-card-info"><div class="stars">4,000 SKILLS IN STOCK</div><h2>MERCHANT</h2><p>NO THREAT // CUSTOM DIALOGUE // SKILL VAULT</p></div>`;merchant.addEventListener("click",async()=>{await transition(()=>showScreen("merchant-screen"));openMerchant()});list.appendChild(merchant);}
+function askBoss(b){pendingBoss=b;$("confirm-title").textContent=`FIGHT ${b.name}?`;$("confirm-copy").textContent=`Are you sure you want to fight ${b.name}? It has ${b.stars} stars.`;$("confirm-screen").classList.remove("hidden");}
+$("confirm-no").addEventListener("click",()=>$("confirm-screen").classList.add("hidden"));
+$("confirm-yes").addEventListener("click",async()=>{const b=pendingBoss;pendingBoss=null;$("confirm-screen").classList.add("hidden");await transition(()=>startBattle(b));});
 
-async function useAttackAgainstEmpress(id, attack) {
-  if (!empressAttackEnabled) return;
-  const button = document.querySelector(`[data-attack-id="${id}"]`);
-  if (button) button.animate([{transform:"scale(1)"},{transform:"scale(1.05)"},{transform:"scale(1)"}], {duration:280});
-
-  const parried = Math.random() < CONFIG.empressParryChance;
-  if (parried) {
-    await empressParry(id);
-    return;
-  }
-
-  const damage = Math.min(empressHP, randomInt(attack.min, attack.max));
-  empressHP -= damage;
-  updateHP();
-  setMessage(`${pick(attack.messages)} Empress takes ${formatHP(damage)} damage.`);
-  await wait(850);
-
-  if (empressHP <= 0) {
-    empressAttackEnabled = false;
-    setPhaseLabel("ENCOUNTER CLEARED // THE EMPRESS FALLS");
-    $("boss-status-text").textContent = "EMPEROR'S CASTLE SILENCED";
-    setCharacterImage("battle-boss", CONFIG.assets.empress);
-    setMessage("The Empress falls... but the castle remembers your name.");
-    showFlash();
-    busy = false;
-    return;
-  }
-
-  await empressTurn();
+/* ------------------------- MERCHANT ------------------------- */
+function buildSkillCatalog(){
+  if(skillCatalog)return skillCatalog;
+  const prefixes=["Void","Astral","Dread","Soul","Rune","Blood","Echo","Fallen","Solar","Night","Grave","Tome","Royal","Phantom","Seraph","Ruin","Star","Cursed","Abyssal","Thorn"];
+  const cores=["Slash","Burst","Pierce","Nova","Judgment","Wave","Prism","Chain","Rift","Pulse","Meteor","Brand","Requiem","Tempest","Execution","Sigil","Crash","Sunder","Fang","Cannon"];
+  const rarities=[
+    {name:"COMMON",count:1700,color:"#7e94ae",mult:1,cost:[12000,70000]},
+    {name:"RARE",count:1000,color:"#54cfff",mult:1.25,cost:[70000,250000]},
+    {name:"EPIC",count:650,color:"#bd72ff",mult:1.7,cost:[250000,900000]},
+    {name:"LEGENDARY",count:400,color:"#ffb84e",mult:2.4,cost:[900000,3500000]},
+    {name:"MYTHIC",count:200,color:"#ff5573",mult:3.2,cost:[3500000,10000000]},
+    {name:"ENCHANTED",count:50,color:"#f6b4ff",mult:4.5,cost:[10000000,25000000]}
+  ];
+  let id=0, out=[];
+  rarities.forEach(r=>{for(let i=0;i<r.count;i++){const name=`${prefixes[(id*7)%prefixes.length]} ${cores[(id*11+i)%cores.length]} ${String(i+1).padStart(3,"0")}`;const power=Math.round(randomInt(9000,60000)*r.mult);const cost=randomInt(r.cost[0],r.cost[1]);out.push({id:String(id),name,rarity:r.name,color:r.color,enchanted:r.name==="ENCHANTED",cost,power,description:r.name==="ENCHANTED"?`A warped skill carrying an enchantment. Deals ${fmt(power)} damage and glows in battle.`:`A ${r.name.toLowerCase()} skill. Deals around ${fmt(power)} damage when it lands.`});id++;}});
+  skillCatalog=out;return out;
 }
+function openMerchant(){merchantIndex=0;$("merchant-line").textContent=CONFIG.merchant.lines[0];$("merchant-dialog-count").textContent="01 / 50";$("merchant-subline").textContent="I've got something that'll make your next fight considerably less fair.";setCharacter("merchant-image",CONFIG.merchant.image);setBackground(CONFIG.merchant.background);if(settings.music){const music=$("boss-music");music.src=CONFIG.merchant.music;music.loop=true;music.volume=.4;music.play().catch(()=>{});}$("skill-shop").classList.add("hidden");}
+$("merchant-next").addEventListener("click",()=>{merchantIndex=(merchantIndex+1)%CONFIG.merchant.lines.length;$("merchant-line").textContent=CONFIG.merchant.lines[merchantIndex];$("merchant-dialog-count").textContent=`${String(merchantIndex+1).padStart(2,"0")} / 50`;$("merchant-subline").textContent=merchantIndex===49?"That's all fifty. The vault is yours. Pick your weapon.":merchantIndex%3===0?"The vault is still open. Pick something brutal.":"I've got 4,000 ways to make a boss regret meeting you.";if(merchantIndex===49){buildSkillCatalog();$("skill-shop").classList.remove("hidden");renderSkills();}});
+$("open-shop").addEventListener("click",()=>{buildSkillCatalog();$("skill-shop").classList.remove("hidden");renderSkills();});
+function renderSkills(){const q=$("skill-search").value.trim().toLowerCase();const owned=new Set(account?.ownedSkills||[]);const skills=buildSkillCatalog().filter(s=>!q||`${s.name} ${s.rarity} ${s.description}`.toLowerCase().includes(q)).slice(0,180);const grid=$("skill-grid");grid.innerHTML="";skills.forEach(s=>{const el=document.createElement("article");el.className=`skill-card ${s.enchanted?"enchanted":""} ${owned.has(s.id)?"owned":""}`;el.style.setProperty("--rarity",s.color);el.innerHTML=`<div class="skill-rarity">${s.rarity}${s.enchanted?" // ✦ ENCHANTED":""}</div>${owned.has(s.id)?'<span class="owned-tag">OWNED</span>':''}<h3>${s.name}</h3><p>${s.description}</p><div class="skill-price">${owned.has(s.id)?"ALREADY OWNED":fmt(s.cost)+" DOX"}</div>`;el.addEventListener("click",()=>openSkillDetail(s));grid.appendChild(el);});}
+$("skill-search").addEventListener("input",renderSkills);
+function openSkillDetail(s){selectedSkill=s;const wrap=document.createElement("div");wrap.className="skill-detail";wrap.id="skill-detail";const owned=(account.ownedSkills||[]).includes(s.id);wrap.innerHTML=`<div class="skill-detail-card ${s.enchanted?"enchanted":""}"><div class="skill-rarity" style="--rarity:${s.color}">${s.rarity}${s.enchanted?" // ✦ ENCHANTED":""}</div><h2>${s.name}</h2><p>${s.description}</p><div class="detail-price">${owned?"OWNED":"COST: "+fmt(s.cost)+" DOX"}</div><div class="skill-detail-actions"><button class="menu-button primary" id="skill-buy" ${owned||account.dox<s.cost?"disabled":""}>${owned?"OWNED":account.dox<s.cost?"NOT ENOUGH DOX":"BUY SKILL"}</button><button class="menu-button" id="skill-close">CLOSE</button></div></div>`;document.body.appendChild(wrap);$("skill-close").onclick=()=>wrap.remove();if(!owned&&account.dox>=s.cost)$("skill-buy").onclick=async()=>{account.dox-=s.cost;account.ownedSkills=[...(account.ownedSkills||[]),s.id];await saveAccount();updateWallet();wrap.remove();renderSkills();};}
 
-async function empressParry(id) {
-  const button = document.querySelector(`[data-attack-id="${id}"]`);
-  setMessage("EMPRESS PARRIES YOUR ATTACK.");
-  $("battle-message").classList.add("parry-text");
-  screenShake();
-  await playParryEffect();
-  if (button) {
-    button.classList.add("parried-skill");
-    button.disabled = true;
-  }
-  await wait(350);
-  const slash = document.createElement("div");
-  slash.className = "empress-slash";
-  document.body.appendChild(slash);
-  await wait(360);
-  slash.remove();
-  const damage = Math.min(playerHP, randomInt(18000, 34000));
-  playerHP -= damage;
-  const expiresAt = Date.now() + CONFIG.empressSkillCooldown;
-  empressSkillCooldowns.set(id, expiresAt);
-  updateHP();
-  updateEmpressCooldowns();
-  setMessage(`Empress cuts through your guard. ${CONFIG.playerAttacks[id].name} is sealed for 19 seconds.`);
-  $("battle-message").classList.remove("parry-text");
-  await wait(900);
-  if (playerHP <= 0) {
-    empressAttackEnabled = false;
-    showGameOver();
-    return;
-  }
-  updateEmpressCooldowns();
+/* ------------------------- BATTLE ------------------------- */
+function resetBattle(b){currentBoss=b;bossHP=b.maxHP;bossShield=b.shield||0;playerHP=b.playerMaxHP;phaseTwo=false;empressPhase=false;empressHP=0;brokenAttackIds=new Set();empressSkillCooldowns=new Map();bossAttackEnabled=false;battleFinished=false;}
+function updateHP(){
+  if(!currentBoss)return;const max=empressPhase?1000000:currentBoss.maxHP;const hp=empressPhase?empressHP:bossHP;
+  $("boss-hp-text").textContent=`${fmt(hp)} / ${fmt(max)}`;$("boss-hp-fill").style.width=`${Math.max(0,hp/max*100)}%`;$("boss-shield-fill").style.width=currentBoss.shield?`${Math.max(0,bossShield/currentBoss.shield*100)}%`:"0%";$("boss-hp-percent").textContent=`${Math.ceil(Math.max(0,hp/max*100))}%`;
+  $("player-hp-text").textContent=fmt(playerHP);$("player-hp-fill").style.width=`${Math.max(0,playerHP/currentBoss.playerMaxHP*100)}%`;$("player-status-text").textContent=playerHP<currentBoss.playerMaxHP*.25?"SOUL CRITICAL":"STILL STANDING";updateWallet();
+  const available=getAvailableAttackIds().length;$("player-attacks-remain").textContent=String(available).padStart(2,"0");$("attack-count").textContent=`${String(available).padStart(2,"0")} AVAILABLE`;
 }
-
-async function empressTurn() {
-  if (!empressPhase || !empressAttackEnabled || playerHP <= 0 || empressHP <= 0) return;
-  const damage = randomInt(9000, 21000);
-  playerHP = Math.max(0, playerHP - damage);
-  updateHP();
-  setMessage(`Empress's blade flashes across the room. You take ${formatHP(damage)} damage.`);
-  screenShake();
-  await wait(800);
-  updateEmpressCooldowns();
-  if (playerHP <= 0) showGameOver();
+function buildAttackButtons(){
+  const grid=$("attack-grid");grid.classList.remove("finishing-state","empress-state");grid.innerHTML="";
+  currentBoss.playerAttacks.forEach((a,id)=>{const b=document.createElement("button");b.className="attack-button";b.dataset.attackId=id;b.textContent=a[0];b.onclick=()=>usePlayerAttack(id,false);if(brokenAttackIds.has(id))b.disabled=true;grid.appendChild(b);});
+  const owned=account?.ownedSkills||[];if(owned.length){buildSkillCatalog();owned.forEach(skillId=>{const s=skillCatalog.find(x=>x.id===skillId);if(!s)return;const b=document.createElement("button");b.className=`attack-button owned-skill ${s.enchanted?"enchanted-skill":""}`;b.dataset.skillId=s.id;b.textContent=s.name;b.style.setProperty("--rarity",s.color);b.title=s.description;b.onclick=()=>usePlayerAttack(s.id,true,s);grid.appendChild(b);});}
 }
+function getAvailableAttackIds(){return currentBoss.playerAttacks.map((_,i)=>i).filter(i=>!brokenAttackIds.has(i));}
+function updateCooldowns(){const now=Date.now();document.querySelectorAll("[data-attack-id]").forEach(b=>{const id=Number(b.dataset.attackId),until=empressSkillCooldowns.get(id);if(until&&until>now){b.disabled=true;b.classList.add("skill-cooldown");b.dataset.cooldown=`${Math.ceil((until-now)/1000)}s`;}else{if(!brokenAttackIds.has(id))b.disabled=false;b.classList.remove("skill-cooldown");delete b.dataset.cooldown;}})}
+async function startBattle(b){
+  busy=true;resetBattle(b);encounterNumber++;$("encounter-count").textContent=String(encounterNumber).padStart(2,"0");showScreen("battle-screen");setBackground(b.battleBackground || (b.id==="korthas"?CONFIG.background:b.cardImage));setPhaseLabel(`PHASE ONE // ${b.name}`);setCharacter("battle-boss",b.fight);$("boss-name").textContent=b.name;$("boss-level").textContent=`${b.stars} ★`;$("boss-kicker").textContent=b.title;$("battle-title").textContent=b.id==="argus"?"THE LAST GUNNER":"THE KING HAS AWAKENED";$("boss-name").className="";$("boss-aura").className="boss-aura";$("boss-status-text").textContent="DORMANT POWER AWAKENED";$("boss-hp-label").textContent=b.shield?"SHIELD // VITALITY":"ANCIENT SOUL SIGNATURE";buildAttackButtons();updateHP();setMessage(b.intro.join(" "));if(settings.music){const music=$("boss-music");music.src=b.music;music.volume=.6;music.play().catch(()=>{});}await wait(1700);setMessage(b.id==="argus"?b.intro[0]:"Korthas raises his trident. Choose your attack.");bossAttackEnabled=true;busy=false;}
 
-async function triggerPhaseTwo() {
-  phaseTwo = true;
-  setPhaseLabel("PHASE TWO // NO MORE MERCY");
-  $("boss-status-text").textContent = "LIMITERS DESTROYED";
-  setCharacterImage("battle-boss", CONFIG.assets.defeat);
-  for (const line of CONFIG.phaseTwoLines) {
-    $("battle-message").textContent = line;
-    $("battle-message").classList.add("angry-text");
-    screenShake();
-    await wait(line.includes("BASTARD") ? 1250 : 850);
-  }
-  $("battle-message").classList.remove("angry-text");
-  showFlash();
+async function usePlayerAttack(id,isSkill=false,skill=null){
+  if(busy||playerHP<=0||battleFinished)return;if(!isSkill&&brokenAttackIds.has(id))return;if(empressPhase&&empressSkillCooldowns.get(id)>Date.now())return;
+  busy=true;
+  if(empressPhase){await useAttackAgainstEmpress(id,isSkill?skill:currentBoss.playerAttacks[id]);busy=false;return;}
+  if(currentBoss.id==="argus"){const blocked=await argusParryCheck(id,isSkill,skill);if(blocked){busy=false;return;}}
+  let min,max,msgs,name;
+  if(isSkill){min=Math.round(skill.power*.75);max=Math.round(skill.power*1.2);msgs=[`${skill.name} detonates across ${currentBoss.name}.`,`The ${skill.rarity.toLowerCase()} skill tears into the boss.`,`Your purchased skill lands with brutal force.`];name=skill.name;}
+  else{const a=currentBoss.playerAttacks[id];[name,min,max,msgs]=a;}
+  let damage=randomInt(min,max);damage=Math.min(bossHP+bossShield,damage);applyBossDamage(damage);updateHP();setMessage(`${pick(msgs)} ${currentBoss.name} takes ${fmt(damage)} damage.`);shake();
+  if(bossHP<=0){await handleBossDefeat();busy=false;return;}
   await wait(700);
-  setCharacterImage("battle-boss", CONFIG.assets.stageTwo);
-  $("boss-aura").style.opacity = "1";
-  $("boss-aura").style.filter = "blur(9px)";
-  $("boss-name").classList.add("angry-text");
-  $("boss-status-text").textContent = "AWAKENED // DANGEROUS";
-  setMessage(CONFIG.phaseTwoFinalLine);
-  screenShake();
-  await wait(1350);
-  $("boss-name").classList.remove("angry-text");
-  await breakThreeButtons();
+  if(currentBoss.id==="korthas"&&!phaseTwo&&bossHP<=currentBoss.phaseTwoAtHP){await triggerKorthasPhaseTwo();if(bossHP<=0){await handleBossDefeat();busy=false;return;}}
+  await bossTurn();busy=false;
 }
-async function breakThreeButtons() {
-  const shuffled = getAvailableAttackIds().sort(() => Math.random() - .5);
-  const toBreak = shuffled.slice(0, Math.min(3, shuffled.length));
-  for (const id of toBreak) {
-    const button = document.querySelector(`[data-attack-id="${id}"]`);
-    if (!button) continue;
-    $("battle-boss").classList.remove("boss-lunge");
-    void $("battle-boss").offsetWidth;
-    $("battle-boss").classList.add("boss-lunge");
-    setMessage(`Korthas targets ${CONFIG.playerAttacks[id].name}...`);
-    await wait(220);
-    const spear = document.createElement("img");
-    spear.src = CONFIG.assets.attack;
-    spear.alt = "";
-    spear.className = "spear-projectile";
-    const rect = button.getBoundingClientRect();
-    spear.style.setProperty("--target-x", `${rect.left + rect.width / 2}px`);
-    spear.style.setProperty("--target-y", `${rect.top + rect.height / 2}px`);
-    document.body.appendChild(spear);
-    await wait(490);
-    spear.remove();
-    button.classList.add("broken");
-    screenShake();
-    await wait(600);
-    button.remove();
-    brokenAttackIds.add(id);
-    updateHP();
-    await wait(220);
+function applyBossDamage(d){if(bossShield>0){const absorbed=Math.min(bossShield,d);bossShield-=absorbed;d-=absorbed;}bossHP=Math.max(0,bossHP-d);}
+
+async function triggerKorthasPhaseTwo(){phaseTwo=true;setPhaseLabel("PHASE TWO // NO MORE MERCY");$("boss-status-text").textContent="LIMITERS DESTROYED";setCharacter("battle-boss",currentBoss.defeat);for(const line of currentBoss.phaseTwo){setMessage(line);$("battle-message").classList.add("angry-text");shake();await wait(line.includes("BASTARD")?1100:750)}$("battle-message").classList.remove("angry-text");showFlash();await wait(500);setCharacter("battle-boss",currentBoss.stageTwo);$("boss-name").classList.add("angry-text");$("boss-status-text").textContent="AWAKENED // DANGEROUS";setMessage(currentBoss.phaseFinal);await wait(1000);$("boss-name").classList.remove("angry-text");await breakKorthasSkills();}
+async function breakKorthasSkills(){const ids=getAvailableAttackIds().sort(()=>Math.random()-.5).slice(0,3);for(const id of ids){const b=document.querySelector(`[data-attack-id="${id}"]`);if(!b)continue;setMessage(`Korthas targets ${currentBoss.playerAttacks[id][0]}...`);await wait(200);b.classList.add("broken");shake();await wait(500);b.remove();brokenAttackIds.add(id);updateHP();}setMessage("Korthas has destroyed three of your attacks. He is faster now.");}
+async function bossTurn(){if(!bossAttackEnabled||playerHP<=0||bossHP<=0)return;if(currentBoss.id==="argus"){await argusTurn();return;}const move=pick(currentBoss.bossAttacks);let d=randomInt(move[1],move[2]);if(phaseTwo)d=Math.round(d*1.45);playerHP=Math.max(0,playerHP-d);updateHP();setMessage(`${move[0]} hits you. You take ${fmt(d)} damage.`);shake();await wait(800);if(playerHP<=0)showGameOver();}
+
+/* KORTHAS DEFEAT -> FINISH HIM -> EMPRESS */
+async function handleBossDefeat(){if(currentBoss.id!=="korthas"){await completeBoss();return;}bossAttackEnabled=false;battleFinished=false;brokenAttackIds=new Set(currentBoss.playerAttacks.map((_,i)=>i));setCharacter("battle-boss",currentBoss.defeat);setPhaseLabel("KORTHAS DEFEATED // FINISH HIM");$("boss-status-text").textContent="DEFEATED // BARELY BREATHING";showFlash();shake();for(const line of currentBoss.defeat){setMessage(line);$("battle-message").classList.add("defeat-text");await wait(line==="....."?850:1300)}$("battle-message").classList.remove("defeat-text");const grid=$("attack-grid");[...grid.children].forEach(x=>x.classList.add("defeat-fade"));await wait(620);grid.classList.add("finishing-state");grid.innerHTML="";const b=document.createElement("button");b.className="finish-him-button";b.innerHTML="<span>FINISH HIM</span><small>THE FINAL BLOW</small>";b.onclick=finishKorthas;grid.appendChild(b);$("attack-count").textContent="01 FINAL BLOW";setTimeout(()=>b.classList.add("shaking-letters"),80);}
+async function finishKorthas(){if(busy)return;busy=true;const b=document.querySelector(".finish-him-button");if(b)b.disabled=true;setMessage("FINISH HIM...");await wait(500);if(b)b.classList.add("knocked-away");await playParryEffect(currentBoss.parrySound);setMessage("— PARRY —");$("battle-message").classList.add("parry-text");shake();showFlash();await wait(550);$("battle-message").classList.remove("parry-text");await summonEmpress();busy=false;}
+async function playParryEffect(src){await playAudio(src,.9);const burst=document.createElement("div");burst.className="parry-burst";const target=$("battle-boss");if(target){const r=target.getBoundingClientRect();burst.style.left=`${r.left+r.width/2}px`;burst.style.top=`${r.top+r.height*.43}px`;}document.body.appendChild(burst);setTimeout(()=>burst.remove(),900);}
+async function summonEmpress(){empressPhase=true;bossAttackEnabled=false;empressHP=1000000;empressSkillCooldowns=new Map();brokenAttackIds=new Set();$("boss-name").textContent="EMPRESS";$("boss-level").textContent="CASTLE // ???";$("boss-status-text").textContent="THE EMPRESS HAS ARRIVED";$("boss-kicker").textContent="THE QUEEN OF THE CASTLE";$("boss-aura").className="boss-aura empress-aura";$("boss-name").className="empress-name";setPhaseLabel("PHASE THREE // THE EMPRESS");setCharacter("battle-boss",currentBoss.id==="korthas"?"assets/empress.png":currentBoss.fight);buildAttackButtons();$("attack-grid").classList.add("empress-state");updateHP();setMessage(currentBoss.empress[0]);await wait(1100);for(let i=1;i<currentBoss.empress.length;i++){setMessage(currentBoss.empress[i]);if(i>=4){$("battle-message").classList.add("empress-rage");shake()}await wait(i>=4?500:950)}$("battle-message").classList.remove("empress-rage");setMessage("Empress raises her sword. She is watching every move.");bossAttackEnabled=true;}
+async function useAttackAgainstEmpress(id,attack){const base=Array.isArray(attack)?attack:[attack.name,Math.round(attack.power*.75),Math.round(attack.power*1.2),[]];if(Math.random()<.72){await empressParry(id,base[0]);return;}const d=Math.min(empressHP,randomInt(base[1],base[2]));empressHP-=d;updateHP();setMessage(`${pick(base[3]||["Your skill lands."])} Empress takes ${fmt(d)} damage.`);await wait(750);if(empressHP<=0){await completeBoss(true);return;}await bossTurn();}
+async function empressParry(id,name){setMessage("EMPRESS PARRIES YOUR ATTACK.");$("battle-message").classList.add("parry-text");shake();await playParryEffect("assets/empress-parry.mp3");const b=document.querySelector(`[data-attack-id="${id}"]`);if(b){b.classList.add("parried-skill");b.disabled=true;}await wait(260);const slash=document.createElement("div");slash.className="empress-slash";document.body.appendChild(slash);await wait(330);slash.remove();const d=randomInt(18000,34000);playerHP=Math.max(0,playerHP-d);if(typeof id==="number")empressSkillCooldowns.set(id,Date.now()+19000);updateHP();updateCooldowns();setMessage(`Empress cuts through your guard. ${name} is sealed for 19 seconds.`);$("battle-message").classList.remove("parry-text");await wait(750);if(playerHP<=0)showGameOver();}
+
+/* ARGUS */
+async function argusParryCheck(id,isSkill,skill){if(Math.random()>=currentBoss.parryChance)return false;const name=isSkill?skill.name:currentBoss.playerAttacks[id][0];setMessage(`ARGUS raises his weapon. ${name} is caught in the sightline.`);const line=document.createElement("div");line.className="gun-line";document.body.appendChild(line);await wait(150);line.remove();await playAudio(currentBoss.parrySound,.95,true,true);showFlash();shake();const b=document.querySelector(`[data-attack-id="${id}"]`);if(b){b.classList.add("parried-skill");b.disabled=true;b.classList.add("skill-cooldown");b.dataset.cooldown="20s";}if(typeof id==="number")empressSkillCooldowns.set(id,Date.now()+20000);playerHP=Math.max(0,playerHP-30000);updateHP();setMessage("ARGUS: Reloading.");await playAudio(currentBoss.reloadSound,.7);setMessage("He reloaded.");await wait(350);if(playerHP<=0)showGameOver();return true;}
+async function argusTurn(){if(Math.random()<currentBoss.healChance){const heal=randomInt(100000,260000);bossHP=Math.min(currentBoss.maxHP,bossHP+heal);updateHP();setMessage(`ARGUS repairs himself. +${fmt(heal)} HP.`);showFlash();await wait(700);return;}
+  if(Math.random()<currentBoss.rapidBlastChance){setMessage(currentBoss.rapid);$("battle-message").classList.add("argus-rage");shake();await wait(700);$("battle-message").classList.remove("argus-rage");let shots=3+(Math.random()<currentBoss.extraShotChance?1:0);for(let i=0;i<shots;i++){const x=document.createElement("div");x.className="rapid-flash";document.body.appendChild(x);setTimeout(()=>x.remove(),280);const d=Math.min(playerHP,19000);playerHP-=d;updateHP();setMessage(`RAPID BLAST // SHOT ${i+1} OF ${shots}. You take ${fmt(d)} damage.`);shake();await wait(420);if(playerHP<=0){showGameOver();return;}}await playAudio(currentBoss.reloadSound,.7);setMessage("Argus reloads.");return;}
+  const d=Math.min(playerHP,randomInt(15000,27000));playerHP-=d;updateHP();setMessage(`Argus fires once. You take ${fmt(d)} damage.`);shake();await wait(700);if(playerHP<=0)showGameOver();}
+
+async function completeBoss(isEmpress=false){if(battleFinished)return;battleFinished=true;bossAttackEnabled=false;$("boss-status-text").textContent="ENCOUNTER CLEARED";setPhaseLabel("ENCOUNTER CLEARED // REWARD ACQUIRED");const reward=isEmpress?currentBoss.reward+500000:currentBoss.reward;account.dox=(account.dox||0)+reward;account.defeated[currentBoss.id]=(account.defeated[currentBoss.id]||0)+1;await saveAccount();updateWallet();showReward(reward,currentBoss.name);setMessage(`${currentBoss.name} has fallen. You earned ${fmt(reward)} DOX.`);showFlash();await wait(1700);}
+function showGameOver(){bossAttackEnabled=false;$("gameover-copy").textContent=`${currentBoss.name} has defeated you. Will you return to the hunt?`;$("gameover-screen").classList.remove("hidden");}
+$("retry-yes").addEventListener("click",async()=>{$("gameover-screen").classList.add("hidden");if(currentBoss)await transition(()=>startBattle(currentBoss));});
+$("retry-no").addEventListener("click",async()=>{$("gameover-screen").classList.add("hidden");await transition(()=>{showScreen("lobby-screen");renderLobby()});});
+$("leave-battle").addEventListener("click",async()=>{bossAttackEnabled=false;$("boss-music").pause();await transition(()=>{showScreen("lobby-screen");renderLobby()});});
+setInterval(updateCooldowns,250);
+
+/* ------------------------- BOOT ------------------------- */
+async function boot(){
+  setBackground("assets/menu-background.jpg");
+  // Restore server session when possible.
+  if(sessionToken&&sessionToken!=="local"){
+    try{const data=await api("/me");account=data.account;renderLobby();showScreen("lobby-screen");return;}catch{sessionToken="";localStorage.removeItem(tokenKey);}
   }
-  $("battle-boss").classList.remove("boss-lunge");
-  setMessage("Korthas has destroyed three of your attacks. He is faster now.");
+  if(sessionToken==="local"&&fallbackLocal()){account=fallbackLocal();renderLobby();showScreen("lobby-screen");return;}
+  showScreen("start-screen");
 }
-async function bossTurn() {
-  if (playerHP <= 0 || bossHP <= 0) return;
-  const move = pick(CONFIG.bossAttacks);
-  let damage = randomInt(move.min, move.max);
-  if (phaseTwo) damage = Math.round(damage * 1.45);
-  damage = Math.min(playerHP, damage);
-  playerHP -= damage;
-  updateHP();
-  setMessage(`${pick(move.messages)} You take ${formatHP(damage)} damage.`);
-  screenShake();
-  await wait(900);
-  if (playerHP <= 0) showGameOver();
-}
-setInterval(() => { if (empressPhase) updateEmpressCooldowns(); }, 250);
-
-function showGameOver() {
-  bossMusic.pause();
-  battleScreen.classList.add("hidden");
-  gameoverScreen.classList.remove("hidden");
-  $("gameover-copy").textContent = empressPhase ? "The Empress has defeated you. Will you return to the castle?" : "Korthas has won. Will you face him again?";
-}
-document.querySelectorAll("[data-choice]").forEach(button => {
-  button.addEventListener("click", () => {
-    if (button.dataset.choice === "no") getOutEffect();
-    else startBattle();
-  });
-});
-$("retry-yes").addEventListener("click", showIntro);
-$("retry-no").addEventListener("click", getOutEffect);
-
-// The background and image paths are deliberately easy to find.
-applyBackground();
-showIntro();
+boot();

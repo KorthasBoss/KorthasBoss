@@ -1,56 +1,82 @@
-# KORTHAS — Boss Encounter Website
+# YEN! // BOSS WORLD
 
-A neat, customizable boss-fight website for GitHub Pages. You can add or replace the art, background, and music yourself without needing public image URLs.
+A customizable boss-hunting website built around the existing Korthas battle system.
 
-## 1. The files you will edit most
+## What is included
 
-- `index.html` — page structure and labels
-- `style.css` — colors, layout, visual effects, button animations
-- `script.js` — **all the easy-to-customize settings are at the very top**
-- `assets/` — put your images, background, and music here
+- YEN! start menu with Play / Settings / Credits
+- Username + password account system
+- 500,000 DOX starting bonus
+- Server-side accounts for sign-in from other devices
+- Boss lobby with Korthas (56★) and Argus (79★)
+- Smooth black fade transitions between menus
+- Boss confirmation screen before every fight
+- Existing Korthas phases preserved, including Finish Him -> Empress
+- Argus with shield, gun parry, reload, Rapid Blast, healing, and extra shots
+- DOX rewards after boss clears
+- Reward animation
+- Merchant with 50 dialogue lines
+- Procedural catalog of exactly 4,000 skills
+- Rarity colors + Enchanted skills
+- Purchased skills persist to the account and appear in every battle
+- Settings for effects, music, and reduced motion
+- Per-menu / per-boss / merchant background and music slots
 
-## 2. Add your art and music
+## Custom assets
 
-Put your files in `assets/` and use these filenames:
+Drop these into `assets/` when you have them:
 
-| File | What it is |
-|---|---|
-| `korthas-idle.png` | Intro / idle character |
-| `korthas-fight.png` | First-phase battle pose |
-| `korthas-defeat.png` | Transformation dialogue pose |
-| `korthas-stage2.png` | Stage-two pose |
-| `korthas-attack.png` | Spear/projectile thrown at broken buttons |
-| `background.gif` | Animated background (PNG/JPG also works if you change the path) |
-| `korthas-theme.mp3` | Boss music |
+### Menu / lobby
+- `menu-idle.png`
+- `menu-background.jpg`
+- `lobby-background.jpg`
 
-**Important:** If you want different filenames, open `script.js` and edit `CONFIG.assets`. To change the background filename, edit the first line `BACKGROUND_IMAGE` near the top of `script.js`.
+### Korthas
+- `korthas-idle.png`
+- `korthas-fight.png`
+- `korthas-defeat.png`
+- `korthas-stage2.png`
+- `korthas-attack.png`
+- `korthas-lobby.jpg`
+- `korthas-battle-background.jpg`
+- `korthas-theme.mp3`
 
-Transparent PNG or WebP character art is recommended. Keep the background image behind the game UI, not baked into the character sprites.
+### Empress
+- `empress.png`
+- `empress-parry.mp3`
 
-## 3. Customize the fight
+### Argus
+- `argus-idle.png`
+- `argus-fight.png`
+- `argus-lobby.jpg`
+- `argus-battle-background.jpg`
+- `argus-theme.mp3`
+- `argus-parry.mp3`
+- `argus-reload.mp3`
+- `argus-gun.png` (optional effect/projectile art)
 
-At the top of `script.js`, change:
-- `bossMaxHP` — boss HP (default 700000)
-- `playerMaxHP` — player HP (default 180000)
-- `phaseTwoAtHP` — phase-two trigger (default 610000)
-- `introLines`, `yesLines`, `phaseTwoLines`, `phaseTwoFinalLine` — dialogue
-- `playerAttacks` — names, random damage ranges, and random attack messages
-- `bossAttacks` — boss attack names, damage ranges, and messages
+### Merchant
+- `merchant-idle.png`
+- `merchant-background.jpg`
+- `merchant-theme.mp3`
 
-The boss randomly destroys three different player attack buttons when phase two begins. The remaining buttons reorganize themselves automatically.
+`background.gif` remains an optional arena fallback.
 
-## 4. Test the website
+## Run locally
 
-Open `index.html` in a browser. For best results, use VS Code with the Live Server extension. Audio normally starts only after clicking YES because browsers block autoplay before a user interaction.
+This version includes a tiny Express server because true cross-device accounts require a server. Install dependencies and run:
 
-If an image does not show, check its exact spelling and file extension. Filenames are case-sensitive on GitHub Pages.
+```bash
+npm install
+npm start
+```
 
-## 5. Publish on GitHub Pages
+Then open `http://localhost:3000`.
 
-1. Create a new repository on GitHub.
-2. Upload the contents of this folder, including the `assets` folder.
-3. Open **Settings → Pages**.
-4. Choose **Deploy from a branch**, select your `main` branch and `/(root)`, then save.
-5. Wait for GitHub Pages to publish.
+The server stores account data in `data/accounts.json`. Passwords are stored as salted scrypt hashes, not plain text.
 
-Browsers usually block `window.close()` for tabs opened directly by a user. The `GET OUT` static sequence still plays; the site then attempts to close the tab.
+### Deployment note
+
+For a hosted deployment such as Render, keep `data/accounts.json` on persistent storage (for example a persistent disk). Without persistent storage, a server restart/redeploy can erase the local JSON account database.
+
+If the HTML is opened directly as a file, the site has a localStorage fallback so the battle and menu can still be tested, but that fallback is not a cross-device account system.

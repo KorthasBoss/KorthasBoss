@@ -1,105 +1,65 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#070911">
-  <title>KORTHAS // The Tome Encounter</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#070911"><title>YEN! // BOSS WORLD</title><link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="ambient ambient-one"></div>
-  <div class="ambient ambient-two"></div>
-  <div id="scanlines" aria-hidden="true"></div>
+<div class="ambient ambient-one"></div><div class="ambient ambient-two"></div><div id="scanlines" aria-hidden="true"></div>
+<main id="game" class="game-shell">
+<header class="site-header"><a class="brand" href="#" id="brand-home"><span class="brand-mark">Y!</span><span><strong>YEN!</strong><small>BOSS WORLD</small></span></a><div class="header-status"><span class="status-dot"></span><span id="phase-label">WELCOME</span></div></header>
 
-  <main id="game" class="game-shell">
-    <header class="site-header">
-      <a class="brand" href="#" aria-label="Korthas encounter home">
-        <span class="brand-mark">K</span>
-        <span><strong>KORTHAS</strong><small>THE TOME ENCOUNTER</small></span>
-      </a>
-      <div class="header-status"><span class="status-dot"></span><span id="phase-label">ENCOUNTER WAITING</span></div>
-    </header>
+<!-- START MENU -->
+<section id="start-screen" class="portal-screen">
+  <div class="portal-art"><div class="portal-ring"></div><div class="portal-grid"></div><img id="menu-art" class="portal-character" src="assets/menu-idle.png" alt="YEN menu character"></div>
+  <div class="portal-copy"><p class="section-kicker"><span class="tiny-diamond"></span> THE HUNT BEGINS HERE</p><h1 class="portal-title">YEN!</h1><p class="portal-subtitle">A place to earn materials, tame bosses, buy ridiculous skills, and become a problem.</p>
+    <div class="menu-buttons"><button class="menu-button primary" data-screen="auth-screen">PLAY <span>↗</span></button><button class="menu-button" data-screen="settings-screen">SETTINGS <span>⚙</span></button><button class="menu-button" data-screen="credits-screen">CREDITS <span>///</span></button></div>
+    <div class="portal-note"><span>01</span> BOSS HUNTING <i></i><span>02</span> SKILL FORGING <i></i><span>03</span> DOX ECONOMY</div>
+  </div>
+</section>
 
-    <section id="intro-screen" class="intro-layout">
-      <div class="intro-art-panel">
-        <div class="art-corner corner-tl"></div><div class="art-corner corner-br"></div>
-        <div class="art-orbit orbit-one"></div><div class="art-orbit orbit-two"></div>
-        <div class="art-caption"><span>THE SLEEPING KING</span><span>NO. 001</span></div>
-        <img id="intro-boss" class="character-art idle-art" src="assets/korthas-idle.png" alt="Korthas idle stance">
-        <div class="art-floor"></div>
-      </div>
+<!-- AUTH -->
+<section id="auth-screen" class="portal-subscreen hidden">
+  <div class="subscreen-card"><p class="section-kicker">WAIT JUST A SEC.</p><h1>YOU WANT TO EARN COINS AND BETTER SKILLS, RIGHT?</h1><p class="lead-copy">Make an account. Every boss you defeat pays a massive amount of <b>DOX</b>. No profile setup. No extra nonsense. Just a username and password.</p>
+  <div class="auth-tabs"><button class="auth-tab active" data-auth-mode="register">CREATE ACCOUNT</button><button class="auth-tab" data-auth-mode="login">SIGN IN</button></div>
+  <form id="auth-form"><label>USERNAME<input id="auth-username" required minlength="3" maxlength="24" autocomplete="username"></label><label>PASSWORD<input id="auth-password" type="password" required minlength="6" maxlength="72" autocomplete="new-password"></label><button class="menu-button primary" type="submit" id="auth-submit">CREATE ACCOUNT <span>↗</span></button></form><p id="auth-status" class="form-status"></p>
+  <div class="sub-actions"><button class="text-button" data-screen="start-screen">← BACK</button></div></div>
+</section>
 
-      <div class="dialogue-card">
-        <div class="section-kicker"><span class="tiny-diamond"></span> AN UNWELCOME VISITOR</div>
-        <div class="speaker-row"><div class="speaker-icon">K</div><div><h1>Korthas</h1><p>Keeper of the Tome</p></div><span class="speaker-state">IDLE</span></div>
-        <div class="dialogue-window">
-          <div class="dialogue-topline"><span>INCOMING DIALOGUE</span><span id="dialogue-count">01 / 06</span></div>
-          <p id="intro-line" class="dialogue-text">Hm...</p>
-          <div class="dialogue-caret">▼</div>
-        </div>
-        <div id="choice-row" class="choice-row hidden">
-          <button class="choice-button choice-yes" data-choice="yes"><span>YES</span><span class="button-arrow">↗</span></button>
-          <button class="choice-button choice-no" data-choice="no"><span>NO</span><span class="button-arrow">↗</span></button>
-        </div>
-        <p class="micro-hint">CHOOSE CAREFULLY. SOME ANSWERS CANNOT BE TAKEN BACK.</p>
-      </div>
-    </section>
+<!-- LOBBY -->
+<section id="lobby-screen" class="portal-subscreen hidden">
+  <div class="lobby-top"><div><p class="section-kicker">HUNTER LOBBY</p><h1>CHOOSE YOUR TARGET</h1></div><div class="wallet"><span>DOX</span><strong id="wallet-dox">500,000</strong></div></div>
+  <div class="lobby-grid" id="boss-list"></div><p class="coming-soon">MORE ACHIEVEMENTS WILL BE OUT SOON.</p>
+  <div class="lobby-actions"><button class="lobby-action" data-screen="merchant-screen">MERCHANT</button><button class="lobby-action" data-screen="settings-screen">SETTINGS</button><button class="lobby-action" id="logout-button">SIGN OUT</button></div>
+</section>
 
-    <section id="battle-screen" class="battle-screen hidden">
-      <div class="battle-heading"><div><div class="section-kicker"><span class="tiny-diamond"></span> HOSTILE ENTITY DETECTED</div><h2>THE KING HAS AWAKENED</h2></div><div class="battle-tag">BOSS FIGHT <span>///</span> LIVE</div></div>
-      <div class="boss-panel">
-        <div class="boss-panel-grid"></div>
-        <div class="boss-art-wrap">
-          <div id="boss-aura" class="boss-aura"></div>
-          <img id="battle-boss" class="character-art battle-art" src="assets/korthas-fight.png" alt="Korthas battle stance">
-          <div class="boss-sigil">✦</div>
-        </div>
-        <div class="boss-info">
-          <div class="boss-name-line"><div><span class="info-kicker">THE OATHBOUND</span><h2 id="boss-name">KORTHAS</h2></div><span class="boss-level">LV ??</span></div>
-          <div class="hp-title"><span>VITALITY</span><span id="boss-hp-text">700,000 / 700,000</span></div>
-          <div class="hp-track boss-track"><div id="boss-hp-fill" class="hp-fill boss-fill"></div><div class="hp-shine"></div></div>
-          <div class="hp-meta"><span>ANCIENT SOUL SIGNATURE</span><span id="boss-hp-percent">100%</span></div>
-          <div class="boss-status"><span class="status-dot"></span><span id="boss-status-text">DORMANT POWER AWAKENED</span></div>
-        </div>
-      </div>
+<!-- MERCHANT -->
+<section id="merchant-screen" class="portal-subscreen hidden merchant-screen">
+  <div class="merchant-wrap"><div class="merchant-art"><div class="merchant-glow"></div><img id="merchant-image" src="assets/merchant-idle.png" alt="Merchant"></div>
+  <div class="merchant-dialog"><p class="section-kicker">THE MERCHANT // NO THREAT DETECTED</p><h1 id="merchant-line">OH. YOU'RE BACK.</h1><p id="merchant-subline">I've got something that'll make your next fight considerably less fair.</p><button id="merchant-next" class="menu-button primary">NEXT <span>→</span></button><div class="merchant-meta"><span id="merchant-dialog-count">01 / 50</span><span>4,000 SKILLS IN STOCK</span></div></div></div>
+  <div id="skill-shop" class="skill-shop hidden"><div class="shop-heading"><div><p class="section-kicker">THE VAULT</p><h2>SKILLS // 4,000 ITEMS</h2></div><div class="shop-search"><input id="skill-search" placeholder="Search skills..."></div></div><div id="skill-grid" class="skill-grid"></div></div>
+  <div class="sub-actions"><button class="text-button" data-screen="lobby-screen">← BACK TO LOBBY</button><button class="text-button" id="open-shop">OPEN SKILL VAULT</button></div>
+</section>
 
-      <div class="combat-grid">
-        <section class="combat-main">
-          <div class="panel-heading"><span class="tiny-diamond"></span><span>COMBAT LOG</span><span class="panel-line"></span><span class="live-pill">LIVE</span></div>
-          <div class="battle-log" aria-live="polite"><span class="log-marker">›</span><p id="battle-message">Korthas watches you in silence.</p></div>
-          <div class="panel-heading attack-heading"><span class="tiny-diamond red-diamond"></span><span>CHOOSE YOUR ATTACK</span><span class="panel-line"></span><span id="attack-count" class="attack-count">08 AVAILABLE</span></div>
-          <div id="attack-grid" class="attack-grid"></div>
-        </section>
-        <aside class="player-panel">
-          <div class="player-emblem">✧</div>
-          <div class="section-kicker">PLAYER STATUS</div>
-          <h3>YOUR SOUL</h3>
-          <div class="player-hp-numbers"><strong id="player-hp-text">180,000</strong><span>/ 180,000 HP</span></div>
-          <div class="hp-track player-track"><div id="player-hp-fill" class="hp-fill player-fill"></div></div>
-          <div class="player-status-row"><span class="player-status-dot"></span><span id="player-status-text">STILL STANDING</span></div>
-          <div class="player-divider"></div>
-          <div class="player-stat"><span>ATTACKS REMAINING</span><strong id="player-attacks-remain">08</strong></div>
-          <div class="player-stat"><span>ENCOUNTER</span><strong id="encounter-count">01</strong></div>
-          <div class="player-warning">Korthas is unpredictable. Watch the combat log.</div>
-        </aside>
-      </div>
-    </section>
+<!-- SETTINGS -->
+<section id="settings-screen" class="portal-subscreen hidden"><div class="subscreen-card settings-card"><p class="section-kicker">PLAY SETTINGS</p><h1>MAKE THE HUNT YOURS.</h1><label class="toggle-row"><span>SCREEN EFFECTS <small>Keep the flashes and impact effects.</small></span><input type="checkbox" id="setting-effects" checked><i></i></label><label class="toggle-row"><span>BOSS MUSIC <small>Theme music and merchant ambience.</small></span><input type="checkbox" id="setting-music" checked><i></i></label><label class="toggle-row"><span>REDUCED MOTION <small>Soften shakes and aggressive animations.</small></span><input type="checkbox" id="setting-motion"><i></i></label><div class="sub-actions"><button class="text-button" id="settings-save">SAVE SETTINGS</button><button class="text-button" data-screen="start-screen">← BACK</button></div></div></section>
 
-    <section id="gameover-screen" class="full-overlay hidden">
-      <div class="overlay-emblem">✕</div><p class="section-kicker">SIGNAL LOST // SOUL DEPLETED</p>
-      <h1 class="game-over-title">GAME OVER</h1><p id="gameover-copy" class="overlay-copy">Korthas has won. Will you face him again?</p>
-      <div class="choice-row overlay-choices"><button id="retry-yes" class="choice-button choice-yes"><span>YES, AGAIN</span><span class="button-arrow">↗</span></button><button id="retry-no" class="choice-button choice-no"><span>NO, I'M DONE</span><span class="button-arrow">↗</span></button></div>
-    </section>
+<!-- CREDITS -->
+<section id="credits-screen" class="portal-subscreen hidden"><div class="subscreen-card credits-card"><p class="section-kicker">CREDITS</p><h1>THE PEOPLE BEHIND THE HUNT</h1><div class="credit-block"><strong>Owner: UNIX!</strong><span>Coworkers / artist</span><p>Waver_cakes<br>PlazaArts<br>Gain_zero</p></div><div class="credit-rule"></div><p class="credit-small">YEN! BOSS WORLD // BATTLE, MERCHANTS &amp; BAD DECISIONS.</p><button class="text-button" data-screen="start-screen">← BACK</button></div></section>
 
-    <section id="static-screen" class="full-overlay static-screen hidden">
-      <div class="static-noise"></div><p class="section-kicker">UNAUTHORIZED PRESENCE</p><h1>GET OUT.</h1><p class="static-subtitle">CONNECTION TERMINATED</p>
-    </section>
+<!-- BATTLE -->
+<section id="battle-screen" class="battle-screen hidden">
+  <div class="battle-heading"><div><div class="section-kicker"><span class="tiny-diamond"></span> HOSTILE ENTITY DETECTED</div><h2 id="battle-title">THE KING HAS AWAKENED</h2></div><div class="battle-tag">BOSS FIGHT <span>///</span> LIVE</div></div>
+  <div class="boss-panel"><div class="boss-panel-grid"></div><div class="boss-art-wrap"><div id="boss-aura" class="boss-aura"></div><img id="battle-boss" class="character-art battle-art" src="assets/korthas-fight.png" alt="Boss battle stance"><div class="boss-sigil">✦</div></div><div class="boss-info"><div class="boss-name-line"><div><span class="info-kicker" id="boss-kicker">THE OATHBOUND</span><h2 id="boss-name">KORTHAS</h2></div><span class="boss-level" id="boss-level">56 ★</span></div><div class="hp-title"><span>VITALITY</span><span id="boss-hp-text">700,000 / 700,000</span></div><div class="hp-track boss-track"><div id="boss-shield-fill" class="hp-fill shield-fill"></div><div id="boss-hp-fill" class="hp-fill boss-fill"></div><div class="hp-shine"></div></div><div class="hp-meta"><span id="boss-hp-label">ANCIENT SOUL SIGNATURE</span><span id="boss-hp-percent">100%</span></div><div class="boss-status"><span class="status-dot"></span><span id="boss-status-text">DORMANT POWER AWAKENED</span></div></div></div>
+  <div class="combat-grid"><section class="combat-main"><div class="panel-heading"><span class="tiny-diamond"></span><span>COMBAT LOG</span><span class="panel-line"></span><span class="live-pill">LIVE</span></div><div class="battle-log" aria-live="polite"><span class="log-marker">›</span><p id="battle-message">Korthas watches you in silence.</p></div><div class="panel-heading attack-heading"><span class="tiny-diamond red-diamond"></span><span>CHOOSE YOUR ATTACK</span><span class="panel-line"></span><span id="attack-count" class="attack-count">08 AVAILABLE</span></div><div id="attack-grid" class="attack-grid"></div></section><aside class="player-panel"><div class="player-emblem">✧</div><div class="section-kicker">PLAYER STATUS</div><h3>YOUR SOUL</h3><div class="player-hp-numbers"><strong id="player-hp-text">180,000</strong><span>/ 180,000 HP</span></div><div class="hp-track player-track"><div id="player-hp-fill" class="hp-fill player-fill"></div></div><div class="player-status-row"><span class="player-status-dot"></span><span id="player-status-text">STILL STANDING</span></div><div class="player-divider"></div><div class="player-stat"><span>DOX</span><strong id="battle-dox">500,000</strong></div><div class="player-stat"><span>ATTACKS REMAINING</span><strong id="player-attacks-remain">08</strong></div><div class="player-stat"><span>ENCOUNTER</span><strong id="encounter-count">01</strong></div><div class="player-warning">Every boss is different. Watch the combat log.</div></aside></div>
+  <div class="battle-bottom"><button class="text-button" id="leave-battle">← RETURN TO LOBBY</button></div>
+</section>
 
-    <footer class="site-footer"><span>© KORTHAS // THE TOME ENCOUNTER</span><span>AN UNFORGIVING LITTLE WORLD <i>✦</i></span></footer>
-  </main>
-  <audio id="boss-music" src="assets/korthas-theme.mp3" loop preload="auto"></audio>
-  <audio id="parry-sound" src="assets/empress-parry.mp3" preload="auto"></audio>
-  <script src="script.js"></script>
-</body>
-</html>
+<section id="gameover-screen" class="full-overlay hidden"><div class="overlay-emblem">✕</div><p class="section-kicker">SIGNAL LOST // SOUL DEPLETED</p><h1 class="game-over-title">GAME OVER</h1><p id="gameover-copy" class="overlay-copy">The boss has won. Will you face it again?</p><div class="choice-row overlay-choices"><button id="retry-yes" class="choice-button choice-yes"><span>YES, AGAIN</span><span class="button-arrow">↗</span></button><button id="retry-no" class="choice-button choice-no"><span>NO, I'M DONE</span><span class="button-arrow">↗</span></button></div></section>
+<section id="confirm-screen" class="full-overlay hidden"><div class="confirm-card"><p class="section-kicker">ENCOUNTER REQUEST</p><h1 id="confirm-title">ARE YOU SURE?</h1><p id="confirm-copy">Are you sure you want to fight Korthas?</p><div class="choice-row"><button id="confirm-yes" class="choice-button choice-yes"><span>YES</span><span>↗</span></button><button id="confirm-no" class="choice-button choice-no"><span>NO</span><span>×</span></button></div></div></section>
+<section id="static-screen" class="full-overlay static-screen hidden"><div class="static-noise"></div><p class="section-kicker">UNAUTHORIZED PRESENCE</p><h1>GET OUT.</h1><p class="static-subtitle">CONNECTION TERMINATED</p></section>
+<footer class="site-footer"><span>© YEN! // BOSS WORLD</span><span>EARN. FIGHT. BUY SOMETHING STUPID. <i>✦</i></span></footer>
+</main>
+<audio id="boss-music" src="assets/korthas-theme.mp3" loop preload="auto"></audio><audio id="parry-sound" src="assets/empress-parry.mp3" preload="auto"></audio>
+<script src="script.js"></script>
+</body></html>
