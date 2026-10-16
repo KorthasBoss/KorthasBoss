@@ -218,3 +218,68 @@ button{font:inherit;cursor:pointer}
 @media(max-width:560px){.portal-screen,.portal-subscreen{padding-top:22px}.portal-title{font-size:92px}.portal-subtitle{font-size:19px}.portal-note{flex-wrap:wrap}.subscreen-card{margin-top:18px;padding:22px}.lobby-top{align-items:start;flex-direction:column}.wallet{width:100%;text-align:left}.skill-grid{grid-template-columns:1fr}.confirm-card{padding:24px}.confirm-card h1{font-size:30px}.merchant-dialog h1{font-size:45px}.merchant-meta{gap:10px}.merchant-meta span{font-size:7px}}
 .merchant-lobby-card{border-color:#4b3b2d;background:linear-gradient(145deg,#1c1711,#0b0b0d)}.merchant-lobby-card:hover{border-color:#ffbf65;box-shadow:0 18px 45px #ff9f2618}.merchant-lobby-card .boss-card-art{filter:drop-shadow(0 0 24px #ff9f264d)}.merchant-lobby-card .stars{color:#ffc56d}
 .owned-skill{border-color:color-mix(in srgb,var(--rarity) 55%,#29384e)}.owned-skill::after{background:var(--rarity)}.enchanted-skill{border-color:#c984ff!important;box-shadow:0 0 18px #b04cff1d,inset 0 0 20px #b04cff0c}.enchanted-skill::after{background:#e3a0ff}.skill-card.enchanted h3{color:#f2d5ff;text-shadow:0 0 13px #b65cff66}
+
+/* ==========================================================
+   YEN! // STABLE CHARACTER ART
+   Boss/character images are never intentionally faded.
+   Missing files stay fully visible while a warning is logged.
+========================================================== */
+.character-art,.battle-art,.boss-card-art,.portal-character,.idle-art,#battle-boss,#merchant-image{
+  opacity:1!important;
+  visibility:visible!important;
+}
+
+/* ==========================================================
+   MERCHANT // HEALING POTIONS
+========================================================== */
+.potion-vault{margin-top:28px;padding-top:22px;border-top:1px solid #27364b}
+.potion-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin-top:12px}
+.potion-card{position:relative;min-height:115px;padding:15px;border:1px solid #4a3340;background:linear-gradient(145deg,#17121d,#0c1018);color:#f4eff5;cursor:pointer;transition:transform .16s,border-color .16s,box-shadow .16s}
+.potion-card:hover{transform:translateY(-3px);border-color:#ff6b87;box-shadow:0 10px 24px #ff29441c}
+.potion-card h3{margin:8px 0 5px;font:600 14px var(--display);letter-spacing:.04em}
+.potion-card p{margin:0;color:#8997ad;font:9px/1.45 var(--mono)}
+.potion-card .potion-price{margin-top:10px;color:#ff8299;font:10px var(--mono)}
+.potion-card .potion-owned{position:absolute;top:10px;right:10px;color:#74dfff;font:8px var(--mono)}
+.attack-button.potion-button{border-color:#5b3946;color:#ffb7c4}
+.attack-button.potion-button:disabled{opacity:.3}
+
+/* ==========================================================
+   AZAEL // DOMAIN
+========================================================== */
+body.azael-domain{
+  --bg:#090003;
+  background-color:#090003!important;
+  color:#ffe9ed;
+}
+body.azael-domain .site-header,
+body.azael-domain .combat-main,
+body.azael-domain .player-panel,
+body.azael-domain .boss-panel{
+  border-color:#6b1829;
+}
+body.azael-domain .boss-panel{background:linear-gradient(105deg,#210812,#100207 65%,#240711)}
+body.azael-domain .combat-main{background:#12050a}
+body.azael-domain .player-panel{background:linear-gradient(155deg,#260a12,#100309 75%)}
+body.azael-domain .panel-line{background:#541323}
+body.azael-domain .boss-fill{background:linear-gradient(90deg,#7b0d22,#e22d4e,#ff9eaa);box-shadow:0 0 18px #ff214d}
+body.azael-domain .battle-log{background:linear-gradient(100deg,#260b14,#12050a);border-color:#5b1628}
+body.azael-domain .attack-button{border-color:#6b2738;background:linear-gradient(145deg,#24101a,#11060b)}
+body.azael-domain .attack-button:hover:not(:disabled){border-color:#ff4263;box-shadow:0 8px 24px #ff29442b}
+body.azael-domain .boss-name-line h2,
+body.azael-domain .battle-heading h2{color:#fff0f3;text-shadow:0 0 22px #ff214d66}
+body.azael-domain .status-dot{background:#ff4263;box-shadow:0 0 12px #ff4263}
+.domain-transition{position:fixed;inset:0;z-index:9998;background:#000;opacity:0;pointer-events:none;animation:domainFadeBlack 2.2s ease-in-out forwards}
+@keyframes domainFadeBlack{0%{opacity:0}38%{opacity:1}70%{opacity:1}100%{opacity:0}}
+.domain-mini-game{position:fixed;z-index:9999;inset:0;display:grid;place-items:center;background:#030207cc;backdrop-filter:blur(5px)}
+.domain-mini-card{width:min(560px,92vw);padding:28px;border:1px solid #8c2941;background:linear-gradient(145deg,#17070d,#090308);box-shadow:0 0 70px #ff173d22;text-align:center}
+.domain-mini-card .section-kicker{justify-content:center;color:#ff8198}
+.domain-mini-card h2{margin:10px 0;font-size:30px;letter-spacing:.08em}
+.domain-mini-card p{color:#aeb7c7;font:13px/1.6 var(--mono)}
+.domain-reaction{position:relative;height:28px;margin:22px 0;border:1px solid #5d2434;background:#09030a;overflow:hidden}
+.domain-reaction-target{position:absolute;left:50%;top:0;width:20%;height:100%;transform:translateX(-50%);background:#ff365c55;border-left:1px solid #ff6680;border-right:1px solid #ff6680}
+.domain-reaction-cursor{position:absolute;top:-4px;width:5px;height:36px;background:#fff;box-shadow:0 0 15px #ff4868;left:0}
+.domain-hit-button{width:100%;min-height:52px;border:1px solid #ff4263;background:#210a12;color:#ffe9ee;font:700 12px var(--mono);letter-spacing:.14em}
+.domain-hit-button:hover{background:#3a0c18;box-shadow:0 0 25px #ff29443b}
+.domain-timer{position:fixed;z-index:65;right:18px;top:18px;padding:7px 10px;border:1px solid #792238;background:#100208dd;color:#ff9cad;font:9px var(--mono);letter-spacing:.1em;pointer-events:none}
+@media(max-width:850px){.potion-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.potion-grid{grid-template-columns:1fr}.domain-mini-card{padding:20px}.domain-mini-card h2{font-size:24px}}

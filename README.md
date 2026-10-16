@@ -1,95 +1,23 @@
 # YEN! // BOSS WORLD
 
-A customizable boss-hunting website built around the existing Korthas battle system.
+A static YEN! boss-hunting site. The game does **not** use Render, a mini-server,
+SQLite, or a public account database.
 
-## What is included
+## Accounts
 
-- YEN! start menu with Play / Settings / Credits
-- Username + password account system
-- 500,000 DOX starting bonus
-- Server-side accounts for sign-in from other devices
-- Boss lobby with Korthas (56★) and Argus (79★)
-- Smooth black fade transitions between menus
-- Boss confirmation screen before every fight
-- Existing Korthas phases preserved, including Finish Him -> Empress
-- Argus with shield, gun parry, reload, Rapid Blast, healing, and extra shots
-- DOX rewards after boss clears
-- Reward animation
-- Merchant with 50 dialogue lines
-- Procedural catalog of exactly 4,000 skills
-- Rarity colors + Enchanted skills
-- Purchased skills persist to the account and appear in every battle
-- Settings for effects, music, and reduced motion
-- Per-menu / per-boss / merchant background and music slots
+Accounts are defined in `accounts.js` and loaded directly by username/password.
+DOX, purchased skills, custom attacks and potion inventory are intentionally
+session-only. If you want a player to start with more DOX or a new skill, edit
+their object in `accounts.js`.
 
-## Custom assets
-
-Drop these into `assets/` when you have them:
-
-### Menu / lobby
-- `menu-idle.png`
-- `menu-background.jpg`
-- `lobby-background.jpg`
-
-### Korthas
-- `korthas-idle.png`
-- `korthas-fight.png`
-- `korthas-defeat.png`
-- `korthas-stage2.png`
-- `korthas-attack.png`
-- `korthas-lobby.jpg`
-- `korthas-battle-background.jpg`
-- `korthas-theme.mp3`
-
-### Empress
-- `empress.png`
-- `empress-parry.mp3`
-
-### Argus
-- `argus-idle.png`
-- `argus-fight.png`
-- `argus-lobby.jpg`
-- `argus-battle-background.jpg`
-- `argus-theme.mp3`
-- `argus-parry.mp3`
-- `argus-reload.mp3`
-- `argus-gun.png` (optional effect/projectile art)
-
-### Merchant
-- `merchant-idle.png`
-- `merchant-background.jpg`
-- `merchant-theme.mp3`
-
-`background.gif` remains an optional arena fallback.
-
-## Run YEN! on your mini server (local SQLite saves)
-
-**Requirements:** Node.js 22.5 or newer.
-
-1. Extract this folder to your computer.
-2. Open a terminal in the `KorthasBoss-main` folder.
-3. Run `npm install` once.
-4. Run `npm start`.
-5. Open `http://localhost:8080` in your browser.
-
-The server creates `players.db` beside `server.js`. This SQLite file stores private accounts, password hashes, DOX, defeated-boss counts, and purchased skills. Keep this file and back it up; deleting it deletes the saved accounts. The old `data/accounts.json` is imported automatically the first time the new database is created, and the JSON file is left untouched. If a `players.db` from the previous mini server exists, its old `users` rows are imported into the new account table without deleting the old table.
-
-To use the game from another device on the same Wi-Fi, open it using the computer running the server's local network IP, for example `http://192.168.1.25:8080`. Replace that example IP with the server computer's actual LAN IP and allow Node through the computer's firewall for private networks. The server must stay running. This is local-network access, not public internet hosting.
-
-The game saves after purchases and boss rewards. If a server save fails, YEN! displays a warning instead of silently claiming the database was updated. Browser storage may hold a recovery copy, but it is not a replacement for the SQLite database.
-
-
-## Script-defined accounts (no account server)
-
-The sign-in form reads accounts from `accounts.js`. Open that file and add one
-object per account inside `window.YEN_ACCOUNTS`:
+Example:
 
 ```js
 {
   username: "playername",
   password: "choose-a-password",
   dox: 500000,
-  ownedSkills: ["0"],
+  ownedSkills: ["0", "1234"],
   attacks: [
     {
       id: "my-attack",
@@ -99,20 +27,86 @@ object per account inside `window.YEN_ACCOUNTS`:
       color: "#ff355e",
       description: "What this attack does."
     }
-  ]
+  ],
+  potions: {
+    minor: 2,
+    royal: 1
+  }
 }
 ```
 
-- `username` and `password` are the sign-in credentials.
-- `dox` sets the account's starting DOX balance.
-- `ownedSkills` lists existing skill catalog IDs to show as attack buttons.
-- Each entry in `attacks` adds an account-specific attack button. `power` is its
-  base damage; `color`, `rarity`, and `description` are optional.
-- DOX rewards and purchases only affect the current session. Edit `accounts.js`
-  to set the amount/skills for the next sign-in.
-- This is intended for a private/trusted site: account credentials are delivered
-  to the browser and are visible to anyone who can inspect the site files. It is
-  not secure authentication for a public website.
+This is a trusted/private account system. Credentials are visible to anyone who
+can inspect the GitHub Pages files. Do not reuse real passwords.
 
-Argus's rapid-blast sequence now plays `assets/argus-gun.mp3` for each shot and
-`assets/argus-reload.mp3` when the sequence finishes.
+## Boss organization
+
+Every boss is now separated into its own script:
+
+```text
+bosses/
+├── korthas.js
+├── argus.js
+└── azael.js
+```
+
+`index.html` loads these scripts before `script.js`. This keeps each boss's large
+configuration separate instead of piling every boss into the master script.
+
+### Korthas
+
+- 56 stars
+- 700,000 HP
+- Phase Two remains intact
+- His Trident Arc visibly flies into the selected skill buttons
+- Trident Arc can destroy basic attacks, purchased skills and custom account attacks
+- Finish Him -> Empress remains intact
+- Empress remains at 1,000,000 HP
+
+### Argus
+
+- 79 stars
+- 2,000,000 HP
+- 3,000 shield
+- Gun parry/reload
+- Rapid Blast
+- Healing
+
+### Azael
+
+- 150 stars
+- 2,300,000 HP
+- 25,000,000 DOX reward
+- Judgment Game: fail = heavy damage; win = Azael is stunned for one player turn
+- Tears: heavy damage
+- Domain: 10% chance to activate
+- Domain fades the screen through black, switches the entire battle UI to deep red,
+  and uses `assets/domain-background.svg`
+- Domain lasts four minutes
+- Domain unlocks five additional attacks
+- Domain attacks are intentionally unpredictable
+
+Azael's included `assets/azael.svg` is a working placeholder character. Replace
+that file with your final Azael artwork whenever you have it; the filename can
+stay the same.
+
+## Merchant
+
+The Merchant now has **8,000 skills** total:
+
+- 4,000 standard skills across Common -> Mythic
+- 4,000 **ENCHANTED** endgame skills
+- Enchanted skills have much higher damage and extremely high DOX prices
+
+The Merchant also sells five healing potions. Purchased potions appear as usable
+buttons in battle and restore HP.
+
+## Character fading fix
+
+Character images are forced to remain at full opacity. Missing assets no longer
+make the character fade to 15% opacity.
+
+## Removed server files
+
+The old `game-server/` folder and the unused server/database files have been
+removed from this build. This version is intended to be a normal static GitHub
+Pages site.
