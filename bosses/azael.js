@@ -14,11 +14,11 @@ window.YEN_BOSSES.azael = {
   maxHP: 2300000,
   playerMaxHP: 180000,
   reward: 25000000,
-  cardImage: "assets/azael.svg",
-  idle: "assets/azael.svg",
-  fight: "assets/azael.svg",
+  cardImage: "assets/Azael.png",
+  idle: "assets/Azael.png",
+  fight: "assets/Azael.png",
   music: "assets/korthas-theme.mp3",
-  battleBackground: "assets/Background.gif",
+  battleBackground: "assets/Azaelbck.png",
   domainBackground: "assets/domain-background.svg",
 
   miniGameAttack: {
