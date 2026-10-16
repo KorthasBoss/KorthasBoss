@@ -283,3 +283,42 @@ body.azael-domain .status-dot{background:#ff4263;box-shadow:0 0 12px #ff4263}
 .domain-timer{position:fixed;z-index:65;right:18px;top:18px;padding:7px 10px;border:1px solid #792238;background:#100208dd;color:#ff9cad;font:9px var(--mono);letter-spacing:.1em;pointer-events:none}
 @media(max-width:850px){.potion-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:560px){.potion-grid{grid-template-columns:1fr}.domain-mini-card{padding:20px}.domain-mini-card h2{font-size:24px}}
+
+/* ==========================================================
+   RESULT SEQUENCES // VICTORY + DEFEAT
+========================================================== */
+.result-sequence{position:fixed;inset:0;z-index:10000;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 42%,#102b3bde 0%,#03060cf7 58%,#010207 100%);overflow:hidden;text-align:center;animation:resultIn .45s ease-out both}
+.result-sequence::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0 5px,#fff00007 6px);pointer-events:none}
+.result-center{position:relative;z-index:3;animation:victoryText .8s cubic-bezier(.2,.9,.2,1) both}
+.result-center h1{margin:8px 0;font-size:clamp(60px,11vw,150px);letter-spacing:.04em;line-height:.9;text-shadow:0 0 18px #73e8ff66,0 0 70px #3bd4ff33}
+.result-center p{margin:12px 0;color:#8ea4ba;font:11px var(--mono);letter-spacing:.25em}
+.result-kicker{color:#69dfff;font:10px var(--mono);letter-spacing:.18em}
+.money-reward,.loss-reward{position:absolute;z-index:5;bottom:48px;min-width:min(520px,86vw);padding:15px 24px;border:1px solid #3c7287;background:#06121add;box-shadow:0 0 35px #27d5ff1c;animation:moneyRise 1s .35s cubic-bezier(.2,.9,.2,1) both}
+.money-reward span,.loss-reward span{display:block;color:#68859b;font:8px var(--mono);letter-spacing:.18em}
+.money-reward strong{display:block;color:#9df0ff;font:32px var(--mono);margin-top:4px;text-shadow:0 0 18px #2dd8ff}
+.result-actions{position:absolute;z-index:6;bottom:34px;display:flex;gap:10px;opacity:0;animation:actionsIn .5s 1.2s forwards}
+.result-actions .menu-button{min-width:210px}
+.result-runes{position:absolute;inset:-20%;background:conic-gradient(from 0deg,transparent,#3edfff22,transparent 18%,#7beeff12,transparent 38%);animation:runeSpin 8s linear infinite}
+.victory-sequence .result-runes::after{content:"✦   ✧   ✦   ◇   ✦   ✧";position:absolute;inset:0;display:grid;place-items:center;color:#9cf2ff55;font-size:8vw;letter-spacing:3vw;animation:starPulse 1.4s infinite}
+.defeat-sequence{background:radial-gradient(circle at 50% 50%,#350813ee 0%,#090207f7 48%,#010105 100%)}
+.defeat-sequence .result-center h1{color:#ff607c;text-shadow:0 0 20px #ff274d88,0 0 80px #ff123d44;animation:defeatText .22s infinite alternate}
+.defeat-sequence .result-kicker{color:#ff718b}
+.defeat-static{position:absolute;inset:0;opacity:.15;background:repeating-linear-gradient(0deg,transparent 0 3px,#ff315015 4px 5px);animation:staticJitter .12s infinite}
+.loss-reward{bottom:auto;top:72%;border-color:#672536;background:#18050be8;box-shadow:0 0 35px #ff24441a}
+.loss-reward strong{display:block;color:#ff9aaa;font:25px var(--mono);margin-top:4px}
+.result-out{animation:resultOut .6s ease forwards}
+@keyframes resultIn{from{opacity:0;transform:scale(1.04)}to{opacity:1;transform:scale(1)}}
+@keyframes resultOut{to{opacity:0;transform:scale(.98)}}
+@keyframes victoryText{from{opacity:0;transform:translateY(25px) scale(.85);filter:blur(7px)}to{opacity:1;transform:none;filter:none}}
+@keyframes defeatText{from{transform:translateX(-3px)}to{transform:translateX(3px)}}
+@keyframes moneyRise{from{opacity:0;transform:translateY(45px) scale(.8)}to{opacity:1;transform:none}}
+@keyframes actionsIn{to{opacity:1;transform:translateY(0)}}
+@keyframes runeSpin{to{transform:rotate(360deg)}}
+@keyframes starPulse{50%{opacity:.25;transform:scale(1.08)}}
+@keyframes staticJitter{50%{transform:translateX(2px)}100%{transform:translateX(-2px)}}
+.yen-save-warning{position:fixed;z-index:12000;left:50%;bottom:22px;transform:translateX(-50%);max-width:min(92vw,560px);padding:12px 16px;border:1px solid #ff647c;background:#170b12;color:#fff;border-radius:10px;font:600 13px/1.45 system-ui;box-shadow:0 8px 34px #0009;text-align:center}
+
+/* Characters never fade because of image-load errors. */
+#battle-boss,.battle-art,.boss-card-art,#merchant-image,.portal-character,.character-art{opacity:1!important;visibility:visible!important}
+
+@media(max-width:560px){.result-center h1{font-size:58px}.money-reward,.loss-reward{bottom:28px}.loss-reward{top:72%;bottom:auto}.result-actions{bottom:18px;flex-direction:column;width:min(88vw,360px)}.result-actions .menu-button{width:100%}}

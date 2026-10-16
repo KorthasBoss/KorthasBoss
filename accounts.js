@@ -1,41 +1,70 @@
 /*
- * YEN! SCRIPT-DEFINED ACCOUNTS
- * Add one object per account below. You can also give an account starting potions with the optional `potions` object. This is a static/local account list:
- * anyone who can view the site files can read these credentials, so only use
- * this for a private/trusted deployment. Do not reuse real passwords.
- *
- * The game's 8 basic attacks (VOID SLASH, RUNE BURST, SOUL PIERCE, ECHO BOLT,
- * TOME SHARD, STARFALL, DREAD WAVE, LAST WORD) are automatically available to
- * every account. You do not need to list those basic attacks here.
- *
- * ownedSkills accepts either a skill ID (as a string, e.g. "0", "15") OR the
- * exact skill name shown in the Skill Vault. Names are matched case-insensitively.
- * This means you can write the skill's name instead of finding its ID.
- *
- * attacks adds extra custom attack buttons that are unique to this account.
- * Example:
- * {
- *   username: "argusfan",
- *   password: "change-me",
- *   dox: 2500000,
- *   ownedSkills: ["Void Slash 001", "Astral Nova 001", "15"],
- *   attacks: [
- *     { id: "dox-burst", name: "DOX BURST", power: 42000,
- *       rarity: "CUSTOM", color: "#ff355e",
- *       description: "A custom account-only attack." }
- *   ]
- * }
- */
+==========================================================
+ YEN! // ECHO ACCOUNT FILE
+==========================================================
+This is the ONLY place you need to edit accounts.
+
+Every object inside YEN_ACCOUNTS is a complete account template.
+
+Available fields:
+  username       login name
+  password       login password
+  dox            starting DOX (number OR quoted number for huge values)
+  ownedSkills   Skill IDs OR exact skill names from the 8,000-skill vault
+  attacks       Extra attack buttons unique to this account
+  potions       Starting healing-potion counts
+
+The basic boss attacks are supplied by the boss's own script.
+Purchased/owned skills and custom attacks are added automatically.
+
+This is intentionally a static account system. There is no server and
+nothing is saved back to this file automatically.
+
+
+id: "dox-burst",
+        name: "DOX BURST",
+       power: 42000,
+        rarity: "CUSTOM",
+       color: "#ff355e",
+        description: "A custom account-only attack."
+
+==========================================================
+*/
+
 window.YEN_ACCOUNTS = [
-{
-    username: "argusfan",
-    password: "change-me",
-    dox: 250000025000002500000250000025000002500000,
-    ownedSkills: ["Void Slash 001", "Astral Nova 001", "15"],
+  {
+    username: "Solstice",
+    password: "666",
+
+    // Quote enormous DOX values so JavaScript does not round them.
+    dox: "2000000",
+
+    // Add skill IDs (0-7999) or exact skill names.
+    ownedSkills: [""],
+
+    // Add as many account-only attack buttons as you want.
     attacks: [
-      { id: "dox-burst", name: "DOX BURST", power: 42000,
-        rarity: "CUSTOM", color: "#ff355e",
-        description: "A custom account-only attack." }
-    ]
+     {
+        
+      }
+    ],
+
+    // Optional starting healing items.
+    potions: {
+      minor: 2,
+      greater: 1
+    }
   }
+
+  // Add more accounts here:
+  // ,{
+  //   username: "anotherplayer",
+  //   password: "password",
+  //   dox: "500000",
+  //   ownedSkills: ["15", "7999"],
+  //   attacks: [
+  //     { id:"my-attack", name:"MY ATTACK", power:90000, rarity:"CUSTOM", color:"#9b6cff", description:"My attack." }
+  //   ],
+  //   potions: { soul: 3 }
+  // }
 ];
