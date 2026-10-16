@@ -21,7 +21,7 @@ ACCOUNT MODE:
 
 const CONFIG = {
   background: "assets/79909.gif",
-    accountStartingDox: 500000,
+    accountStartingDox: 0,
   bosses: window.YEN_BOSSES,
   merchant: {
     image: "assets/Merchant_Idle.png", background: "assets/Merchant_background.gif", music: "assets/merchant-theme.mp3",

@@ -14,7 +14,7 @@ window.YEN_BOSSES.korthas = {
   cardImage: "assets/korthas-idle.png",
   idle: "assets/korthas-idle.png",
   fight: "assets/korthas-fight.png",
-  defeat: "assets/korthas-defeat.png",
+  defeat: "assets/defeat.png",
   stageTwo: "assets/korthas-stage2.png",
   attack: "assets/korthas-attack.png",
   music: "assets/korthas-theme.mp3",
