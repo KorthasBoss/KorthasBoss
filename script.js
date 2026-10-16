@@ -59,6 +59,7 @@ let skillCatalog = null;
 let selectedSkill = null;
 let cooldowns = new Map();
 let brokenAttackIds = new Set();
+let lastPlayerDamage = 0;
 
 const settings = JSON.parse(localStorage.getItem("yen_settings") || '{"effects":true,"music":true,"motion":false}');
 
@@ -180,7 +181,7 @@ function renderLobby() {
   Object.values(CONFIG.bosses).forEach(boss => list.appendChild(bossCard(boss)));
   const merchant = document.createElement("article");
   merchant.className = "boss-card merchant-lobby-card";
-  merchant.innerHTML = `<div class="boss-card-bg" style="background-image:url('${CONFIG.merchant.background}')"></div><div class="boss-card-badge">MERCHANT // SAFE</div><img class="boss-card-art" src="${CONFIG.merchant.image}" alt="Merchant"><div class="boss-card-info"><div class="stars">8,000 SKILLS IN STOCK</div><h2>MERCHANT</h2><p>NO THREAT // CUSTOM DIALOGUE // SKILL VAULT</p></div>`;
+  merchant.innerHTML = `<div class="boss-card-bg" style="background-image:url('${CONFIG.merchant.background}')"></div><div class="boss-card-badge">MERCHANT // SAFE</div><img class="boss-card-art" src="${CONFIG.merchant.image}" alt="Merchant"><div class="boss-card-info"><div class="stars">8,001 SKILLS IN STOCK</div><h2>MERCHANT</h2><p>NO THREAT // CUSTOM DIALOGUE // SKILL VAULT</p></div>`;
   merchant.addEventListener("click", async () => { await transition(() => showScreen("merchant-screen")); openMerchant(); });
   list.appendChild(merchant);
 }
@@ -263,14 +264,31 @@ function buildSkillCatalog() {
   rarities.forEach(rarity => {
     for (let i=0;i<rarity.count;i++) {
       const name = `${prefixes[(id*7)%prefixes.length]} ${cores[(id*11+i)%cores.length]} ${String(i+1).padStart(3,"0")}`;
-      const power = Math.round(randomInt(rarity.name === "ENCHANTED" ? 90000 : 9000, rarity.name === "ENCHANTED" ? 220000 : 60000) * rarity.mult);
-      const cost = randomInt(rarity.cost[0],rarity.cost[1]);
+      const seed = (id * 1103515245 + 12345) >>> 0;
+      const ratio = seed / 4294967296;
+      const powerMin = rarity.name === "ENCHANTED" ? 90000 : 9000;
+      const powerMax = rarity.name === "ENCHANTED" ? 220000 : 60000;
+      const power = Math.round((powerMin + (powerMax - powerMin) * ratio) * rarity.mult);
+      const cost = Math.floor(rarity.cost[0] + (rarity.cost[1] - rarity.cost[0]) * ratio);
       output.push({
         id:String(id), name, rarity:rarity.name, color:rarity.color, enchanted:rarity.name === "ENCHANTED", cost, power,
         description: rarity.name === "ENCHANTED" ? `ENCHANTED ENDGAME SKILL. Deals around ${fmt(power)} damage. Extremely expensive and built to hurt bosses.` : `A ${rarity.name.toLowerCase()} skill. Deals around ${fmt(power)} damage when it lands.`
       });
       id++;
     }
+  });
+  output.push({
+    id:"win-can-make-sword",
+    name:"WIN CAN MAKE SWORD",
+    rarity:"DIVINE // CUSTOM",
+    color:"#ffffff",
+    enchanted:true,
+    rainbow:true,
+    special:"rainbow-sword",
+    breakChance:0.04,
+    cost:8000000,
+    power:200000,
+    description:"A forbidden rainbow blade. Deals exactly 200,000 damage and has a 4% chance to shatter after use."
   });
   skillCatalog = output;
   return output;
@@ -281,7 +299,11 @@ const POTIONS = [
   {id:"greater",name:"GREATER HEALING POTION",heal:60000,cost:125000,description:"Restores 60,000 HP."},
   {id:"soul",name:"SOUL FLASK",heal:110000,cost:450000,description:"Restores 110,000 HP."},
   {id:"royal",name:"ROYAL ELIXIR",heal:150000,cost:1500000,description:"Restores 150,000 HP."},
-  {id:"immortal",name:"IMMORTAL DRAUGHT",heal:999999,cost:12000000,description:"Restores your entire soul."}
+  {id:"immortal",name:"IMMORTAL DRAUGHT",heal:999999,cost:12000000,description:"Restores your entire soul."},
+  {id:"crimson",name:"CRIMSON REPAIR",heal:130000,cost:900000,description:"Restores 130,000 HP."},
+  {id:"void",name:"VOID HEART TONIC",heal:165000,cost:3000000,description:"Restores 165,000 HP."},
+  {id:"divine",name:"DIVINE SOUL ELIXIR",heal:180000,cost:7500000,description:"Restores your full soul and can be used at critical health."},
+  {id:"last",name:"LAST BREATH VIAL",heal:999999,cost:25000000,description:"A forbidden emergency potion. Restores your entire soul."}
 ];
 
 function isSkillOwned(skill, owned=account?.ownedSkills||[]) {
@@ -328,7 +350,7 @@ $("merchant-next").addEventListener("click", () => {
   merchantIndex = (merchantIndex + 1) % CONFIG.merchant.lines.length;
   $("merchant-line").textContent = CONFIG.merchant.lines[merchantIndex];
   $("merchant-dialog-count").textContent = `${String(merchantIndex+1).padStart(2,"0")} / 50`;
-  $("merchant-subline").textContent = merchantIndex===49 ? "That's all fifty. The vault is yours. Pick your weapon." : merchantIndex%3===0 ? "The vault is still open. Pick something brutal." : "I've got 8,000 ways to make a boss regret meeting you.";
+  $("merchant-subline").textContent = merchantIndex===49 ? "That's all fifty. The vault is yours. Pick your weapon." : merchantIndex%3===0 ? "The vault is still open. Pick something brutal." : "I've got 8,001 ways to make a boss regret meeting you.";
   if (merchantIndex===49) { buildSkillCatalog(); $("skill-shop").classList.remove("hidden"); renderSkills(); }
 });
 $("open-shop").addEventListener("click", () => { buildSkillCatalog(); $("skill-shop").classList.remove("hidden"); renderSkills(); });
@@ -387,6 +409,7 @@ function resetBattle(boss) {
   busy = false;
   cooldowns = new Map();
   brokenAttackIds = new Set();
+  lastPlayerDamage = 0;
   document.body.classList.remove("azael-domain");
   document.querySelector(".domain-timer")?.remove();
 }
@@ -396,7 +419,7 @@ function attackFromBase(base, key) {
   return {type:"base", key, name:base[0], min:base[1], max:base[2], messages:base[3] || ["The attack lands."], source:base};
 }
 function attackFromSkill(skill) {
-  return {type:"skill", key:`skill:${skill.id}`, name:skill.name, min:Math.round(skill.power*.75), max:Math.round(skill.power*1.2), messages:[`${skill.name} detonates across ${currentBoss.name}.`,`The ${skill.rarity.toLowerCase()} skill tears into the boss.`,`Your purchased skill lands with brutal force.`], source:skill, power:skill.power};
+  return {type:"skill", key:`skill:${skill.id}`, name:skill.name, min:skill.special === "rainbow-sword" ? 200000 : Math.round(skill.power*.75), max:skill.special === "rainbow-sword" ? 200000 : Math.round(skill.power*1.2), messages:skill.special === "rainbow-sword" ? [`A rainbow slash tears across ${currentBoss.name}.`,`The WIN CAN MAKE SWORD flashes through the arena.`,`A prismatic blade cuts the boss for massive damage.`] : [`${skill.name} detonates across ${currentBoss.name}.`,`The ${skill.rarity.toLowerCase()} skill tears into the boss.`,`Your purchased skill lands with brutal force.`], source:skill, power:skill.power};
 }
 function attackFromCustom(attack) {
   return {type:"custom", key:`custom:${attack.id}`, name:attack.name, min:Math.round(attack.power*.75), max:Math.round(attack.power*1.2), messages:[`${attack.name} tears into ${currentBoss.name}.`,attack.description,"The custom attack lands with brutal force."], source:attack, power:attack.power};
@@ -431,7 +454,7 @@ function buildAttackButtons() {
 }
 function addAttackButton(attack) {
   const button = document.createElement("button");
-  button.className = `attack-button ${attack.type!=="base"?"owned-skill":""} ${attack.source?.enchanted?"enchanted-skill":""}`;
+  button.className = `attack-button ${attack.type!=="base"?"owned-skill":""} ${attack.source?.enchanted?"enchanted-skill":""} ${attack.source?.special === "rainbow-sword" ? "rainbow-sword-button" : ""}`;
   button.dataset.attackKey = attack.key;
   button.textContent = attack.name;
   button.title = attack.source?.description || attack.name;
@@ -540,7 +563,8 @@ function ctxForBoss() {
     completeVictory,
     lose:showGameOver,
     getAttackKeyForObject,
-    getPlayerAttackButtons:()=>[...document.querySelectorAll("#attack-grid .attack-button:not(.potion-button):not(:disabled)")]
+    getPlayerAttackButtons:()=>[...document.querySelectorAll("#attack-grid .attack-button:not(.potion-button):not(:disabled)")],
+    get lastPlayerDamage(){ return lastPlayerDamage; }
   };
 }
 
@@ -580,6 +604,21 @@ async function startBattle(boss) {
   busy=false;
 }
 
+async function maybeBreakSpecialAttack(attack) {
+  if (attack.source?.special !== "rainbow-sword") return false;
+  if (Math.random() >= (attack.source.breakChance || 0.04)) return false;
+  account.ownedSkills = (account.ownedSkills || []).filter(v => String(v) !== String(attack.source.id) && String(v).trim().toLowerCase() !== String(attack.source.name).trim().toLowerCase());
+  markBroken(attack.key);
+  const brokenButton = [...document.querySelectorAll("#attack-grid [data-attack-key]")].find(el => el.dataset.attackKey === attack.key);
+  if (brokenButton) {
+    brokenButton.classList.add("rainbow-sword-broken");
+    setTimeout(() => brokenButton.remove(), 700);
+  }
+  setMessage("THE WIN CAN MAKE SWORD SHATTERS. It has vanished from your account.");
+  await saveAccount();
+  return true;
+}
+
 async function usePlayerAttack(attack) {
   if (busy || playerHP<=0 || battleFinished || !bossAttackEnabled) return;
   if (brokenAttackIds.has(attack.key) || isCooling(attack)) return;
@@ -587,8 +626,17 @@ async function usePlayerAttack(attack) {
 
   const ctx=ctxForBoss();
 
+  if (attack.source?.special === "rainbow-sword") {
+    const slash = document.createElement("div");
+    slash.className = "rainbow-sword-slash";
+    document.body.appendChild(slash);
+    setTimeout(() => slash.remove(), 900);
+    setMessage("WIN CAN MAKE SWORD unleashes a RAINBOW SLASH.");
+  }
+
   if (currentBossState.empress && currentBoss.hooks?.playerAttackDuringEmpress) {
     await currentBoss.hooks.playerAttackDuringEmpress(ctx,attack);
+    await maybeBreakSpecialAttack(attack);
     busy=false;
     return;
   }
@@ -601,6 +649,8 @@ async function usePlayerAttack(attack) {
   let range=attackToRange(attack);
   let damage=randomInt(range.min,range.max);
   const wasStunned=Boolean(currentBossState.stunned);
+
+  if (attack.source?.special === "rainbow-sword") damage = 200000;
   if (wasStunned) {
     currentBossState.stunned=false;
     damage=Math.round(damage*1.35);
@@ -610,9 +660,13 @@ async function usePlayerAttack(attack) {
     setMessage(`${pick(attack.messages)} ${currentBoss.name} takes ${fmt(damage)} damage.`);
   }
 
+  lastPlayerDamage = damage;
   applyBossDamage(Math.min(bossHP+bossShield,damage));
   updateHP();
   shake();
+
+  await maybeBreakSpecialAttack(attack);
+  if (brokenAttackIds.has(attack.key)) await wait(700);
 
   if (bossHP<=0) {
     await handleBossDefeat();

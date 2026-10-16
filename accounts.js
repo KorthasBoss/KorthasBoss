@@ -20,14 +20,14 @@ Purchased/owned skills and custom attacks are added automatically.
 This is intentionally a static account system. There is no server and
 nothing is saved back to this file automatically.
 
-
-id: "dox-burst",
+ {
+        id: "dox-burst",
         name: "DOX BURST",
-       power: 42000,
+        power: 42000,
         rarity: "CUSTOM",
-       color: "#ff355e",
+        color: "#ff355e",
         description: "A custom account-only attack."
-
+      }
 ==========================================================
 */
 
@@ -44,9 +44,6 @@ window.YEN_ACCOUNTS = [
 
     // Add as many account-only attack buttons as you want.
     attacks: [
-     {
-        
-      }
     ],
 
     // Optional starting healing items.

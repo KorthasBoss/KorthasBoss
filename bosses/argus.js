@@ -78,7 +78,7 @@ window.YEN_BOSSES.argus = {
         ctx.setMessage(ctx.boss.rapid);
         ctx.addMessageClass("argus-rage");
         ctx.shake();
-        await ctx.wait(700);
+        await ctx.wait(280);
         ctx.removeMessageClass("argus-rage");
         const shots = 3 + (Math.random() < ctx.boss.extraShotChance ? 1 : 0);
         for (let i=0;i<shots;i++) {
@@ -92,7 +92,7 @@ window.YEN_BOSSES.argus = {
           ctx.updateHP();
           ctx.setMessage(`RAPID BLAST // SHOT ${i+1} OF ${shots}. You take ${ctx.fmt(damage)} damage.`);
           ctx.shake();
-          await ctx.wait(420);
+          await ctx.wait(95);
           if (ctx.playerHP <= 0) { ctx.lose(); return; }
         }
         await ctx.playAudio(ctx.boss.reloadSound,.7);

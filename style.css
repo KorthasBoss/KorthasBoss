@@ -322,3 +322,23 @@ body.azael-domain .status-dot{background:#ff4263;box-shadow:0 0 12px #ff4263}
 #battle-boss,.battle-art,.boss-card-art,#merchant-image,.portal-character,.character-art{opacity:1!important;visibility:visible!important}
 
 @media(max-width:560px){.result-center h1{font-size:58px}.money-reward,.loss-reward{bottom:28px}.loss-reward{top:72%;bottom:auto}.result-actions{bottom:18px;flex-direction:column;width:min(88vw,360px)}.result-actions .menu-button{width:100%}}
+
+/* MALAKOR */
+.malakor-reflect-vfx{position:fixed;z-index:9990;left:50%;top:34%;transform:translate(-50%,-50%);padding:14px 24px;border:1px solid #ff354f;color:#fff;background:#24030ae8;box-shadow:0 0 30px #ff203f66,0 0 80px #ff203f33;font:12px var(--mono);letter-spacing:.18em;animation:malakorReflect .65s ease-out forwards;pointer-events:none}
+@keyframes malakorReflect{0%{opacity:0;transform:translate(-50%,-50%) scale(.7)}25%{opacity:1;transform:translate(-50%,-50%) scale(1.08)}100%{opacity:0;transform:translate(-50%,-75%) scale(1)}}
+.malakor-rush-vfx{position:fixed;z-index:9988;left:-30vw;top:50%;width:30vw;height:9px;background:linear-gradient(90deg,transparent,#ff334f,#fff);box-shadow:0 0 18px #ff203f,0 0 55px #ff203f;transform:translateY(-50%) skewX(-20deg);pointer-events:none;opacity:0}
+.malakor-rush-vfx:not(.impact){animation:malakorRush .55s cubic-bezier(.2,.8,.2,1) forwards}
+.malakor-rush-vfx.impact{left:70%;opacity:1;animation:malakorImpact .35s ease-out forwards}
+@keyframes malakorRush{0%{left:-30vw;opacity:0}25%{opacity:1}100%{left:65%;opacity:1}}
+@keyframes malakorImpact{0%{transform:translateY(-50%) scaleX(1)}100%{transform:translateY(-50%) scaleX(3);opacity:0}}
+.malakor-sword-slash{position:fixed;z-index:9989;left:50%;top:48%;width:58vw;height:8px;background:linear-gradient(90deg,transparent,#ff314d,#fff,#ff314d,transparent);box-shadow:0 0 14px #ff314d,0 0 38px #ff203f;transform:translate(-50%,-50%) rotate(calc(-18deg + var(--slash-index) * 7deg));animation:malakorSlash .18s ease-out forwards;pointer-events:none}
+@keyframes malakorSlash{0%{opacity:0;transform:translate(-50%,-50%) rotate(calc(-18deg + var(--slash-index) * 7deg)) scaleX(.1)}35%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) rotate(calc(-18deg + var(--slash-index) * 7deg)) scaleX(1.2)}}
+.malakor-mini-game{position:fixed;z-index:9999;inset:0;display:grid;place-items:center;background:#050207d9;backdrop-filter:blur(6px)}
+.malakor-mini-card{width:min(580px,92vw);padding:30px;border:1px solid #8e263d;background:linear-gradient(145deg,#19070d,#070309);box-shadow:0 0 90px #ff1e3d25;text-align:center}
+.malakor-mini-card h2{font-size:32px;margin:10px 0}.malakor-mini-card p{font:13px/1.6 var(--mono);color:#aeb7c7}.malakor-eye-track{position:relative;height:24px;margin:28px 0;background:#180b10;border:1px solid #6e2639;overflow:hidden}.malakor-eye-core{position:absolute;left:43%;width:14%;height:100%;background:#ff314f;box-shadow:0 0 30px #ff204c}.malakor-eye-cursor{position:absolute;left:0;top:0;width:3px;height:100%;background:#fff;box-shadow:0 0 14px #fff}.malakor-eye-button{border:1px solid #ff4160;background:#210811;color:#fff;padding:13px 20px;font:11px var(--mono);letter-spacing:.1em;cursor:pointer}.malakor-eye-button:hover{box-shadow:0 0 25px #ff204c66}
+.rainbow-sword-slash{position:fixed;z-index:9991;left:50%;top:46%;width:78vw;height:14px;background:linear-gradient(90deg,#ff004c,#ff8a00,#fff000,#36ff6d,#00d9ff,#6c5cff,#ff00c8);box-shadow:0 0 15px #fff,0 0 35px #7cf,0 0 80px #f4f;transform:translate(-50%,-50%) rotate(-8deg);animation:rainbowSlash .85s cubic-bezier(.2,.8,.2,1) forwards;pointer-events:none}
+@keyframes rainbowSlash{0%{opacity:0;transform:translate(-50%,-50%) rotate(-8deg) scaleX(.05)}20%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) rotate(-8deg) scaleX(1.15)}}
+.rainbow-sword-broken{animation:rainbowBreak .7s ease forwards!important}
+@keyframes rainbowBreak{0%{opacity:1;transform:scale(1)}35%{opacity:1;transform:scale(1.06) rotate(-2deg)}100%{opacity:0;transform:scale(.7) rotate(8deg);filter:blur(4px)}}
+.attack-button.rainbow-sword-button{border-image:linear-gradient(90deg,#ff005d,#ffd400,#00ff88,#00c8ff,#a64cff,#ff00a8) 1!important;box-shadow:0 0 18px #ff00aa33,inset 0 0 22px #ffffff08}
+.attack-button.rainbow-sword-button::after{background:linear-gradient(90deg,#ff005d,#ffd400,#00ff88,#00c8ff,#a64cff,#ff00a8)!important;transform:scaleX(1)!important}
