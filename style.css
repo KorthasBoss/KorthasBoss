@@ -433,3 +433,63 @@ body.azael-domain .status-dot{background:#ff4263;box-shadow:0 0 12px #ff4263}
 @keyframes aethelStarFall{to{top:110vh;transform:rotate(270deg) scale(.55);opacity:0}}
 .star-cursed{border-color:#fff!important;box-shadow:0 0 22px #aebdff55,inset 0 0 22px #aebdff18!important}
 @media(max-width:560px){.aethelgard-cards{gap:8px}.aethelgard-choice-card{height:130px}.aethelgard-name-box,.aethelgard-card-box,.aethelgard-mini-card{padding:22px}}
+
+/* ==========================================================
+   AMIAS + NEBULA // SHARED PROFILE FRAME CARDS
+   The frame is ornamental and intentionally sits outside the
+   normal boss-card box. Both bosses remain normal clickable cards.
+========================================================== */
+.profile-frame-card{
+  overflow:visible!important;
+  isolation:isolate;
+  z-index:1;
+  background:linear-gradient(145deg,#11152b,#070914)!important;
+  border-color:#6670a8!important;
+}
+.profile-frame-card:hover{z-index:5;border-color:#dfe5ff!important;box-shadow:0 20px 60px #8e9cff2b,0 0 38px #fff1!important}
+.profile-frame-card .boss-card-bg{opacity:.16!important;background:radial-gradient(circle at 50% 40%,#6d59ff33,transparent 55%),linear-gradient(145deg,#17122d,#050711)!important}
+.profile-frame-card::after{z-index:1!important;background:linear-gradient(180deg,transparent 25%,#050711dd 76%,#050711ff 100%)!important}
+.profile-frame-wrap{position:absolute;z-index:3;left:-5%;right:-5%;top:-10%;bottom:-10%;display:grid;place-items:center;pointer-events:none}
+.profile-card-frame{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 14px #a9b7ff55) drop-shadow(0 0 35px #8e9cff20)}
+.profile-card-character{z-index:4!important;left:50%!important;right:auto!important;top:46%!important;width:42%!important;height:255px!important;transform:translate(-50%,-50%)!important;object-fit:contain!important;filter:drop-shadow(0 0 20px #fff6) drop-shadow(0 0 40px #8e7cff44)!important}
+.profile-frame-card .boss-card-badge{z-index:7;background:#050711dd;color:#fff;border-color:#c9d1ff99}
+.profile-frame-card .boss-card-info{z-index:7;left:20px;right:20px;bottom:16px;text-align:center}
+.profile-frame-card .boss-card-info .stars{color:#fff;text-shadow:0 0 15px #aab7ff}
+.profile-frame-card .boss-card-info h2{color:#fff;text-shadow:0 0 22px #a79cff;letter-spacing:.14em}
+.profile-frame-card .boss-card-info p{color:#c4c9e6}
+.profile-frame-card:nth-child(even) .profile-card-frame{filter:drop-shadow(0 0 14px #d9d4ff55) drop-shadow(0 0 35px #b4a9ff22)}
+
+/* AMIAS combat VFX */
+.amias-slash-vfx{position:fixed;z-index:9990;left:50%;top:48%;width:105vw;height:12px;background:linear-gradient(90deg,transparent,#ff174f,#fff,#ff174f,transparent);box-shadow:0 0 20px #ff174f,0 0 70px #ff174f;transform:translate(-50%,-50%) rotate(-12deg);animation:amiasSlash .42s ease-out forwards;pointer-events:none}
+@keyframes amiasSlash{0%{opacity:0;transform:translate(-50%,-50%) rotate(-12deg) scaleX(.03)}20%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) rotate(-12deg) scaleX(1.15)}}
+.amias-parry-vfx{position:fixed;z-index:9991;left:50%;top:46%;width:130px;height:130px;border:4px solid #fff;border-radius:50%;box-shadow:0 0 20px #fff,0 0 50px #ff164f,0 0 100px #ff164f;transform:translate(-50%,-50%);animation:amiasParry .36s ease-out forwards;pointer-events:none}
+@keyframes amiasParry{0%{opacity:0;transform:translate(-50%,-50%) scale(.1)}35%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(2.8)}}
+.amias-crimson-slash{position:fixed;z-index:9989;left:50%;top:48%;width:75vw;height:9px;background:linear-gradient(90deg,transparent,#ff174f,#fff,#ff174f,transparent);box-shadow:0 0 16px #ff174f,0 0 45px #ff174f;transform:translate(-50%,-50%) rotate(calc(-28deg + var(--slash-index)*9deg));animation:amiasWaltz .1s ease-out forwards;pointer-events:none}
+@keyframes amiasWaltz{0%{opacity:0;transform:translate(-50%,-50%) rotate(calc(-28deg + var(--slash-index)*9deg)) scaleX(.05)}30%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) rotate(calc(-28deg + var(--slash-index)*9deg)) scaleX(1.1)}}
+.amias-blood-crown{position:fixed;z-index:9988;left:50%;top:43%;width:220px;height:220px;border-radius:50%;border:5px solid #ff174f;box-shadow:0 0 25px #ff174f,0 0 90px #ff174f88,inset 0 0 45px #ff174f44;transform:translate(-50%,-50%);animation:amiasCrown .75s ease-out forwards;pointer-events:none}
+@keyframes amiasCrown{0%{opacity:0;transform:translate(-50%,-50%) scale(.15)}40%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(2.3) rotate(45deg)}}
+.amias-heartseeker{position:fixed;z-index:9988;left:50%;top:50%;width:35vw;height:35vw;max-width:360px;max-height:360px;border-radius:50%;background:radial-gradient(circle,#fff0 40%,#ff174f55 42%,#ff174f00 64%);box-shadow:0 0 60px #ff174f;transform:translate(-50%,-50%);animation:amiasHeart .7s ease-out forwards;pointer-events:none}
+@keyframes amiasHeart{0%{opacity:0;transform:translate(-50%,-50%) scale(.2)}35%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(1.8)}}
+.amias-red-judgment{position:fixed;z-index:9987;inset:15%;border:2px solid #ff174f;box-shadow:inset 0 0 100px #ff174f33,0 0 60px #ff174f55;animation:amiasJudgment .7s ease-out forwards;pointer-events:none}
+@keyframes amiasJudgment{0%{opacity:0;transform:scale(.7)}30%{opacity:1}100%{opacity:0;transform:scale(1.15)}}
+.amias-parry-text{color:#ff718c!important;text-shadow:0 0 18px #ff174f!important}
+
+/* NEBULA combat VFX */
+.nebula-reflect-vfx{position:fixed;z-index:9991;inset:0;border:7px solid #a78bff;box-shadow:inset 0 0 100px #7d5cff66,0 0 70px #9d84ff88;animation:nebReflect .65s ease-out forwards;pointer-events:none}
+@keyframes nebReflect{0%{opacity:0;transform:scale(.8)}25%{opacity:1}100%{opacity:0;transform:scale(1.06)}}
+.nebula-null-vfx{position:fixed;z-index:9988;left:50%;top:45%;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,#fff,#a995ff 8%,#6d4dff22 45%,transparent 70%);transform:translate(-50%,-50%);animation:nebNull .55s ease-out forwards;pointer-events:none}
+@keyframes nebNull{0%{opacity:0;transform:translate(-50%,-50%) scale(.1)}40%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(1.7)}}
+.nebula-gravity-vfx{position:fixed;z-index:9988;left:50%;top:50%;width:180px;height:180px;border-radius:50%;background:#000;box-shadow:0 0 30px #fff,0 0 100px #684cff,0 0 180px #24146b;transform:translate(-50%,-50%);animation:nebGravity .75s ease-out forwards;pointer-events:none}
+@keyframes nebGravity{0%{opacity:0;transform:translate(-50%,-50%) scale(.05)}35%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(2.8)}}
+.nebula-devour-vfx{position:fixed;z-index:9988;left:50%;top:50%;width:45vw;height:45vw;max-width:520px;max-height:520px;border-radius:50%;background:conic-gradient(from 0deg,#fff,#7158ff,#08001d,#c3b7ff,#fff);box-shadow:0 0 80px #7c5cff;transform:translate(-50%,-50%);animation:nebDevour .8s ease-out forwards;pointer-events:none}
+@keyframes nebDevour{0%{opacity:0;transform:translate(-50%,-50%) scale(.1) rotate(0)}35%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(1.8) rotate(260deg)}}
+.nebula-star-impact{position:fixed;z-index:9989;left:calc(10% + var(--star-index)*9%);top:10%;width:24px;height:24px;background:#fff;clip-path:polygon(50% 0,61% 38%,100% 50%,61% 62%,50% 100%,39% 62%,0 50%,39% 38%);box-shadow:0 0 20px #fff,0 0 50px #8d70ff;animation:nebStar .12s ease-out forwards;pointer-events:none}
+@keyframes nebStar{0%{opacity:0;transform:scale(.1) translateY(-30px)}60%{opacity:1}100%{opacity:0;transform:scale(3) translateY(45vh)}}
+.nebula-horizon-vfx{position:fixed;z-index:9988;left:50%;top:50%;width:70vw;height:70vw;max-width:800px;max-height:800px;border-radius:50%;border:20px solid #4e2bff55;box-shadow:inset 0 0 100px #000,0 0 100px #6546ff;transform:translate(-50%,-50%);animation:nebHorizon .8s ease-out forwards;pointer-events:none}
+@keyframes nebHorizon{0%{opacity:0;transform:translate(-50%,-50%) scale(.1)}40%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(1.6)}}
+.nebula-null-text{color:#ddd5ff!important;text-shadow:0 0 18px #9277ff!important}
+.nebula-card-game{position:fixed;z-index:9999;inset:0;display:grid;place-items:center;background:#02000bdc;backdrop-filter:blur(7px)}
+.nebula-card-box{width:min(720px,92vw);padding:34px;border:1px solid #8c76ff;background:linear-gradient(145deg,#140d32,#03020b);box-shadow:0 0 100px #765cff35;text-align:center}
+.nebula-card-box h2{font-size:40px;margin:12px 0}.nebula-card-box p{color:#b9b1d4;font:12px/1.6 var(--mono)}
+.nebula-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:24px 0}.nebula-choice{height:190px;border:1px solid #8c76ff;background:radial-gradient(circle at 50% 35%,#35227a,#080313 68%);color:#fff;cursor:pointer;transition:.18s;box-shadow:inset 0 0 35px #9f88ff18}.nebula-choice:hover{transform:translateY(-8px) scale(1.03);border-color:#fff;box-shadow:0 0 40px #8b6dff66}.nebula-choice span{display:block;font-size:70px;text-shadow:0 0 30px #fff,0 0 60px #8d72ff}.nebula-choice small{font:9px var(--mono);letter-spacing:.15em;color:#bcb2e8}.nebula-card-timer{font:25px var(--mono);color:#fff;text-shadow:0 0 20px #9b84ff}
+@media(max-width:560px){.profile-frame-wrap{left:-8%;right:-8%}.profile-card-character{width:48%!important}.nebula-cards{gap:8px}.nebula-choice{height:145px}.nebula-card-box{padding:22px}}
