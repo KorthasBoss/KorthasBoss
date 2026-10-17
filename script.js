@@ -161,12 +161,25 @@ function updateWallet() {
 
 function bossCard(boss) {
   const el = document.createElement("article");
-  el.className = `boss-card ${boss.cardFrame ? "aethelgard-card" : ""}`;
-  el.style.setProperty("--card-bg", `url("${boss.cardFrame || boss.cardImage}")`);
-  el.innerHTML = `<div class="boss-card-bg"></div>
-    <div class="boss-card-badge">BOSS // ${String(boss.stars).padStart(2,"0")} ★</div>
-    ${boss.cardFrame ? "" : `<img class="boss-card-art" src="${boss.idle}" alt="${boss.name} idle">`}
-    <div class="boss-card-info"><div class="stars">${"★".repeat(Math.min(8,Math.ceil(boss.stars/10)))} ${boss.stars} STARS</div><h2>${boss.name}</h2><p>${boss.title} // REWARD ${fmtDox(boss.reward)} DOX</p></div>`;
+  const isAethelgard = boss.id === "aethelgard";
+  el.className = `boss-card ${isAethelgard ? "aethelgard-card" : ""}`;
+  el.style.setProperty("--card-bg", `url("${boss.cardImage || boss.idle}")`);
+
+  if (isAethelgard) {
+    // Aethelgard keeps the same clickable card structure as every other boss.
+    // His supplied image is a PROFILE FRAME, not the card background.
+    el.innerHTML = `<div class="boss-card-bg"></div>
+      <div class="aethelgard-frame-wrap" aria-hidden="true"><img class="aethelgard-profile-frame" src="${boss.cardFrame}" alt=""></div>
+      <div class="boss-card-badge">BOSS // ${String(boss.stars).padStart(2,"0")} ★</div>
+      <img class="boss-card-art aethelgard-card-character" src="${boss.idle}" alt="${boss.name} idle">
+      <div class="boss-card-info"><div class="stars">${"★".repeat(8)} ${boss.stars} STARS</div><h2>${boss.name}</h2><p>${boss.title} // REWARD ${fmtDox(boss.reward)} DOX</p></div>`;
+  } else {
+    el.innerHTML = `<div class="boss-card-bg"></div>
+      <div class="boss-card-badge">BOSS // ${String(boss.stars).padStart(2,"0")} ★</div>
+      <img class="boss-card-art" src="${boss.idle}" alt="${boss.name} idle">
+      <div class="boss-card-info"><div class="stars">${"★".repeat(Math.min(8,Math.ceil(boss.stars/10)))} ${boss.stars} STARS</div><h2>${boss.name}</h2><p>${boss.title} // REWARD ${fmtDox(boss.reward)} DOX</p></div>`;
+  }
+
   el.addEventListener("click", () => askBoss(boss));
   return el;
 }

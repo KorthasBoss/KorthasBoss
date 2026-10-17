@@ -92,7 +92,7 @@ window.YEN_BOSSES.argus = {
           ctx.updateHP();
           ctx.setMessage(`RAPID BLAST // SHOT ${i+1} OF ${shots}. You take ${ctx.fmt(damage)} damage.`);
           ctx.shake();
-          await ctx.wait(35);
+          await ctx.wait(18);
           if (ctx.playerHP <= 0) { ctx.lose(); return; }
         }
         await ctx.playAudio(ctx.boss.reloadSound,.7);

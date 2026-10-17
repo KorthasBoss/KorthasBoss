@@ -344,35 +344,69 @@ body.azael-domain .status-dot{background:#ff4263;box-shadow:0 0 12px #ff4263}
 .attack-button.rainbow-sword-button::after{background:linear-gradient(90deg,#ff005d,#ffd400,#00ff88,#00c8ff,#a64cff,#ff00a8)!important;transform:scaleX(1)!important}
 
 /* ==========================================================
-   AETHELGARD // SPECIAL FINAL-LORD CARD + ENCOUNTER
+   AETHELGARD // SPECIAL FINAL-LORD PROFILE FRAME
+   The normal boss card remains the card. The supplied artwork
+   is an outer profile frame layered around his centered portrait.
 ========================================================== */
 .aethelgard-card{
-  border:0!important;
-  background:#02030a!important;
-  min-height:390px!important;
-  box-shadow:0 0 0 1px #9ea9ff55,0 0 35px #9aa8ff20!important;
+  overflow:visible!important;
+  isolation:isolate;
+  min-height:360px!important;
+  background:linear-gradient(145deg,#111b2b,#080c14)!important;
+  border-color:#6f7ca8!important;
+  z-index:1;
+}
+.aethelgard-card:hover{
+  z-index:4;
+  border-color:#dce5ff!important;
+  box-shadow:0 18px 55px #9aaaff26,0 0 35px #cbd6ff18!important;
 }
 .aethelgard-card .boss-card-bg{
-  inset:0!important;
-  opacity:1!important;
-  background-size:100% 100%!important;
-  background-position:center!important;
-  background-repeat:no-repeat!important;
-  filter:none!important;
+  opacity:.22!important;
+  background:radial-gradient(circle at 50% 42%,#24345c55,transparent 55%),linear-gradient(145deg,#10192b,#060a12)!important;
 }
 .aethelgard-card::after{
-  background:linear-gradient(180deg,transparent 15%,#02030ae8 88%)!important;
+  z-index:1!important;
+  background:linear-gradient(180deg,transparent 35%,#060911ee 78%,#060911ff 100%)!important;
 }
-.aethelgard-card .boss-card-art{display:none!important}
-.aethelgard-card .boss-card-info{left:11%;right:11%;bottom:12%;text-align:center}
+.aethelgard-frame-wrap{
+  position:absolute;
+  z-index:3;
+  left:-2%;
+  right:-2%;
+  top:-8%;
+  bottom:-8%;
+  pointer-events:none;
+  display:grid;
+  place-items:center;
+}
+.aethelgard-profile-frame{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  filter:drop-shadow(0 0 12px #9eaaff55) drop-shadow(0 0 28px #8b9cff22);
+}
+.aethelgard-card-character{
+  z-index:4!important;
+  left:50%!important;
+  right:auto!important;
+  top:50%!important;
+  width:45%!important;
+  height:255px!important;
+  transform:translate(-50%,-54%)!important;
+  object-fit:contain!important;
+  filter:drop-shadow(0 0 18px #a9b8ff66) drop-shadow(0 0 38px #8799ff22)!important;
+}
+.aethelgard-card .boss-card-badge{z-index:6;top:14px;left:14px;border-color:#cbd4ff99;color:#fff;background:#060916cc}
+.aethelgard-card .boss-card-info{z-index:6;left:20px;right:20px;bottom:18px;text-align:center}
 .aethelgard-card .boss-card-info .stars{color:#fff;text-shadow:0 0 14px #b9c8ff}
-.aethelgard-card .boss-card-info h2{font-size:34px;letter-spacing:.14em;color:#fff;text-shadow:0 0 20px #9caeff}
+.aethelgard-card .boss-card-info h2{font-size:30px;letter-spacing:.14em;color:#fff;text-shadow:0 0 20px #9caeff}
 .aethelgard-card .boss-card-info p{color:#c4cbed}
-.aethelgard-card .boss-card-badge{top:10%;left:10%;border-color:#cbd4ff99;color:#fff;background:#06091699}
-.aethelgard-card:hover{transform:translateY(-7px) scale(1.015)!important;border-color:#fff!important;box-shadow:0 20px 65px #aabaff35,0 0 45px #fff2!important}
+
 .battle-locked{position:relative!important;filter:grayscale(.55)!important;opacity:.58!important;cursor:not-allowed!important}
 .battle-locked::after{content:"🔒";position:absolute;right:9px;top:7px;font-size:14px;filter:grayscale(0)}
-.aethelgard-name-overlay,.aethelgard-card-game,.aethelgard-mini-game{position:fixed;inset:0;z-index:150;background:#010208ed;display:flex;align-items:center;justify-content:center;padding:20px}
+.aethelgard-name-overlay,.aethelgard-card-game,.aethelgard-mini-game{position:fixed;inset:0;z-index:150;background:#010208ed;display:flex;align-items:center;justify-content:center;padding:20px;animation:aethelgardOverlayIn .35s ease both}
+@keyframes aethelgardOverlayIn{from{opacity:0}to{opacity:1}}
 .aethelgard-name-box,.aethelgard-card-box,.aethelgard-mini-card{width:min(680px,100%);border:1px solid #aab6ff88;background:linear-gradient(145deg,#10152a,#03050c);box-shadow:0 0 70px #8699ff25,0 30px 100px #000b;padding:32px}
 .aethelgard-name-box h2,.aethelgard-card-box h2,.aethelgard-mini-card h2{font:clamp(30px,5vw,52px) var(--display);margin:12px 0;color:#fff;text-shadow:0 0 22px #aebdff66}
 .aethelgard-name-box p,.aethelgard-card-box p,.aethelgard-mini-card p{font:12px/1.5 var(--mono);color:#8998b6}
