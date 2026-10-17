@@ -86,13 +86,13 @@ window.YEN_BOSSES.argus = {
           flash.className = "rapid-flash";
           document.body.appendChild(flash);
           setTimeout(()=>flash.remove(),280);
-          await ctx.playAudio(ctx.boss.parrySound,.9,true,true);
+          ctx.playAudio(ctx.boss.parrySound,.9,true,false);
           const damage = Math.min(ctx.playerHP,19000);
           ctx.damagePlayer(damage);
           ctx.updateHP();
           ctx.setMessage(`RAPID BLAST // SHOT ${i+1} OF ${shots}. You take ${ctx.fmt(damage)} damage.`);
           ctx.shake();
-          await ctx.wait(95);
+          await ctx.wait(35);
           if (ctx.playerHP <= 0) { ctx.lose(); return; }
         }
         await ctx.playAudio(ctx.boss.reloadSound,.7);

@@ -161,11 +161,11 @@ function updateWallet() {
 
 function bossCard(boss) {
   const el = document.createElement("article");
-  el.className = "boss-card";
-  el.style.setProperty("--card-bg", `url("${boss.cardImage}")`);
+  el.className = `boss-card ${boss.cardFrame ? "aethelgard-card" : ""}`;
+  el.style.setProperty("--card-bg", `url("${boss.cardFrame || boss.cardImage}")`);
   el.innerHTML = `<div class="boss-card-bg"></div>
     <div class="boss-card-badge">BOSS // ${String(boss.stars).padStart(2,"0")} ★</div>
-    <img class="boss-card-art" src="${boss.idle}" alt="${boss.name} idle">
+    ${boss.cardFrame ? "" : `<img class="boss-card-art" src="${boss.idle}" alt="${boss.name} idle">`}
     <div class="boss-card-info"><div class="stars">${"★".repeat(Math.min(8,Math.ceil(boss.stars/10)))} ${boss.stars} STARS</div><h2>${boss.name}</h2><p>${boss.title} // REWARD ${fmtDox(boss.reward)} DOX</p></div>`;
   el.addEventListener("click", () => askBoss(boss));
   return el;
@@ -455,6 +455,11 @@ function buildAttackButtons() {
 function addAttackButton(attack) {
   const button = document.createElement("button");
   button.className = `attack-button ${attack.type!=="base"?"owned-skill":""} ${attack.source?.enchanted?"enchanted-skill":""} ${attack.source?.special === "rainbow-sword" ? "rainbow-sword-button" : ""}`;
+  if (currentBossState.introLocked) {
+    button.classList.add("battle-locked");
+    button.disabled = true;
+    button.setAttribute("aria-label", `${attack.name} locked during Aethelgard's introduction`);
+  }
   button.dataset.attackKey = attack.key;
   button.textContent = attack.name;
   button.title = attack.source?.description || attack.name;
@@ -650,6 +655,7 @@ async function usePlayerAttack(attack) {
   let damage=randomInt(range.min,range.max);
   const wasStunned=Boolean(currentBossState.stunned);
 
+  if (currentBoss.id === "aethelgard" && attack._aethelgardFixedDamage) damage = attack._aethelgardFixedDamage;
   if (attack.source?.special === "rainbow-sword") damage = 200000;
   if (wasStunned) {
     currentBossState.stunned=false;
@@ -778,7 +784,12 @@ function usePotion(id) {
   buildAttackButtons();
   setMessage(`${potion.name} restores ${fmt(playerHP-before)} HP.`);
   showFlash();
-  wait(650).then(async()=>{if(playerHP>0&&!battleFinished)await bossTurn();busy=false;});
+  wait(650).then(()=>{
+    if(playerHP>0&&!battleFinished){
+      setMessage(`${potion.name} settles. The boss waits for your next battle skill.`);
+    }
+    busy=false;
+  });
 }
 
 async function playParryEffect(src) {
