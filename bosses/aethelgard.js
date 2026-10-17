@@ -35,13 +35,7 @@ window.YEN_BOSSES.aethelgard = {
   // Standard player buttons still appear during the encounter.
   // Aethelgard's armor reduces every successful attack to exactly 3,000 damage.
   playerAttacks: [
-    ["VOID SLASH",9000,21000,["Your void slash reaches Aethelgard.","The hit sparks against his armor."]],
-    ["RUNE BURST",7000,26000,["Runes explode across the arena.","Aethelgard's armor rings from the impact."]],
-    ["SOUL PIERCE",11000,19000,["Your strike finds Aethelgard's guard.","The blow lands, but his armor barely gives."]],
-    ["ECHO BOLT",6000,28000,["An echo bolt tears through the air.","White energy cracks against the Lord's armor."]],
-    ["TOME SHARD",8000,24000,["A Tome shard cuts toward Aethelgard.","Ancient symbols flare on impact."]],
-    ["STARFALL",10000,22000,["A star crashes down on the Lord.","The arena flashes from the impact."]],
-    ["DREAD WAVE",5000,30000,["A wave of dread crashes into Aethelgard.","The Lord does not even step back."]],
+    ["SLASH",9000,21000,["Your void slash reaches Aethelgard.","The hit sparks against his armor."]],
     ["LAST WORD",12000,20000,["Your final word strikes the True Final Lord.","The air fractures around Aethelgard."]]
   ],
 
@@ -52,7 +46,7 @@ window.YEN_BOSSES.aethelgard = {
   eyesFalling: {
     name: "EYES ARE FALLING",
     correctDamage: 20000,
-    failDamage: [50000, 85000],
+    failDamage: [100000, 200000],
     timeLimit: 5000
   },
   starEffect: {

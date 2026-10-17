@@ -33,7 +33,7 @@ window.YEN_BOSSES.argus = {
     ["DREAD WAVE",5000,30000,["A wave of dread rolls over the gunner.","Argus is forced backward.","The wave tears through his firing line."]],
     ["LAST WORD",12000,20000,["Your final word hits like a sentence.","The air cracks around Argus.","The gunner finally looks worried."]]
   ],
-  bossAttacks: [["HAND CANNON",15000,27000],["BLACK ROUND",12000,24000],["EXECUTION SHOT",18000,30000]],
+  bossAttacks: [["HAND CANNON",15000,27000],["BLACK ROUND",12000,24000],["EXECUTION SHOT",200000,30000]],
   intro: ["I have watched a thousand like you fall. You will be no different."],
   rapid: "That's all you got? Fuck it.",
 

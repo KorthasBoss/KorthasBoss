@@ -32,7 +32,7 @@ window.YEN_BOSSES.malakor = {
   attacks: {
     bullRush: {
       name: "BULL RUSH",
-      damage: 90000
+      damage: 200000
     },
     swordSlash: {
       name: "SWORD SLASH",
