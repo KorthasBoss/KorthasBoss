@@ -36,7 +36,7 @@ window.YEN_ACCOUNTS = [
     username: "Solstice",
     password: "666",
     // Quote enormous DOX values so JavaScript does not round them.
-    dox: "2000000",
+    dox: "160000000",
     // Add skill IDs (0-7999) or exact skill names.
     ownedSkills: [""],
     // Add as many account-only attack buttons as you want.
