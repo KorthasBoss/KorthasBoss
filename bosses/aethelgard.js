@@ -46,7 +46,7 @@ window.YEN_BOSSES.aethelgard = {
   eyesFalling: {
     name: "EYES ARE FALLING",
     correctDamage: 20000,
-    failDamage: [100000, 200000],
+    failDamage: [400000,400000],
     timeLimit: 5000
   },
   starEffect: {

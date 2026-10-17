@@ -263,6 +263,7 @@ $("logout-button").addEventListener("click", async () => {
 function buildSkillCatalog() {
   if (skillCatalog) return skillCatalog;
   const prefixes = ["Void","Astral","Dread","Soul","Rune","Blood","Echo","Fallen","Solar","Night","Grave","Tome","Royal","Phantom","Seraph","Ruin","Star","Cursed","Abyssal","Thorn"];
+    
   const cores = ["Slash","Burst","Pierce","Nova","Judgment","Wave","Prism","Chain","Rift","Pulse","Meteor","Brand","Requiem","Tempest","Execution","Sigil","Crash","Sunder","Fang","Cannon"];
   const rarities = [
     {name:"COMMON",count:1600,color:"#7e94ae",mult:1,cost:[12000,70000]},
