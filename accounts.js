@@ -43,16 +43,6 @@ window.YEN_ACCOUNTS = [
     attacks: [
     ],
 
-    username: "kuya",
-    password: "67",
-    // Quote enormous DOX values so JavaScript does not round them.
-    dox: "2000000",
-    // Add skill IDs (0-7999) or exact skill names.
-    ownedSkills: [""],
-    // Add as many account-only attack buttons as you want.
-    attacks: [
-    ],
-
     // Optional starting healing items.
     potions: {
       minor: 0,
