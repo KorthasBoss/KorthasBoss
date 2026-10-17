@@ -298,7 +298,7 @@ function buildSkillCatalog() {
     enchanted:true,
     rainbow:true,
     special:"rainbow-sword",
-    breakChance:0.04,
+    breakChance:26,
     cost:8000000,
     power:200000,
     description:"A forbidden rainbow blade. Deals exactly 200,000 damage and has a 4% chance to shatter after use."
