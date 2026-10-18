@@ -46,8 +46,10 @@ window.YEN_ACCOUNTS = [
     potions: {
       minor: 0,
       greater: 0
-    },
+    }
+  },
 
+    {
     username: "kuya",
     password: "67",
     // Quote enormous DOX values so JavaScript does not round them.
@@ -57,23 +59,10 @@ window.YEN_ACCOUNTS = [
     // Add as many account-only attack buttons as you want.
     attacks: [
     ],
-    
-     // Optional starting healing items.
+    // Optional starting healing items.
     potions: {
       minor: 0,
-      greater: 78
+      greater: 989
     }
   }
-
-  // Add more accounts here:
-  // ,{
-  //   username: "anotherplayer",
-  //   password: "password",
-  //   dox: "500000",
-  //   ownedSkills: ["15", "7999"],
-  //   attacks: [
-  //     { id:"my-attack", name:"MY ATTACK", power:90000, rarity:"CUSTOM", color:"#9b6cff", description:"My attack." }
-  //   ],
-  //   potions: { soul: 3 }
-  // }
 ];
