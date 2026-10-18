@@ -162,7 +162,7 @@ function updateWallet() {
 function bossCard(boss) {
   const el = document.createElement("article");
   const isProfileBoss = Boolean(boss.profileFrame);
-  const profileClass = isProfileBoss ? `profile-frame-card ${boss.id === "aethelgard" ? "aethelgard-card" : ""}` : "";
+  const profileClass = isProfileBoss ? "profile-frame-card" : "";
   el.className = `boss-card ${profileClass}`;
   el.style.setProperty("--card-bg", `url("${boss.cardImage || boss.idle}")`);
 
@@ -170,9 +170,9 @@ function bossCard(boss) {
     // Profile-frame bosses keep the normal clickable card, while the supplied
     // artwork sits OUTSIDE the card as an ornamental profile frame.
     el.innerHTML = `<div class="boss-card-bg"></div>
-      <div class="profile-frame-wrap ${boss.id === "aethelgard" ? "aethelgard-frame-wrap" : ""}" aria-hidden="true"><img class="profile-card-frame ${boss.id === "aethelgard" ? "aethelgard-profile-frame" : ""}" src="${boss.profileFrame}" alt=""></div>
+      <div class="profile-frame-wrap" aria-hidden="true"><img class="profile-card-frame" src="${boss.profileFrame}" alt=""></div>
       <div class="boss-card-badge">BOSS // ${String(boss.stars).padStart(2,"0")} ★</div>
-      <img class="boss-card-art profile-card-character ${boss.id === "aethelgard" ? "aethelgard-card-character" : ""}" src="${boss.idle}" alt="${boss.name} idle">
+      <img class="boss-card-art profile-card-character" src="${boss.idle}" alt="${boss.name} idle">
       <div class="boss-card-info"><div class="stars">${"★".repeat(8)} ${boss.stars} STARS</div><h2>${boss.name}</h2><p>${boss.title} // REWARD ${fmtDox(boss.reward)} DOX</p></div>`;
   } else {
     el.innerHTML = `<div class="boss-card-bg"></div>

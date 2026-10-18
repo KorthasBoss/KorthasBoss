@@ -18,6 +18,7 @@ window.YEN_BOSSES.nebula = {
   maxHP: 50000000,
   playerMaxHP: 1500000,
   reward: 15000000000,
+  intro: ["The stars have gone silent.", "NEBULA is waiting.", "Now show me what your attack is worth."],
 
   // Replace these with final Nebula art/background whenever ready.
   cardImage: "assets/Nebula.png",
