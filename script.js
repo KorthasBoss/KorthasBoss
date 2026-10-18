@@ -323,7 +323,7 @@ function buildSkillCatalog() {
     color:"#ffffff",
     enchanted:true,
     rainbow:true,
-    special:"jjs-sword",
+    special:"rainbow-sword",
     breakChance:0,
     cost:7000000000000,
     power:130000,
