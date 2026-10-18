@@ -28,14 +28,8 @@ window.YEN_BOSSES.amias = {
   parryChance: 0.34,
 
   playerAttacks: [
-    ["VOID SLASH",9000,21000,["Your void slash cuts through Amias's aura.","A dark arc tears across the arena."]],
-    ["RUNE BURST",7000,26000,["Runes detonate around Amias.","The burst forces her backward."]],
-    ["SOUL PIERCE",11000,19000,["Your strike searches for her heart.","Steel meets bloodbound power."]],
-    ["ECHO BOLT",6000,28000,["Echo energy snaps into Amias.","The impact rings through the arena."]],
-    ["TOME SHARD",8000,24000,["A Tome shard slices through her guard.","Ancient lettering flashes over her armor."]],
-    ["STARFALL",10000,22000,["A star crashes onto Amias.","The arena erupts with white sparks."]],
-    ["DREAD WAVE",5000,30000,["A dread wave slams into her.","Amias refuses to yield."]],
-    ["LAST WORD",12000,20000,["Your final word strikes with brutal force.","The air fractures around her."]]
+     ["SLASH",9000,21000,["Your void slash reaches Aethelgard.","The hit sparks against his armor."]],
+    ["LAST WORD",12000,20000,["Your final word strikes the True Final Lord.","The air fractures around Aethelgard."]]
   ],
 
   attacks: {

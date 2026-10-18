@@ -32,14 +32,8 @@ window.YEN_BOSSES.nebula = {
   empoweredReflection: 1.0,
 
   playerAttacks: [
-    ["VOID SLASH",9000,21000,["Your void slash enters the nebula.","Space bends around the impact."]],
-    ["RUNE BURST",7000,26000,["Runes explode inside the cosmic field.","Nebula barely moves."]],
-    ["SOUL PIERCE",11000,19000,["Your soul piercer finds a target.","The void ripples around Nebula."]],
-    ["ECHO BOLT",6000,28000,["Echo energy disappears into the stars.","A cosmic detonation follows."]],
-    ["TOME SHARD",8000,24000,["A Tome shard crosses the galaxy around her.","Ancient symbols flare against her aura."]],
-    ["STARFALL",10000,22000,["A star falls into Nebula.","She watches it disappear."]],
-    ["DREAD WAVE",5000,30000,["A dread wave folds through space.","Nebula's aura swallows it."]],
-    ["LAST WORD",12000,20000,["Your final word reaches the abyss.","Reality cracks behind her."]]
+     ["SLASH",9000,21000,["Your void slash reaches Aethelgard.","The hit sparks against his armor."]],
+    ["LAST WORD",12000,20000,["Your final word strikes the True Final Lord.","The air fractures around Aethelgard."]]
   ],
 
   attacks: {
