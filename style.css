@@ -343,6 +343,10 @@ body.azael-domain .status-dot{background:#ff4263;box-shadow:0 0 12px #ff4263}
 .attack-button.rainbow-sword-button{border-image:linear-gradient(90deg,#ff005d,#ffd400,#00ff88,#00c8ff,#a64cff,#ff00a8) 1!important;box-shadow:0 0 18px #ff00aa33,inset 0 0 22px #ffffff08}
 .attack-button.rainbow-sword-button::after{background:linear-gradient(90deg,#ff005d,#ffd400,#00ff88,#00c8ff,#a64cff,#ff00a8)!important;transform:scaleX(1)!important}
 
+/* CURVED CRYSTAL SCYTHE */
+.attack-button.jjs-sword-button{border-image:linear-gradient(90deg,#ff6600,#000000,#ff6600,#000000,#ff6600,#000000) 1!important;box-shadow:0 0 18px #ff00aa33,inset 0 0 22px #ffffff08}
+.attack-button.jjs-sword-button::after{background:linear-gradient(90deg,#ff6600,#000000,#ff6600,#000000,#ff6600,#000000)!important;transform:scaleX(1)!important}
+
 .battle-locked{position:relative!important;filter:grayscale(.55)!important;opacity:.58!important;cursor:not-allowed!important}
 .battle-locked::after{content:"🔒";position:absolute;right:9px;top:7px;font-size:14px;filter:grayscale(0)}
 .aethelgard-name-overlay,.aethelgard-card-game,.aethelgard-mini-game{position:fixed;inset:0;z-index:150;background:#010208ed;display:flex;align-items:center;justify-content:center;padding:20px;animation:aethelgardOverlayIn .35s ease both}

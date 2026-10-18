@@ -303,7 +303,31 @@ function buildSkillCatalog() {
     breakChance:0.01,
     cost:80000000,
     power:79000,
-    description:"A forbidden rainbow blade. Deals exactly 200,000 damage and has a 4% chance to shatter after use."
+    description:"A forbidden rainbow blade. Deals exactly 200,000 damage and has a 4% chance to shatter after use.",
+
+    id:"knife",
+    name:"KNIFE",
+    rarity:"HALLOWEEN // JJS!",
+    color:"#ffffff",
+    enchanted:true,
+    rainbow:true,
+    special:"rainbow-sword",
+    breakChance:0,
+    cost:80000000,
+    power:98000,
+    description:"Are we fucking deadass? 0%",
+
+     id:"curved-crystal-scythe",
+    name:"CURVED CRYSTAL SCYTHE",
+    rarity:"HALLOWEEN // JJS!",
+    color:"#ffffff",
+    enchanted:true,
+    rainbow:true,
+    special:"jjs-sword",
+    breakChance:0,
+    cost:7000000000000,
+    power:130000,
+    description:"Who needs to worry about accuracy When you have curved scythe that take 130K damage? Only a small fee"
   });
   skillCatalog = output;
   return output;

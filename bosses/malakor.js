@@ -46,14 +46,8 @@ window.YEN_BOSSES.malakor = {
   },
 
   playerAttacks: [
-    ["VOID SLASH",9000,21000,["Your void slash strikes Malakor's armor.","The blade scrapes across his plating."]],
-    ["RUNE BURST",7000,26000,["Runes detonate against Malakor.","The armor rings from the impact."]],
-    ["SOUL PIERCE",11000,19000,["Your strike searches for a gap in the armor.","You find one for a split second."]],
-    ["ECHO BOLT",6000,28000,["Echo energy crashes into the armor.","Blue sparks scatter from Malakor."]],
-    ["TOME SHARD",8000,24000,["A Tome shard punches into the plating.","Ancient lettering burns across his armor."]],
-    ["STARFALL",10000,22000,["A star crashes onto Malakor.","The impact makes his armor scream."]],
-    ["DREAD WAVE",5000,30000,["A dread wave rolls over Malakor.","The armored devil refuses to move."]],
-    ["LAST WORD",12000,20000,["Your final word slams into the armor.","The arena cracks beneath the impact."]]
+     ["SLASH",9000,21000,["Your void slash reaches Aethelgard.","The hit sparks against his armor."]],
+    ["LAST WORD",12000,20000,["Your final word strikes the True Final Lord.","The air fractures around Aethelgard."]]
   ],
 
   intro: [

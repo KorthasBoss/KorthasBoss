@@ -24,14 +24,8 @@ window.YEN_BOSSES.argus = {
   extraShotChance: 0.38,
   healChance: 0.20,
   playerAttacks: [
-    ["VOID SLASH",9000,21000,["Your void slash tears through the dark.","The slash catches Argus clean.","A blue wound of light opens across his guard."]],
-    ["RUNE BURST",7000,26000,["Runes detonate around Argus.","The burst rattles his shield.","Ancient symbols burn through the smoke."]],
-    ["SOUL PIERCE",11000,19000,["You pierce the gunner's guard.","The hit lands with a brutal crack.","Argus's stance breaks for a second."]],
-    ["ECHO BOLT",6000,28000,["An echo bolt snaps across the arena.","The bolt punches into Argus.","The shot is answered by a burst of blue light."]],
-    ["TOME SHARD",8000,24000,["A Tome shard cuts through the air.","The shard detonates against his armor.","Ancient lettering flashes across his weapon."]],
-    ["STARFALL",10000,22000,["A star crashes down on Argus.","The arena flashes white.","The impact sends a shock through his shield."]],
-    ["DREAD WAVE",5000,30000,["A wave of dread rolls over the gunner.","Argus is forced backward.","The wave tears through his firing line."]],
-    ["LAST WORD",12000,20000,["Your final word hits like a sentence.","The air cracks around Argus.","The gunner finally looks worried."]]
+    ["SLASH",9000,21000,["Your void slash reaches Aethelgard.","The hit sparks against his armor."]],
+    ["LAST WORD",12000,20000,["Your final word strikes the True Final Lord.","The air fractures around Aethelgard."]]
   ],
   bossAttacks: [["HAND CANNON",15000,27000],["BLACK ROUND",12000,24000],["EXECUTION SHOT",200000,30000]],
   intro: ["I have watched a thousand like you fall. You will be no different."],

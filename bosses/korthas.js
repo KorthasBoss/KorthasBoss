@@ -30,14 +30,8 @@ window.YEN_BOSSES.korthas = {
   phaseTwoAtHP: 610000,
 
   playerAttacks: [
-    ["VOID SLASH",9000,21000,["Your void slash tears through the dark.","A clean hit. Korthas staggers.","Blue sparks scatter from the impact."]],
-    ["RUNE BURST",7000,26000,["Runes detonate around Korthas.","The rune burst hits harder than expected.","A ring of light snaps shut around the boss."]],
-    ["SOUL PIERCE",11000,19000,["Your strike pierces his guard.","The hit lands with a sharp crack.","Korthas's aura flickers from the impact."]],
-    ["ECHO BOLT",6000,28000,["An echo bolt ricochets into Korthas.","The blast hits twice in quick succession.","Blue energy bursts across the arena."]],
-    ["TOME SHARD",8000,24000,["A shard of the Tome cuts through the air.","The shard detonates on impact.","Ancient lettering burns across his armor."]],
-    ["STARFALL",10000,22000,["A star falls directly onto Korthas.","The arena flashes as the star connects.","The impact sends a ripple through the floor."]],
-    ["DREAD WAVE",5000,30000,["A wave of dread crashes into the boss.","The attack surges with unstable power.","Korthas absorbs the hit with a growl."]],
-    ["LAST WORD",12000,20000,["Your final word strikes like a curse.","The attack lands with brutal precision.","The air cracks around Korthas."]]
+     ["SLASH",9000,21000,["Your void slash reaches Aethelgard.","The hit sparks against his armor."]],
+    ["LAST WORD",12000,20000,["Your final word strikes the True Final Lord.","The air fractures around Aethelgard."]]
   ],
 
   bossAttacks: [
