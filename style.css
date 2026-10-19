@@ -217,7 +217,7 @@ button{font:inherit;cursor:pointer}
 @media(max-width:850px){.portal-screen{grid-template-columns:1fr;gap:20px}.portal-art{min-height:370px}.portal-character{height:330px}.menu-buttons{grid-template-columns:1fr}.lobby-grid{grid-template-columns:1fr}.merchant-wrap{grid-template-columns:1fr}.merchant-art{min-height:320px}.merchant-art img{height:290px}.skill-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.shop-heading{align-items:stretch;flex-direction:column}.shop-search{width:100%}.lobby-actions{flex-wrap:wrap}.lobby-action{min-width:30%}}
 @media(max-width:560px){.portal-screen,.portal-subscreen{padding-top:22px}.portal-title{font-size:92px}.portal-subtitle{font-size:19px}.portal-note{flex-wrap:wrap}.subscreen-card{margin-top:18px;padding:22px}.lobby-top{align-items:start;flex-direction:column}.wallet{width:100%;text-align:left}.skill-grid{grid-template-columns:1fr}.confirm-card{padding:24px}.confirm-card h1{font-size:30px}.merchant-dialog h1{font-size:45px}.merchant-meta{gap:10px}.merchant-meta span{font-size:7px}}
 .merchant-lobby-card{border-color:#4b3b2d;background:linear-gradient(145deg,#1c1711,#0b0b0d)}.merchant-lobby-card:hover{border-color:#ffbf65;box-shadow:0 18px 45px #ff9f2618}.merchant-lobby-card .boss-card-art{filter:drop-shadow(0 0 24px #ff9f264d)}.merchant-lobby-card .stars{color:#ffc56d}
-.owned-skill{border-color:color-mix(in srgb,var(--rarity) 55%,#29384e)}.owned-skill::after{background:var(--rarity)}.enchanted-skill{border-color:#c984ff!important;box-shadow:0 0 18px #b04cff1d,inset 0 0 20px #b04cff0c}.enchanted-skill::after{background:#e3a0ff}.skill-card.enchanted h3{color:#f2d5ff;text-shadow:0 0 13px #b65cff66}
+.owned-skill{border-color:color-mix(in srgb,var(--rarity) 55%,#29384e)}.owned-skill::after{background:var(--rarity)}.enchanted-skill{border-color:var(--rarity)!important;box-shadow:0 0 18px color-mix(in srgb,var(--rarity) 55%,transparent),inset 0 0 20px color-mix(in srgb,var(--rarity) 16%,transparent)}.enchanted-skill::after{background:var(--rarity)}.skill-card.enchanted h3{color:#f2d5ff;text-shadow:0 0 13px #b65cff66}
 
 /* ==========================================================
    YEN! // STABLE CHARACTER ART
@@ -437,3 +437,56 @@ body.azael-domain .status-dot{background:#ff4263;box-shadow:0 0 12px #ff4263}
 .nebula-card-box h2{font-size:40px;margin:12px 0}.nebula-card-box p{color:#b9b1d4;font:12px/1.6 var(--mono)}
 .nebula-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:24px 0}.nebula-choice{height:190px;border:1px solid #8c76ff;background:radial-gradient(circle at 50% 35%,#35227a,#080313 68%);color:#fff;cursor:pointer;transition:.18s;box-shadow:inset 0 0 35px #9f88ff18}.nebula-choice:hover{transform:translateY(-8px) scale(1.03);border-color:#fff;box-shadow:0 0 40px #8b6dff66}.nebula-choice span{display:block;font-size:70px;text-shadow:0 0 30px #fff,0 0 60px #8d72ff}.nebula-choice small{font:9px var(--mono);letter-spacing:.15em;color:#bcb2e8}.nebula-card-timer{font:25px var(--mono);color:#fff;text-shadow:0 0 20px #9b84ff}
 @media(max-width:560px){.profile-frame-wrap{left:-8%;right:-8%}.profile-card-character{width:48%!important}.nebula-cards{gap:8px}.nebula-choice{height:145px}.nebula-card-box{padding:22px}}
+
+
+/* ==========================================================
+   SEA PREDATOR // SPECIAL ENDGAME PRESENTATION
+   ========================================================== */
+.sea-predator-battle .boss-panel{min-height:330px;border-color:#28e7ff66;background:linear-gradient(105deg,#061a28,#07111d 58%,#08233a);box-shadow:inset 0 0 90px #00d9ff12,0 0 40px #00d9ff0b}
+.sea-predator-battle .boss-panel-grid{background-image:linear-gradient(#4feaff20 1px,transparent 1px),linear-gradient(90deg,#4feaff20 1px,transparent 1px);background-size:26px 26px}
+.sea-predator-battle .boss-track{height:34px;border-color:#38e9ff;box-shadow:0 0 22px #00eaff33,inset 0 0 18px #00d9ff16}
+.sea-predator-battle .boss-fill{background:linear-gradient(90deg,#00a8c9,#35f4ff,#d9ffff)!important;box-shadow:0 0 22px #00eaff99!important}
+.sea-predator-battle .boss-hp-numbers,.sea-predator-battle .hp-title{font-size:1.05em}
+.sea-predator-battle .boss-name{color:#d9ffff;text-shadow:0 0 15px #00eaff,0 0 45px #007dff}
+.sea-predator-battle .battle-tag{border-color:#38e9ff;color:#8ff7ff;box-shadow:0 0 18px #00d9ff1c}
+.sea-predator-battle .attack-button{border-color:#176c7c;background:linear-gradient(145deg,#071d27,#071018)}
+.sea-predator-battle .attack-button:hover:not(:disabled){border-color:#42f5ff;box-shadow:0 8px 30px #00eaff20}
+
+/* Reward attack: image-led, glowing, and still a normal owned attack button. */
+.attack-button.trident-coop-button{border-color:#55f5ff!important;background:radial-gradient(circle at 50% 30%,#0d647588,#06131d 65%)!important;box-shadow:0 0 20px #00eaff55,inset 0 0 24px #00eaff18!important;display:flex;align-items:center;justify-content:center;gap:7px}
+.attack-button.trident-coop-button::after{background:#55f5ff!important;transform:scaleX(1)!important;box-shadow:0 0 12px #55f5ff}
+.attack-button-image{width:36px;height:48px;object-fit:contain;filter:drop-shadow(0 0 7px #55f5ff) drop-shadow(0 0 18px #008cff);flex:0 0 auto}
+.attack-button-label{position:relative;z-index:2}
+.trident-coop-vfx{position:fixed;z-index:9992;left:50%;top:50%;width:90px;height:280px;transform:translate(-50%,-50%) rotate(-8deg);background:linear-gradient(90deg,transparent,#fff,#55f5ff,#fff,transparent);clip-path:polygon(46% 0,54% 0,58% 78%,82% 70%,67% 88%,50% 100%,33% 88%,18% 70%,42% 78%);filter:drop-shadow(0 0 18px #55f5ff) drop-shadow(0 0 50px #007dff);animation:tridentCoop .95s ease-out forwards;pointer-events:none}
+@keyframes tridentCoop{0%{opacity:0;transform:translate(-50%,-50%) rotate(-8deg) scale(.2)}25%{opacity:1}70%{opacity:1;transform:translate(-50%,-50%) rotate(8deg) scale(1.25)}100%{opacity:0;transform:translate(-50%,-50%) rotate(22deg) scale(1.7)}}
+
+/* Sea Predator attack VFX */
+.sea-shell-null-vfx,.sea-shell-hit-vfx,.sea-trident-vfx,.sea-crash-vfx,.sea-shell-judgment-vfx,.sea-black-tide-vfx,.sea-devour-vfx,.sea-coop-vfx{position:fixed;z-index:9990;left:50%;top:48%;pointer-events:none}
+.sea-shell-null-vfx{width:330px;height:330px;border:8px double #8ffaff;border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 30px #00eaff,0 0 100px #006bff,inset 0 0 60px #00eaff;animation:seaNull .7s ease-out forwards}
+@keyframes seaNull{0%{opacity:0;transform:translate(-50%,-50%) scale(.2) rotate(0)}35%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(1.35) rotate(90deg)}}
+.sea-shell-hit-vfx{width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,transparent 34%,#b8ffff18 36%,transparent 57%),conic-gradient(#55f5ff55,#061a2c,#fff4,#55f5ff55);box-shadow:0 0 70px #00d9ff66;transform:translate(-50%,-50%);animation:seaHit .55s ease-out forwards}
+@keyframes seaHit{from{opacity:0;transform:translate(-50%,-50%) scale(.5)}to{opacity:1;transform:translate(-50%,-50%) scale(1.3) rotate(180deg);filter:brightness(1.8)}}
+.sea-trident-vfx{width:55px;height:300px;background:linear-gradient(90deg,transparent,#fff,#55f5ff,#008cff,transparent);clip-path:polygon(43% 0,57% 0,58% 74%,82% 68%,67% 88%,50% 100%,33% 88%,18% 68%,42% 74%);filter:drop-shadow(0 0 20px #55f5ff);animation:seaStrike .8s ease-out forwards}
+@keyframes seaStrike{0%{opacity:0;transform:translate(-50%,-50%) translateY(-200px) rotate(15deg)}35%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) translateY(120px) rotate(-15deg)}}
+.sea-crash-vfx{inset:20%;background:radial-gradient(circle,#fff 0,#55f5ff33 14%,transparent 60%);box-shadow:0 0 100px #00eaff,0 0 200px #0077ff;transform:scale(.2);animation:seaCrash .9s ease-out forwards}
+@keyframes seaCrash{0%{opacity:0;transform:scale(.2)}25%{opacity:1}100%{opacity:0;transform:scale(1.5)}}
+.sea-tidal-slash{position:fixed;z-index:9990;left:50%;top:50%;width:110vw;height:9px;background:linear-gradient(90deg,transparent,#fff,#55f5ff,#008cff,transparent);box-shadow:0 0 16px #55f5ff,0 0 60px #0077ff;transform:translate(-50%,-50%) rotate(calc(-30deg + var(--sea-index)*12deg));animation:seaTidal .18s ease-out forwards;pointer-events:none}
+@keyframes seaTidal{from{opacity:0;transform:translate(-50%,-50%) rotate(calc(-30deg + var(--sea-index)*12deg)) scaleX(.1)}to{opacity:0;transform:translate(-50%,-50%) rotate(calc(-30deg + var(--sea-index)*12deg)) scaleX(1.2)}}
+.sea-shell-judgment-vfx{width:320px;height:320px;border-radius:50%;border:14px solid #55f5ff;box-shadow:0 0 40px #00eaff,0 0 130px #006bff,inset 0 0 50px #00eaff;transform:translate(-50%,-50%);animation:seaJudgment .9s ease-out forwards}
+@keyframes seaJudgment{0%{opacity:0;transform:translate(-50%,-50%) scale(.1) rotate(0)}30%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(1.8) rotate(180deg)}}
+.sea-black-tide-vfx{left:0;top:35%;width:100vw;height:45vh;background:linear-gradient(180deg,transparent,#001b35cc,#000 100%);box-shadow:0 -40px 100px #006bff88;animation:seaTide .9s ease-out forwards}
+@keyframes seaTide{from{opacity:0;transform:translateY(100%)}35%{opacity:1}to{opacity:0;transform:translateY(-20%)}}
+.sea-devour-vfx{width:60vw;height:60vw;max-width:700px;max-height:700px;border-radius:50%;background:radial-gradient(circle,#000 20%,#001a2d 38%,transparent 67%);box-shadow:0 0 70px #00eaff,0 0 180px #004cff;transform:translate(-50%,-50%);animation:seaDevour .95s ease-out forwards}
+@keyframes seaDevour{from{opacity:0;transform:translate(-50%,-50%) scale(.1) rotate(0)}30%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(1.5) rotate(240deg)}}
+.sea-coop-vfx{width:80vw;height:80vh;background:radial-gradient(circle,#fff 0,#55f5ff33 10%,transparent 55%);box-shadow:0 0 80px #55f5ff,0 0 220px #006bff;transform:translate(-50%,-50%);animation:seaCoop .95s ease-out forwards}
+@keyframes seaCoop{from{opacity:0;transform:translate(-50%,-50%) scale(.1)}25%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(1.4)}}
+
+.reward-skill-card{position:absolute;z-index:6;bottom:112px;min-width:min(520px,86vw);padding:14px 22px;border:1px solid #55f5ff;background:#03141ce8;box-shadow:0 0 45px #00eaff33,inset 0 0 25px #00eaff0c;text-align:center;animation:rewardSkillIn .8s .45s ease-out both}
+.reward-skill-card span{display:block;color:#75eaff;font:8px var(--mono);letter-spacing:.2em}.reward-skill-card strong{display:block;margin-top:5px;color:#e8ffff;font:22px var(--mono);text-shadow:0 0 16px #55f5ff}.reward-skill-card small{display:block;margin-top:5px;color:#7595aa;font:7px var(--mono);letter-spacing:.08em}
+@keyframes rewardSkillIn{from{opacity:0;transform:translateY(20px) scale(.94)}to{opacity:1;transform:none}}
+
+/* User-supplied background URIs: replace these files without touching code. */
+.portal-screen#start-screen{background-image:linear-gradient(#03050a66,#03050af0),url("assets/start-background.png");background-size:cover;background-position:center}
+#lobby-screen{background-image:linear-gradient(#03050a55,#03050ae8),url("assets/lobby-background.png");background-size:cover;background-position:center}
+
+.skill-card.reward-only{border-color:#55f5ff;box-shadow:0 0 22px #00eaff18,inset 0 0 25px #00eaff08}.skill-card.reward-only .skill-price{color:#75eaff;text-shadow:0 0 10px #00eaff}
