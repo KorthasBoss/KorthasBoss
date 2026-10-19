@@ -15,9 +15,9 @@ The engine never copies one boss's combat rules into another boss.
 */
 
 const CONFIG = {
+  // ONE global site background. Change this one path to change the
+  // start screen, lobby, and any battle that does not define its own background.
   background: "assets/79909.gif",
-  startBackground: "assets/79909.gif",
-  lobbyBackground: "assets/79909.gif",
   accountStartingDox: 500000,
   bosses: window.YEN_BOSSES || {},
   merchant: window.YEN_MERCHANT || { image:"assets/Merchant_Idle.png", background:"assets/Merchant_background.gif", music:"assets/merchant-theme.mp3", lines:[] },
@@ -78,10 +78,18 @@ function shake() {
   game.classList.add("shake-screen");
 }
 function setBackground(path, fallback) {
+  document.body.style.backgroundRepeat = "no-repeat";
+  document.body.style.backgroundSize = "cover";
+  document.body.style.backgroundPosition = "center center";
+  document.body.style.backgroundAttachment = "fixed";
   document.body.style.backgroundImage = fallback || "radial-gradient(ellipse at 50% 0%,#17243d,#090d17 45%,#05060b)";
   if (!path) return;
   const image = new Image();
   image.onload = () => {
+    document.body.style.backgroundRepeat = "no-repeat";
+    document.body.style.backgroundSize = "cover";
+    document.body.style.backgroundPosition = "center center";
+    document.body.style.backgroundAttachment = "fixed";
     document.body.style.backgroundImage = `linear-gradient(#03050a99,#03040ae6),url("${path}")`;
   };
   image.onerror = () => console.warn("Background asset could not load:", path);
@@ -149,8 +157,8 @@ function showScreen(id) {
   document.querySelectorAll(".portal-screen,.portal-subscreen,.battle-screen").forEach(x => x.classList.add("hidden"));
   $(id)?.classList.remove("hidden");
   setPhaseLabel(id === "lobby-screen" ? "HUNTER LOBBY" : id === "merchant-screen" ? "MERCHANT // OPEN" : id === "start-screen" ? "WELCOME" : "YEN! // READY");
-  if(id === "start-screen") setBackground(CONFIG.startBackground);
-  if(id === "lobby-screen") setBackground(CONFIG.lobbyBackground);
+  if(id === "start-screen") setBackground(CONFIG.background);
+  if(id === "lobby-screen") setBackground(CONFIG.background);
 }
 
 function updateWallet() {
@@ -163,7 +171,7 @@ function bossCard(boss) {
   const el = document.createElement("article");
   const isProfileBoss = Boolean(boss.profileFrame);
   const profileClass = isProfileBoss ? "profile-frame-card" : "";
-  el.className = `boss-card ${profileClass}`;
+  el.className = `boss-card ${profileClass} ${boss.id === "sea-predator" ? "sea-predator-card" : ""}`;
   el.style.setProperty("--card-bg", `url("${boss.cardImage || boss.idle}")`);
 
   if (isProfileBoss) {
@@ -188,7 +196,7 @@ function bossCard(boss) {
 function renderLobby() {
   $("boss-music").pause();
   document.body.classList.remove("azael-domain");
-  setBackground(CONFIG.lobbyBackground);
+  setBackground(CONFIG.background);
   updateWallet();
   const list = $("boss-list");
   list.innerHTML = "";

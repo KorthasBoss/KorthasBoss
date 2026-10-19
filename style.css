@@ -7,8 +7,8 @@
 }
 *{box-sizing:border-box}
 html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text)}
-body{background-color:#05060b;background-image:radial-gradient(ellipse at 50% 0%,#17243d 0%,#090d17 45%,#05060b 100%);background-size:cover;background-position:center;background-attachment:fixed}
-body{font-family:var(--display);overflow-x:hidden;background:radial-gradient(ellipse at 50% 0%,#17243d 0%,#090d17 45%,#05060b 100%)}
+body{background-color:#05060b;background-image:radial-gradient(ellipse at 50% 0%,#17243d 0%,#090d17 45%,#05060b 100%);background-repeat:no-repeat;background-size:cover;background-position:center;background-attachment:fixed}
+body{font-family:var(--display);overflow-x:hidden;background:radial-gradient(ellipse at 50% 0%,#17243d 0%,#090d17 45%,#05060b 100%);background-repeat:no-repeat;background-size:cover;background-position:center;background-attachment:fixed}
 button{font:inherit;cursor:pointer}
 .hidden{display:none!important}
 .ambient{position:fixed;pointer-events:none;border-radius:50%;filter:blur(90px);opacity:.13;z-index:0}
@@ -490,3 +490,7 @@ body.azael-domain .status-dot{background:#ff4263;box-shadow:0 0 12px #ff4263}
 #lobby-screen{background-image:linear-gradient(#03050a55,#03050ae8),url("assets/lobby-background.png");background-size:cover;background-position:center}
 
 .skill-card.reward-only{border-color:#55f5ff;box-shadow:0 0 22px #00eaff18,inset 0 0 25px #00eaff08}.skill-card.reward-only .skill-price{color:#75eaff;text-shadow:0 0 10px #00eaff}
+
+/* SEA PREDATOR // shared profile-frame card treatment */
+.profile-frame-card.sea-predator-card .profile-frame-wrap{left:-5%;right:-5%;top:-10%;bottom:-10%;}
+.profile-frame-card.sea-predator-card .profile-card-character{width:43%!important;height:255px!important;top:46%!important;}
