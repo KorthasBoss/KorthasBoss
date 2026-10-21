@@ -102,7 +102,7 @@ window.YEN_BOSSES["priest-della"] = {
   playerMaxHP:2500000,
   reward:750000000000,
   rewardSkill:"no-saki",
-  cardImage:"assets/Della.png",
+  cardImage:"assets/priest_della_card.png",
   profileFrame:"assets/priest_della_card.png",
   idle:"assets/Della.png",
   fight:"assets/Della.png",
