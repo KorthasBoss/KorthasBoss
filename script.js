@@ -156,7 +156,7 @@ async function transition(fn) {
 function showScreen(id) {
   document.querySelectorAll(".portal-screen,.portal-subscreen,.battle-screen").forEach(x => x.classList.add("hidden"));
   $(id)?.classList.remove("hidden");
-  setPhaseLabel(id === "lobby-screen" ? "HUNTER LOBBY" : id === "merchant-screen" ? "MERCHANT // OPEN" : id === "start-screen" ? "WELCOME" : "YEN! // READY");
+  setPhaseLabel(id === "lobby-screen" ? "HUNTER LOBBY" : id === "merchant-screen" ? "MERCHANT // OPEN" : id === "della-screen" ? "DELLA // SANCTUM" : id === "start-screen" ? "WELCOME" : "YEN! // READY");
   if(id === "start-screen") setBackground(CONFIG.background);
   if(id === "lobby-screen") setBackground(CONFIG.background);
 }
@@ -206,6 +206,28 @@ function renderLobby() {
   merchant.innerHTML = `<div class="boss-card-bg" style="background-image:url('${CONFIG.merchant.background}')"></div><div class="boss-card-badge">MERCHANT // SAFE</div><img class="boss-card-art" src="${CONFIG.merchant.image}" alt="Merchant"><div class="boss-card-info"><div class="stars">8,001 SKILLS IN STOCK</div><h2>MERCHANT</h2><p>NO THREAT // CUSTOM DIALOGUE // SKILL VAULT</p></div>`;
   merchant.addEventListener("click", async () => { await transition(() => showScreen("merchant-screen")); openMerchant(); });
   list.appendChild(merchant);
+
+  const della = window.YEN_DELLA;
+  if (della) {
+    const card = document.createElement("article");
+    card.className = "boss-card profile-frame-card della-lobby-card";
+    card.style.setProperty("--card-bg", `url("${della.cardImage}")`);
+    card.innerHTML = `<div class="boss-card-bg"></div>
+      <div class="profile-frame-wrap" aria-hidden="true"><img class="profile-card-frame" src="${della.cardFrame}" alt=""></div>
+      <div class="boss-card-badge">MERCHANT // SPECIAL</div>
+      <img class="boss-card-art profile-card-character" src="${della.image}" alt="Priest Della">
+      <div class="boss-card-info"><div class="stars">340 FORBIDDEN SKILLS</div><h2>PRIEST DELLA</h2><p>SAFE SHOP // OPTIONAL BATTLE // EXTREME PRICES</p></div>`;
+    card.addEventListener("click", async () => {
+      $("della-player-name").textContent = account?.username || "{PLAYER}";
+      $("della-shop").classList.add("hidden");
+      await transition(() => showScreen("della-screen"));
+      setBackground(della.background);
+      if (settings.music) {
+        const music=$("boss-music"); music.src=della.music; music.loop=true; music.volume=.4; music.play().catch(()=>{});
+      }
+    });
+    list.appendChild(card);
+  }
 }
 
 function askBoss(boss) {
@@ -277,10 +299,15 @@ const POTIONS = Array.isArray(window.YEN_MERCHANT?.potions) ? window.YEN_MERCHAN
 function isSkillOwned(skill, owned=account?.ownedSkills||[]) {
   return owned.some(value => String(value) === String(skill.id) || String(value).trim().toLowerCase() === String(skill.name).trim().toLowerCase());
 }
+function allConfiguredSkills() {
+  const main = Array.isArray(window.YEN_MERCHANT?.skills) ? window.YEN_MERCHANT.skills : [];
+  const della = Array.isArray(window.YEN_DELLA?.skills) ? window.YEN_DELLA.skills : [];
+  return [...main, ...della];
+}
 function findConfiguredSkill(value) {
   const key = String(value).trim();
-  const catalog = buildSkillCatalog();
-  return catalog.find(skill => String(skill.id) === key) || catalog.find(skill => skill.name.trim().toLowerCase() === key.toLowerCase()) || null;
+  const catalog = allConfiguredSkills();
+  return catalog.find(skill => String(skill.id) === key) || catalog.find(skill => String(skill.name||"").trim().toLowerCase() === key.toLowerCase()) || null;
 }
 function renderPotions() {
   const grid = $("potion-grid");
@@ -340,7 +367,7 @@ function renderSkills() {
     grid.appendChild(el);
   });
 }
-function openSkillDetail(skill) {
+function openSkillDetail(skill, shop="main") {
   selectedSkill = skill;
   const wrap = document.createElement("div");
   wrap.className = "skill-detail";
@@ -357,10 +384,41 @@ function openSkillDetail(skill) {
       await saveAccount();
       updateWallet();
       wrap.remove();
-      renderSkills();
+      if(shop==="della") renderDellaSkills(); else renderSkills();
     };
   }
 }
+
+/* ------------------------- PRIEST DELLA SHOP ------------------------- */
+function renderDellaSkills() {
+  const grid=$("della-skill-grid");
+  if(!grid) return;
+  const query=$("della-skill-search").value.trim().toLowerCase();
+  const skills=(window.YEN_DELLA?.skills||[]).filter(x=>!x.rewardOnly).filter(s=>!query || `${s.name} ${s.rarity} ${s.description}`.toLowerCase().includes(query));
+  grid.innerHTML="";
+  skills.forEach(skill=>{
+    const owned=isSkillOwned(skill);
+    const el=document.createElement("article");
+    el.className=`skill-card della-skill-card ${skill.enchanted?"enchanted":""} ${owned?"owned":""}`;
+    el.style.setProperty("--rarity",skill.color);
+    el.innerHTML=`<div class="skill-rarity">${skill.rarity} // ✦ ENCHANTED</div>${owned?'<span class="owned-tag">OWNED</span>':''}<h3>${skill.name}</h3><p>${skill.description}</p><div class="skill-price">${owned?"ALREADY OWNED":fmtDox(skill.cost)+" DOX"}</div>`;
+    el.addEventListener("click",()=>openSkillDetail(skill,"della"));
+    grid.appendChild(el);
+  });
+}
+function openDellaShop() {
+  $("della-shop").classList.remove("hidden");
+  $("della-skill-search").value="";
+  renderDellaSkills();
+}
+$("della-shop-open").addEventListener("click",openDellaShop);
+$("della-skill-search").addEventListener("input",renderDellaSkills);
+$("della-fight").addEventListener("click",async()=>{
+  const boss=window.YEN_BOSSES?.["priest-della"];
+  if(!boss) return;
+  $("della-shop").classList.add("hidden");
+  await transition(()=>startBattle(boss));
+});
 
 /* ------------------------- BATTLE ENGINE ------------------------- */
 function getBossHook(name) { return currentBoss?.hooks?.[name]; }
@@ -542,7 +600,10 @@ function ctxForBoss() {
     lose:showGameOver,
     getAttackKeyForObject,
     getPlayerAttackButtons:()=>[...document.querySelectorAll("#attack-grid .attack-button:not(.potion-button):not(:disabled)")],
-    get lastPlayerDamage(){ return lastPlayerDamage; }
+    get lastPlayerDamage(){ return lastPlayerDamage; },
+    get account(){ return account; },
+    findSkill:value=>findConfiguredSkill(value),
+    playSkillVFX:(attack,kill=false)=>playConfiguredSkillVFX(attack,kill)
   };
 }
 
@@ -578,9 +639,41 @@ async function startBattle(boss) {
   await wait(1500);
   if (boss.id === "argus") setMessage(boss.intro[0]);
   else if (boss.id === "azael") setMessage("Azael watches you. Something feels wrong.");
+  else if (boss.id === "priest-della") setMessage("... Fine. Don't whine to you're mother when you lose.");
   else setMessage(`${boss.name} watches you. Choose your attack.`);
   bossAttackEnabled=true;
   busy=false;
+}
+
+function playConfiguredSkillVFX(attack, kill=false) {
+  const source=attack?.source || attack;
+  const klass=source?.vfxClass || (source?.enchanted ? "della-vfx-violet" : null);
+  if(!klass) return;
+  const v=document.createElement("div");
+  v.className=`configured-skill-vfx ${klass}${kill && source?.killEffect ? " skill-kill-vfx" : ""}`;
+  document.body.appendChild(v);
+  setTimeout(()=>v.remove(),kill ? 1500 : 900);
+}
+function playSkillBreakVFX() {
+  const v=document.createElement("div");
+  v.className="skill-break-vfx";
+  document.body.appendChild(v);
+  setTimeout(()=>v.remove(),1000);
+}
+
+async function maybeBreakTargetSkill(attack) {
+  const chance=Number(attack?.source?.breakChance || 0);
+  if(!chance || Math.random()>=chance) return false;
+  const owned=Array.isArray(account?.ownedSkills) ? account.ownedSkills : [];
+  const candidates=owned.map(v=>findConfiguredSkill(v)).filter(Boolean).filter(s=>!s.rewardOnly || s.id!=="no-saki");
+  if(!candidates.length) return false;
+  const victim=candidates[Math.floor(Math.random()*candidates.length)];
+  account.ownedSkills=owned.filter(v=>String(v)!==String(victim.id) && String(v).trim().toLowerCase()!==String(victim.name).trim().toLowerCase());
+  playSkillBreakVFX();
+  setMessage(`${attack.name} SHATTERS ${victim.name}. THAT SKILL HAS BEEN BROKEN.`);
+  await saveAccount();
+  buildAttackButtons();
+  return true;
 }
 
 async function maybeBreakSpecialAttack(attack) {
@@ -607,6 +700,7 @@ async function usePlayerAttack(attack) {
   delete attack._nebulaFixedDamage;
   delete attack._aethelgardFixedDamage;
   const ctx=ctxForBoss();
+  playConfiguredSkillVFX(attack,false);
 
   if (attack.source?.special === "trident-of-co-op") {
     const trident=document.createElement("div"); trident.className="trident-coop-vfx"; document.body.appendChild(trident);
@@ -655,8 +749,10 @@ async function usePlayerAttack(attack) {
   lastPlayerDamage = damage;
   applyBossDamage(Math.min(bossHP+bossShield,damage));
   updateHP();
+  if (bossHP <= 0 && attack.source?.killEffect) playConfiguredSkillVFX(attack,true);
   shake();
 
+  await maybeBreakTargetSkill(attack);
   await maybeBreakSpecialAttack(attack);
   if (brokenAttackIds.has(attack.key)) await wait(700);
 
