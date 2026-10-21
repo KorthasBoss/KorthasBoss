@@ -431,17 +431,53 @@ function openDellaShop() {
 }
 $("della-shop-open").addEventListener("click",openDellaShop);
 $("della-skill-search").addEventListener("input",renderDellaSkills);
+
+// Della is a special merchant/boss, but her combat must still use the exact
+// same battle engine as every other boss. If a browser has an older cached
+// page where priest-della.js was not registered yet, load that one script
+// on demand instead of making the player lose the fight.
+async function getPriestDellaBoss() {
+  let boss = window.YEN_BOSSES?.["priest-della"];
+  if (boss) return boss;
+
+  await new Promise((resolve, reject) => {
+    const existing = document.querySelector('script[data-yen-della-loader="1"]');
+    if (existing) {
+      existing.addEventListener("load", resolve, {once:true});
+      existing.addEventListener("error", reject, {once:true});
+      return;
+    }
+    const script = document.createElement("script");
+    script.src = "bosses/priest-della.js?v=20261021-della3";
+    script.dataset.yenDellaLoader = "1";
+    script.onload = resolve;
+    script.onerror = reject;
+    document.head.appendChild(script);
+  }).catch(err => {
+    console.error("Could not load Priest Della's boss script.", err);
+  });
+
+  boss = window.YEN_BOSSES?.["priest-della"];
+  if (boss) {
+    Object.assign(boss, {
+      cardImage:"assets/priest_della_card.png",
+      profileFrame:"assets/priest_della_card.png",
+      idle:"assets/Della.png",
+      fight:"assets/Della.png",
+      battleBackground:"assets/priest della.jpg"
+    });
+  }
+  return boss || null;
+}
+
 $("della-fight").addEventListener("click",async()=>{
-  const boss=window.YEN_BOSSES?.["priest-della"];
+  const boss=await getPriestDellaBoss();
   if(!boss){
     console.error("PRIEST DELLA BOSS SCRIPT DID NOT LOAD.");
-    setMessage?.("PRIEST DELLA COULD NOT START. CHECK HER BOSS SCRIPT.");
     return;
   }
   $("della-shop").classList.add("hidden");
-  await transition(async()=>{
-    await startBattle(boss);
-  });
+  await transition(()=>startBattle(boss));
 });
 
 /* ------------------------- BATTLE ENGINE ------------------------- */
