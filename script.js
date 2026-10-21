@@ -8,6 +8,12 @@ Boss-specific rules live in:
   bosses/korthas.js
   bosses/argus.js
   bosses/azael.js
+  bosses/malakor.js
+  bosses/aethelgard.js
+  bosses/amias.js
+  bosses/nebula.js
+  bosses/sea-predator.js
+  bosses/priest-della.js
 
 A new boss should get its own file and expose a boss object with hooks.
 The engine never copies one boss's combat rules into another boss.
@@ -19,7 +25,7 @@ const CONFIG = {
   // start screen, lobby, and any battle that does not define its own background.
   background: "assets/79909.gif",
   accountStartingDox: 500000,
-  bosses: window.YEN_BOSSES || {},
+  bosses: Object.fromEntries(Object.entries(window.YEN_BOSSES || {}).filter(([id]) => id !== "priest-della")),
   merchant: window.YEN_MERCHANT || { image:"assets/Merchant_Idle.png", background:"assets/Merchant_background.gif", music:"assets/merchant-theme.mp3", lines:[] },
   merchantFallbackLines: [
       "Oh you're back.","Welcome back, hunter.","You look like somebody who needs a better skill.","I don't ask where you got that DOX.","You survived. That's enough for me.","The vault is open. Try not to go broke.","I've seen your type before.","You fight loud. I sell louder.","Pick something nasty.","Some skills bite back.","Enchanted ones cost what they cost.","Don't stare at the price. Earn more.","You want power? Pay for it.","I keep the good stuff behind the expensive stuff.","A cheap skill can still save your life.","A rare skill can ruin somebody else's.","The vault has eight thousand answers.","You only need one.","Unless you're greedy.","Greedy is fine here.","That one? Interesting choice.","I wouldn't use it against Argus first.","Korthas hates flashy skills.","Argus hates everything.","The enchanted stock is temperamental.","Buy before the price feels worse.","You came back with more DOX.","Now you're speaking my language.","A hunter without skills is just target practice.","A hunter with too many skills is expensive target practice.","I've got something mean today.","I've got something beautiful today.","I've got something that should probably be illegal.","Relax. It's only a game.","Probably.","You want the vault? Hit the button.","Don't make me repeat myself.","The good stuff is glowing for a reason.","That purple glow means trouble.","The gold ones hurt wallets.","The red ones hurt bosses.","The blue ones save mistakes.","Buy wisely.","Or don't. I still get paid.","You look ready.","You're almost dangerous.","Almost.","Come back after another boss.","I'll have more bad ideas waiting.","Now go make me proud.","Welcome back, hunter."
@@ -415,9 +421,18 @@ $("della-shop-open").addEventListener("click",openDellaShop);
 $("della-skill-search").addEventListener("input",renderDellaSkills);
 $("della-fight").addEventListener("click",async()=>{
   const boss=window.YEN_BOSSES?.["priest-della"];
-  if(!boss) return;
+  if(!boss){
+    console.error("Priest Della boss script was not loaded.");
+    return;
+  }
   $("della-shop").classList.add("hidden");
-  await transition(()=>startBattle(boss));
+  try {
+    await transition(()=>startBattle(boss));
+  } catch (error) {
+    console.error("Priest Della battle failed to start:", error);
+    setMessage("PRIEST DELLA COULD NOT START. CHECK HER BOSS SCRIPT.");
+    busy=false;
+  }
 });
 
 /* ------------------------- BATTLE ENGINE ------------------------- */
