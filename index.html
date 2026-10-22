@@ -32,6 +32,35 @@
   <div class="lobby-actions"><button class="lobby-action" data-screen="merchant-screen">MERCHANT</button><button class="lobby-action" data-screen="settings-screen">SETTINGS</button><button class="lobby-action" id="logout-button">SIGN OUT</button></div>
 </section>
 
+<!-- PRIEST DELLA -->
+<section id="della-screen" class="portal-subscreen hidden della-screen">
+  <div class="della-intro-shell">
+    <div class="della-intro-art"><img src="assets/Della.png" alt="Priest Della"></div>
+    <div class="della-intro-copy">
+      <p class="section-kicker">PRIEST DELLA // SPECIAL MERCHANT</p>
+      <h1>Morning Hunter..</h1>
+      <div class="della-dialogue">
+        <p>My name is Priest Della. just call; me Della for short.</p>
+        <p>You must be <strong id="della-player-name">{PLAYER}</strong> everyone been talking about.</p>
+        <p>Hope my shop makes use for you.</p>
+      </div>
+      <div class="della-choice-row">
+        <button id="della-fight" class="menu-button della-danger">FIGHT DELLA <span>↗</span></button>
+        <button id="della-shop-open" class="menu-button della-shop-button">LOOK IN HER SHOP <span>✦</span></button>
+      </div>
+      <p class="della-shop-note">340 EXTREME SKILLS // INSANE VFX // INTENSE DOX PRICES</p>
+    </div>
+  </div>
+  <div id="della-shop" class="della-shop hidden">
+    <div class="shop-heading">
+      <div><p class="section-kicker">DELLA'S SANCTUM</p><h2>340 FORBIDDEN SKILLS</h2></div>
+      <div class="shop-search"><input id="della-skill-search" placeholder="Search Della's skills..."></div>
+    </div>
+    <div id="della-skill-grid" class="skill-grid"></div>
+  </div>
+  <div class="sub-actions"><button class="text-button" data-screen="lobby-screen">← BACK TO LOBBY</button></div>
+</section>
+
 <!-- MERCHANT -->
 <section id="merchant-screen" class="portal-subscreen hidden merchant-screen">
   <div class="merchant-wrap"><div class="merchant-art"><div class="merchant-glow"></div><img id="merchant-image" src="assets/merchant-idle.png" alt="Merchant"></div>
@@ -60,5 +89,5 @@
 <footer class="site-footer"><span>© YEN! // BOSS WORLD</span><span>EARN. FIGHT. BUY SOMETHING STUPID. <i>✦</i></span></footer>
 </main>
 <audio id="boss-music" src="assets/korthas-theme.mp3" loop preload="auto"></audio><audio id="parry-sound" src="assets/empress-parry.mp3" preload="auto"></audio>
-<script src="accounts.js"></script><script src="bosses/merchant.js"></script><script src="bosses/korthas.js"></script><script src="bosses/argus.js"></script><script src="bosses/azael.js"></script><script src="bosses/malakor.js"></script><script src="bosses/aethelgard.js"></script><script src="bosses/amias.js"></script><script src="bosses/nebula.js"></script><script src="bosses/sea-predator.js"></script><script src="script.js"></script>
+<script src="accounts.js?v=20261022-skills1"></script><script src="skills/registry.js?v=20261022-skills1"></script><script src="skills/win-can-make-sword.js?v=20261022-skills1"></script><script src="skills/trident-of-co-op.js?v=20261022-skills1"></script><script src="skills/no-saki.js?v=20261022-skills1"></script><script src="bosses/merchant.js?v=20261022-skills1"></script><script src="bosses/korthas.js?v=20261022-skills1"></script><script src="bosses/argus.js?v=20261022-skills1"></script><script src="bosses/azael.js?v=20261022-skills1"></script><script src="bosses/malakor.js?v=20261022-skills1"></script><script src="bosses/aethelgard.js?v=20261022-skills1"></script><script src="bosses/amias.js?v=20261022-skills1"></script><script src="bosses/nebula.js?v=20261022-skills1"></script><script src="bosses/sea-predator.js?v=20261022-skills1"></script><script src="bosses/priest-della.js?v=20261022-skills1"></script><script src="script.js?v=20261022-skills1"></script>
 </body></html>
