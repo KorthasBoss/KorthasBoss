@@ -54,12 +54,4 @@ window.YEN_MERCHANT = {
       id++;
     }
   }
-  M.skills.push({
-    id:"win-can-make-sword",name:"WIN CAN MAKE SWORD",rarity:"DIVINE // CUSTOM",color:"#ffffff",enchanted:true,rainbow:true,special:"rainbow-sword",breakChance:0.04,cost:8000000,power:200000,
-    description:"A forbidden rainbow blade. Deals exactly 200,000 damage and has a 4% chance to shatter after use."
-  });
-  M.skills.push({
-    id:"trident-of-co-op",name:"TRIDENT OF CO-OP",rarity:"KISHIN // RELIC",color:"#55f5ff",enchanted:true,special:"trident-of-co-op",imageId:"trident-of-co-op-card",image:"assets/trident-of-co-op.png",cost:0,power:2500000,rewardOnly:true,
-    description:"SEA PREDATOR'S forbidden cooperative trident. Deals exactly 2,500,000 damage and tears open the arena with a colossal ocean VFX."
-  });
 })();

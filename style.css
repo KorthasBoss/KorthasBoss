@@ -494,3 +494,62 @@ body.azael-domain .status-dot{background:#ff4263;box-shadow:0 0 12px #ff4263}
 /* SEA PREDATOR // shared profile-frame card treatment */
 .profile-frame-card.sea-predator-card .profile-frame-wrap{left:-5%;right:-5%;top:-10%;bottom:-10%;}
 .profile-frame-card.sea-predator-card .profile-card-character{width:43%!important;height:255px!important;top:46%!important;}
+
+/* Dedicated skill system: ordinary Merchant skills get their own neutral
+   enchanted treatment stays independent. */
+.enchanted-skill-vfx{color:#f6b4ff;background:radial-gradient(circle at 50% 50%,#f6b4ff33,transparent 38%)}
+.attack-button.enchanted-skill::before{content:"✦";position:absolute;right:10px;top:7px;font-size:10px;opacity:.75;color:var(--rarity,#f6b4ff)}
+
+/* ==========================================================
+   VASE GATE EVENT // RANDOM KISHIN
+========================================================== */
+.vase-gate-card{overflow:visible!important;min-height:390px;border-color:#4ddfff!important;background:radial-gradient(circle at 50% 42%,#073047,#060b13 62%)!important;box-shadow:inset 0 0 80px #24dfff0c}
+.vase-gate-card:hover{border-color:#dffcff!important;box-shadow:0 20px 70px #18dfff28,0 0 55px #18dfff18!important}
+.vase-gate-card .boss-card-bg{opacity:.72!important;background-size:cover!important;filter:saturate(1.2)!important}
+.vase-gate-frame-wrap{position:absolute;inset:-7% -7%;z-index:3;pointer-events:none;display:grid;place-items:center}
+.vase-gate-frame-wrap img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 14px #3de6ff88) drop-shadow(0 0 55px #28dfff33);animation:vaseFramePulse 3s ease-in-out infinite}
+.vase-gate-core{position:absolute;z-index:4;left:50%;top:45%;transform:translate(-50%,-50%);text-align:center;width:75%;pointer-events:none}
+.vase-gate-symbol{font-size:76px;color:#eaffff;text-shadow:0 0 12px #fff,0 0 45px #26dfff,0 0 90px #0cbcff;animation:vaseSymbol 1.8s ease-in-out infinite}
+.vase-gate-label{font:24px var(--display);letter-spacing:.16em;color:#fff;text-shadow:0 0 18px #43eaff}
+.vase-gate-sub{margin-top:8px;font:8px var(--mono);letter-spacing:.16em;color:#83bdd0}
+.vase-gate-card .boss-card-info{z-index:7;text-align:center}
+.vase-gate-card .boss-card-info .stars{color:#8befff;text-shadow:0 0 14px #21dfff}
+.vase-gate-card .boss-card-info h2{font-size:25px;color:#fff;text-shadow:0 0 18px #26dfff}
+.vase-gate-card .boss-card-info p{color:#8eb9c8}
+@keyframes vaseFramePulse{50%{transform:scale(1.025);filter:drop-shadow(0 0 22px #75f1ff) drop-shadow(0 0 70px #28dfff44)}}
+@keyframes vaseSymbol{50%{transform:scale(1.08) rotate(180deg);opacity:.85}}
+
+.vase-gate-reveal{position:fixed;z-index:10000;inset:0;display:grid;place-items:center;background:radial-gradient(circle at center,#0b3044ee,#01050bf8 65%);backdrop-filter:blur(8px);color:#fff;text-align:center;pointer-events:none;overflow:hidden}
+.vase-gate-reveal-ring{position:absolute;width:48vw;height:48vw;border:2px solid #52eaff;border-radius:50%;box-shadow:0 0 35px #27dfff, inset 0 0 80px #27dfff33;animation:vaseRevealRing 2.2s linear infinite}
+.vase-gate-reveal-kicker,.vase-gate-reveal-title,.vase-gate-reveal-name,.vase-gate-reveal-sub{position:absolute;left:50%;transform:translateX(-50%);width:90%}
+.vase-gate-reveal-kicker{top:28%;font:9px var(--mono);letter-spacing:.28em;color:#75eaff}
+.vase-gate-reveal-title{top:34%;font:16px var(--mono);letter-spacing:.18em;color:#9fc2d0}
+.vase-gate-reveal-name{top:40%;font:clamp(34px,6vw,82px) var(--display);letter-spacing:.1em;text-shadow:0 0 25px #fff,0 0 70px #28dfff;opacity:0;transform:translateX(-50%) scale(.7)}
+.vase-gate-reveal-sub{top:53%;font:9px var(--mono);letter-spacing:.15em;color:#8cecff;opacity:0}
+.vase-gate-reveal.revealing .vase-gate-reveal-name{opacity:1;transform:translateX(-50%) scale(1);transition:1s cubic-bezier(.16,1,.3,1)}
+.vase-gate-reveal.revealing .vase-gate-reveal-sub{opacity:1;transition:1s .4s}
+.vase-gate-reveal.result-out{opacity:0;transition:.6s}
+@keyframes vaseRevealRing{to{transform:rotate(360deg)}}
+
+/* Rare Kishin combat VFX */
+.angelic-player-hit,.souls-player-hit{position:fixed;z-index:9991;inset:0;pointer-events:none;mix-blend-mode:screen}
+.angelic-player-hit{background:radial-gradient(circle,#fff8,transparent 30%);animation:angelicHitFlash .5s ease-out forwards}
+.souls-player-hit{background:radial-gradient(circle,#8d63ff44,transparent 38%);animation:soulHitFlash .55s ease-out forwards}
+@keyframes angelicHitFlash{0%{opacity:0;transform:scale(.7)}25%{opacity:1}100%{opacity:0;transform:scale(1.3)}}
+@keyframes soulHitFlash{0%{opacity:0;transform:scale(.5)}30%{opacity:1}100%{opacity:0;transform:scale(1.4)}}
+.angelic-vfx,.souls-vfx{position:fixed;z-index:9989;left:50%;top:48%;width:70vw;height:70vw;max-width:850px;max-height:850px;transform:translate(-50%,-50%);border-radius:50%;pointer-events:none;mix-blend-mode:screen}
+.angelic-vfx{background:conic-gradient(from 0deg,#fff,#b9e8ff,#fff,#a9b8ff,#fff);box-shadow:0 0 70px #fff,0 0 160px #8bdfff;animation:angelicBossVfx .9s ease-out forwards}
+.souls-vfx{background:conic-gradient(from 90deg,#05000d,#754cff,#05000d,#c3a7ff,#05000d);box-shadow:0 0 70px #764cff,0 0 150px #3513a8;animation:soulsBossVfx .95s ease-out forwards}
+.angelic-vfx.vfx-2{border:15px solid #fff}.angelic-vfx.vfx-3{box-shadow:0 0 100px #fff,0 0 220px #64dfff}.angelic-vfx.vfx-4{transform:translate(-50%,-50%) rotate(45deg)}.angelic-vfx.vfx-5{border:5px dashed #fff}.angelic-vfx.vfx-6{background:radial-gradient(circle,#fff,#b4dfff 20%,transparent 65%)}
+.souls-vfx.vfx-2{border:18px solid #8b63ff}.souls-vfx.vfx-3{box-shadow:0 0 100px #6b42ff,0 0 220px #2600a8}.souls-vfx.vfx-4{transform:translate(-50%,-50%) rotate(45deg)}.souls-vfx.vfx-5{border:6px dashed #a88aff}.souls-vfx.vfx-6{background:radial-gradient(circle,#d7c9ff,#6840ff 20%,transparent 65%)}
+@keyframes angelicBossVfx{0%{opacity:0;transform:translate(-50%,-50%) scale(.08) rotate(0)}25%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(1.55) rotate(260deg)}}
+@keyframes soulsBossVfx{0%{opacity:0;transform:translate(-50%,-50%) scale(.06) rotate(0)}25%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(1.65) rotate(-240deg)}}
+
+.rare-minigame{position:fixed;z-index:10001;inset:0;display:grid;place-items:center;background:#010208e8;backdrop-filter:blur(8px);padding:20px}
+.rare-game-box{width:min(760px,94vw);padding:34px;border:1px solid #8befff;background:linear-gradient(145deg,#081c2b,#04070d);box-shadow:0 0 100px #21dfff22;text-align:center}
+.rare-game-kicker{font:9px var(--mono);letter-spacing:.2em;color:#6cecff}.rare-game-box h2{font-size:34px;margin:12px 0}.rare-game-box p{font:11px/1.6 var(--mono);color:#9db4c4}.rare-game-timer{font:22px var(--mono);color:#fff;margin-top:16px;text-shadow:0 0 16px #53eaff}
+.halo-arena{height:280px;position:relative;border:1px solid #3cdfff44;background:radial-gradient(circle,#0a3145,#02070d);overflow:hidden;margin-top:18px}
+.halo-target{position:absolute;top:-50px;width:48px;height:48px;border:1px solid #fff;border-radius:50%;background:#cfffff;color:#08202b;font-size:24px;box-shadow:0 0 18px #fff,0 0 45px #4eeaff;animation:haloDrop .85s linear forwards;cursor:pointer}
+@keyframes haloDrop{to{top:300px;transform:rotate(180deg);opacity:.25}}
+.soul-sequence{display:flex;justify-content:center;gap:25px;margin:25px 0}.soul-sequence span{font-size:46px;color:#fff;text-shadow:0 0 22px #8e6aff}
+.soul-buttons{display:flex;justify-content:center;gap:12px}.soul-buttons button{width:86px;height:70px;border:1px solid #835dff;background:#0d0820;color:#fff;font-size:30px;cursor:pointer;box-shadow:0 0 20px #633dff22}.soul-buttons button:hover{border-color:#fff;box-shadow:0 0 30px #784cff66}

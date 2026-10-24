@@ -171,10 +171,16 @@ function bossCard(boss) {
   const el = document.createElement("article");
   const isProfileBoss = Boolean(boss.profileFrame);
   const profileClass = isProfileBoss ? "profile-frame-card" : "";
-  el.className = `boss-card ${profileClass} ${boss.id === "sea-predator" ? "sea-predator-card" : ""}`;
-  el.style.setProperty("--card-bg", `url("${boss.cardImage || boss.idle}")`);
+  el.className = `boss-card ${profileClass} ${boss.id === "sea-predator" ? "sea-predator-card" : ""} ${boss.isVaseGateEvent ? "vase-gate-card" : ""}`;
+  el.style.setProperty("--card-bg", `url("${boss.cardImage || boss.idle || "assets/vase-gate-event.svg"}")`);
 
-  if (isProfileBoss) {
+  if (boss.isVaseGateEvent) {
+    el.innerHTML = `<div class="boss-card-bg"></div>
+      <div class="vase-gate-frame-wrap" aria-hidden="true"><img src="${boss.profileFrame}" alt=""></div>
+      <div class="boss-card-badge">EVENT // RANDOM KISHIN</div>
+      <div class="vase-gate-core"><div class="vase-gate-symbol">✦</div><div class="vase-gate-label">THE VASE GATE</div><div class="vase-gate-sub">ENTER TO RECEIVE A TARGET</div></div>
+      <div class="boss-card-info"><div class="stars">${boss.eventChanceText}</div><h2>${boss.name}</h2><p>${boss.title}</p></div>`;
+  } else if (isProfileBoss) {
     // Profile-frame bosses keep the normal clickable card, while the supplied
     // artwork sits OUTSIDE the card as an ornamental profile frame.
     el.innerHTML = `<div class="boss-card-bg"></div>
@@ -189,7 +195,13 @@ function bossCard(boss) {
       <div class="boss-card-info"><div class="stars">${"★".repeat(Math.min(8,Math.ceil(boss.stars/10)))} ${boss.stars} STARS</div><h2>${boss.name}</h2><p>${boss.title} // REWARD ${fmtDox(boss.reward)} DOX</p></div>`;
   }
 
-  el.addEventListener("click", () => askBoss(boss));
+  el.addEventListener("click", async () => {
+    if (boss.isVaseGateEvent) {
+      await startVaseGateEvent();
+      return;
+    }
+    askBoss(boss);
+  });
   return el;
 }
 
@@ -200,12 +212,16 @@ function renderLobby() {
   updateWallet();
   const list = $("boss-list");
   list.innerHTML = "";
-  Object.values(CONFIG.bosses).forEach(boss => list.appendChild(bossCard(boss)));
+  Object.values(CONFIG.bosses).forEach(boss => {
+    if (boss.hiddenFromLobby) return;
+    list.appendChild(bossCard(boss));
+  });
   const merchant = document.createElement("article");
   merchant.className = "boss-card merchant-lobby-card";
   merchant.innerHTML = `<div class="boss-card-bg" style="background-image:url('${CONFIG.merchant.background}')"></div><div class="boss-card-badge">MERCHANT // SAFE</div><img class="boss-card-art" src="${CONFIG.merchant.image}" alt="Merchant"><div class="boss-card-info"><div class="stars">8,001 SKILLS IN STOCK</div><h2>MERCHANT</h2><p>NO THREAT // CUSTOM DIALOGUE // SKILL VAULT</p></div>`;
   merchant.addEventListener("click", async () => { await transition(() => showScreen("merchant-screen")); openMerchant(); });
   list.appendChild(merchant);
+
 }
 
 function askBoss(boss) {
@@ -213,6 +229,32 @@ function askBoss(boss) {
   $("confirm-title").textContent = `FIGHT ${boss.name}?`;
   $("confirm-copy").textContent = `Are you sure you want to fight ${boss.name}? It has ${boss.stars} stars.`;
   $("confirm-screen").classList.remove("hidden");
+}
+
+async function startVaseGateEvent() {
+  const cfg = window.YEN_VASE_GATE;
+  if (!cfg) return;
+  busy = true;
+  const pool = Object.values(CONFIG.bosses).filter(b => cfg.commonTargets.includes(b.id));
+  const rareRoll = Math.random() * 100;
+  let target;
+  if (rareRoll < cfg.rareOneChance) target = CONFIG.bosses[cfg.rareOneId];
+  else if (rareRoll < cfg.rareOneChance + cfg.rareTwoChance) target = CONFIG.bosses[cfg.rareTwoId];
+  else target = pool[Math.floor(Math.random() * pool.length)];
+  if (!target) { busy = false; return; }
+
+  const overlay = document.createElement("div");
+  overlay.className = "vase-gate-reveal";
+  overlay.innerHTML = `<div class="vase-gate-reveal-ring"></div><div class="vase-gate-reveal-kicker">THE VASE GATE EVENT</div><div class="vase-gate-reveal-title">TARGET ACQUIRED</div><div class="vase-gate-reveal-name">${target.name}</div><div class="vase-gate-reveal-sub">${target.id === cfg.rareOneId || target.id === cfg.rareTwoId ? "✦ RARE KISHIN // 2% TARGET" : "COMMON KISHIN TARGET"}</div>`;
+  document.body.appendChild(overlay);
+  setBackground(cfg.background);
+  await wait(650);
+  overlay.classList.add("revealing");
+  await wait(1700);
+  overlay.classList.add("result-out");
+  await wait(650);
+  overlay.remove();
+  await transition(() => startBattle(target));
 }
 
 /* ------------------------- ACCOUNTS ------------------------- */
@@ -270,17 +312,24 @@ $("logout-button").addEventListener("click", async () => {
 
 /* ------------------------- MERCHANT ------------------------- */
 function buildSkillCatalog() {
-  return Array.isArray(window.YEN_MERCHANT?.skills) ? window.YEN_MERCHANT.skills : [];
+  const main = Array.isArray(window.YEN_MERCHANT?.skills) ? window.YEN_MERCHANT.skills : [];
+  const special = Array.isArray(window.YEN_SPECIAL_SKILLS) ? window.YEN_SPECIAL_SKILLS.filter(s=>s.shopVisible) : [];
+  return [...main, ...special];
 }
 const POTIONS = Array.isArray(window.YEN_MERCHANT?.potions) ? window.YEN_MERCHANT.potions : [];
 
 function isSkillOwned(skill, owned=account?.ownedSkills||[]) {
   return owned.some(value => String(value) === String(skill.id) || String(value).trim().toLowerCase() === String(skill.name).trim().toLowerCase());
 }
+function allConfiguredSkills() {
+  const main = Array.isArray(window.YEN_MERCHANT?.skills) ? window.YEN_MERCHANT.skills : [];
+  const special = Array.isArray(window.YEN_SPECIAL_SKILLS) ? window.YEN_SPECIAL_SKILLS : [];
+  return [...main, ...special];
+}
 function findConfiguredSkill(value) {
   const key = String(value).trim();
-  const catalog = buildSkillCatalog();
-  return catalog.find(skill => String(skill.id) === key) || catalog.find(skill => skill.name.trim().toLowerCase() === key.toLowerCase()) || null;
+  const catalog = allConfiguredSkills();
+  return catalog.find(skill => String(skill.id) === key) || catalog.find(skill => String(skill.name||"").trim().toLowerCase() === key.toLowerCase()) || null;
 }
 function renderPotions() {
   const grid = $("potion-grid");
@@ -340,7 +389,7 @@ function renderSkills() {
     grid.appendChild(el);
   });
 }
-function openSkillDetail(skill) {
+function openSkillDetail(skill, shop="main") {
   selectedSkill = skill;
   const wrap = document.createElement("div");
   wrap.className = "skill-detail";
@@ -388,7 +437,11 @@ function attackFromBase(base, key) {
   return {type:"base", key, name:base[0], min:base[1], max:base[2], messages:base[3] || ["The attack lands."], source:base};
 }
 function attackFromSkill(skill) {
-  return {type:"skill", key:`skill:${skill.id}`, name:skill.name, min:skill.special === "rainbow-sword" ? 200000 : Math.round(skill.power*.75), max:skill.special === "rainbow-sword" ? 200000 : Math.round(skill.power*1.2), messages:skill.special === "rainbow-sword" ? [`A rainbow slash tears across ${currentBoss.name}.`,`The WIN CAN MAKE SWORD flashes through the arena.`,`A prismatic blade cuts the boss for massive damage.`] : [`${skill.name} detonates across ${currentBoss.name}.`,`The ${skill.rarity.toLowerCase()} skill tears into the boss.`,`Your purchased skill lands with brutal force.`], source:skill, power:skill.power};
+  const special = Boolean(skill.skillHandler || skill.special);
+  return {type:"skill", key:`skill:${skill.id}`, name:skill.name,
+    min:Math.round(Number(skill.power||0)*.75), max:Math.round(Number(skill.power||0)*1.2),
+    messages:special ? [`${skill.name} activates its dedicated technique.`,`The special skill effect tears across ${currentBoss.name}.`,`${skill.name} hits with its own combat behavior.`] : [`${skill.name} strikes ${currentBoss.name}.`,`The ${String(skill.rarity||"skill").toLowerCase()} skill tears into the boss.`,`Your purchased skill lands.`],
+    source:skill, power:skill.power};
 }
 function attackFromCustom(attack) {
   return {type:"custom", key:`custom:${attack.id}`, name:attack.name, min:Math.round(attack.power*.75), max:Math.round(attack.power*1.2), messages:[`${attack.name} tears into ${currentBoss.name}.`,attack.description,"The custom attack lands with brutal force."], source:attack, power:attack.power};
@@ -542,7 +595,10 @@ function ctxForBoss() {
     lose:showGameOver,
     getAttackKeyForObject,
     getPlayerAttackButtons:()=>[...document.querySelectorAll("#attack-grid .attack-button:not(.potion-button):not(:disabled)")],
-    get lastPlayerDamage(){ return lastPlayerDamage; }
+    get lastPlayerDamage(){ return lastPlayerDamage; },
+    get account(){ return account; },
+    findSkill:value=>findConfiguredSkill(value),
+    playSkillVFX:(attack,kill=false)=>playConfiguredSkillVFX(attack,kill)
   };
 }
 
@@ -583,6 +639,40 @@ async function startBattle(boss) {
   busy=false;
 }
 
+function playConfiguredSkillVFX(attack, kill=false) {
+  const source=attack?.source || attack;
+  // Dedicated skill scripts own their VFX. Do not accidentally give every
+  // enchanted Merchant skills keep their own neutral VFX.
+  if (source?.skillHandler) return;
+  const klass=source?.vfxClass || (source?.enchanted ? "enchanted-skill-vfx" : null);
+  if(!klass) return;
+  const v=document.createElement("div");
+  v.className=`configured-skill-vfx ${klass}${kill && source?.killEffect ? " skill-kill-vfx" : ""}`;
+  document.body.appendChild(v);
+  setTimeout(()=>v.remove(),kill ? 1500 : 900);
+}
+function playSkillBreakVFX() {
+  const v=document.createElement("div");
+  v.className="skill-break-vfx";
+  document.body.appendChild(v);
+  setTimeout(()=>v.remove(),1000);
+}
+
+async function maybeBreakTargetSkill(attack) {
+  const chance=Number(attack?.source?.breakChance || 0);
+  if(!chance || Math.random()>=chance) return false;
+  const owned=Array.isArray(account?.ownedSkills) ? account.ownedSkills : [];
+  const candidates=owned.map(v=>findConfiguredSkill(v)).filter(Boolean).filter(s=>!s.rewardOnly);
+  if(!candidates.length) return false;
+  const victim=candidates[Math.floor(Math.random()*candidates.length)];
+  account.ownedSkills=owned.filter(v=>String(v)!==String(victim.id) && String(v).trim().toLowerCase()!==String(victim.name).trim().toLowerCase());
+  playSkillBreakVFX();
+  setMessage(`${attack.name} SHATTERS ${victim.name}. THAT SKILL HAS BEEN BROKEN.`);
+  await saveAccount();
+  buildAttackButtons();
+  return true;
+}
+
 async function maybeBreakSpecialAttack(attack) {
   if (attack.source?.special !== "rainbow-sword") return false;
   if (Math.random() >= (attack.source.breakChance || 0.04)) return false;
@@ -607,20 +697,7 @@ async function usePlayerAttack(attack) {
   delete attack._nebulaFixedDamage;
   delete attack._aethelgardFixedDamage;
   const ctx=ctxForBoss();
-
-  if (attack.source?.special === "trident-of-co-op") {
-    const trident=document.createElement("div"); trident.className="trident-coop-vfx"; document.body.appendChild(trident);
-    setMessage("TRIDENT OF CO-OP // THE ABYSS ANSWERS.");
-    setTimeout(()=>trident.remove(),1100);
-  }
-
-  if (attack.source?.special === "rainbow-sword") {
-    const slash = document.createElement("div");
-    slash.className = "rainbow-sword-slash";
-    document.body.appendChild(slash);
-    setTimeout(() => slash.remove(), 900);
-    setMessage("WIN CAN MAKE SWORD unleashes a RAINBOW SLASH.");
-  }
+  playConfiguredSkillVFX(attack,false);
 
   if (currentBossState.empress && currentBoss.hooks?.playerAttackDuringEmpress) {
     await currentBoss.hooks.playerAttackDuringEmpress(ctx,attack);
@@ -634,14 +711,19 @@ async function usePlayerAttack(attack) {
     if (blocked) { busy=false; return; }
   }
 
+  let skillResult = null;
+  const skillHandler = attack.source?.skillHandler && window.YEN_SKILL_HANDLERS?.[attack.source.skillHandler];
+  if (skillHandler) {
+    skillResult = await skillHandler(ctx, attack) || {};
+  }
+
   let range=attackToRange(attack);
   let damage=randomInt(range.min,range.max);
   const wasStunned=Boolean(currentBossState.stunned);
 
   if (currentBoss.id === "aethelgard" && attack._aethelgardFixedDamage) damage = attack._aethelgardFixedDamage;
   if (currentBoss.id === "nebula" && attack._nebulaFixedDamage) damage = attack._nebulaFixedDamage;
-  if (attack.source?.special === "rainbow-sword") damage = 200000;
-  if (attack.source?.special === "trident-of-co-op") damage = 2500000;
+  if (skillResult?.damage != null) damage = Number(skillResult.damage);
   if (attack._seaReducedDamage) damage = attack._seaReducedDamage;
   if (wasStunned) {
     currentBossState.stunned=false;
@@ -649,14 +731,16 @@ async function usePlayerAttack(attack) {
     $("boss-status-text").textContent="AWAKENING // DOMAIN-BEARER";
     setMessage("AZAEL IS STILL STUNNED. Your opening hits with extra force.");
   } else {
-    setMessage(`${pick(attack.messages)} ${currentBoss.name} takes ${fmt(damage)} damage.`);
+    setMessage(skillResult?.message || `${pick(attack.messages)} ${currentBoss.name} takes ${fmt(damage)} damage.`);
   }
 
   lastPlayerDamage = damage;
   applyBossDamage(Math.min(bossHP+bossShield,damage));
   updateHP();
+  if (bossHP <= 0 && attack.source?.killEffect) playConfiguredSkillVFX(attack,true);
   shake();
 
+  await maybeBreakTargetSkill(attack);
   await maybeBreakSpecialAttack(attack);
   if (brokenAttackIds.has(attack.key)) await wait(700);
 
