@@ -4,8 +4,8 @@ window.YEN_BOSSES = window.YEN_BOSSES || {};
 window.YEN_VASE_GATE = {
   rareOneId:"angelic-horror",
   rareTwoId:"souls-gate",
-  rareOneChance:2,
-  rareTwoChance:2,
+  rareOneChance:34,
+  rareTwoChance:34,
   commonTargets:["korthas","argus","azael","malakor","aethelgard","amias","nebula","sea-predator"],
   background:"assets/vase-gate-background.svg"
 };
