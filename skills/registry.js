@@ -9,5 +9,10 @@ window.YEN_REGISTER_SKILL = function(skill, handler) {
   const existing = window.YEN_SPECIAL_SKILLS.findIndex(s => String(s.id) === String(skill.id));
   if (existing >= 0) window.YEN_SPECIAL_SKILLS[existing] = skill;
   else window.YEN_SPECIAL_SKILLS.push(skill);
-  if (typeof handler === "function") window.YEN_SKILL_HANDLERS[skill.id] = handler;
+  if (typeof handler === "function") {
+    // Every dedicated special skill automatically points to its own handler.
+    // This keeps special VFX/logic isolated instead of falling back to normal damage.
+    skill.skillHandler = skill.id;
+    window.YEN_SKILL_HANDLERS[skill.id] = handler;
+  }
 };

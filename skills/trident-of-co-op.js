@@ -23,11 +23,24 @@ window.YEN_REGISTER_SKILL({
     <div class="trident-coop-lightning"></div>
     <div class="trident-coop-spear"><i></i><i></i><i></i></div>
     <div class="trident-coop-beam"></div>
-    <div class="trident-coop-spray"></div>`;
+    <div class="trident-coop-spray"></div>
+    <div class="trident-coop-rainbow"></div>
+    <div class="trident-coop-shockwave"></div>`;
   document.body.appendChild(arena);
   ctx.setMessage("TRIDENT OF CO-OP // THE ABYSS ANSWERS.");
   ctx.showFlash();
   ctx.shake();
+  const target=document.querySelector("#battle-boss");
+  if(target){
+    const r=target.getBoundingClientRect();
+    arena.style.left=`${r.left+r.width/2}px`;
+    arena.style.top=`${r.top+r.height*.42}px`;
+  }
+  try {
+    const audio=new Audio("assets/oceans.mp3");
+    audio.volume=.65;
+    audio.play().catch(()=>{});
+  } catch {}
   await ctx.wait(850);
   arena.classList.add("trident-coop-impact");
   await ctx.wait(650);

@@ -614,3 +614,25 @@ body.azael-domain .status-dot{background:#ff4263;box-shadow:0 0 12px #ff4263}
 .perfect-parry-overlay{position:fixed;inset:0;z-index:10003;background:#02070dcc;backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center}
 .perfect-parry-card{width:min(620px,88vw);padding:30px;background:linear-gradient(145deg,#07141a,#03070b);border:1px solid #74f7ff;box-shadow:0 0 25px #00eaff55,0 0 90px #007dff22;text-align:center}
 .perfect-parry-kicker{font:10px var(--mono);color:#74f7ff;letter-spacing:.18em}.perfect-parry-card h2{font:clamp(25px,5vw,45px) var(--pixel);margin:12px 0;color:#fff;text-shadow:0 0 18px #00eaff}.perfect-parry-card p{font:11px var(--mono);color:#9acbd1}.perfect-parry-bar{position:relative;height:38px;margin:28px 0;border:1px solid #285765;background:#030b10;overflow:hidden}.perfect-parry-zone{position:absolute;left:38%;width:24%;height:100%;background:#54ffff33;border-left:2px solid #54ffff;border-right:2px solid #54ffff;box-shadow:0 0 25px #00eaff55}.perfect-parry-cursor{position:absolute;top:2px;width:5px;height:34px;background:#fff;box-shadow:0 0 12px #fff,0 0 28px #00eaff;left:0}.perfect-parry-result{min-height:20px;font:12px var(--mono);letter-spacing:.1em}.perfect-parry-result.success{color:#8fffff;text-shadow:0 0 15px #00eaff}.perfect-parry-result.fail{color:#ff536d;text-shadow:0 0 15px #ff003c}
+
+
+/* TRIDENT OF CO-OP // FULL-SCREEN ABYSSAL VFX */
+.trident-coop-vfx{width:360px!important;height:360px!important;transform:translate(-50%,-50%)!important;background:none!important;clip-path:none!important;filter:none!important;animation:coopArenaPulse 1.7s ease-out forwards!important}
+.trident-coop-vfx::before{content:"";position:absolute;inset:-140px;border-radius:50%;background:conic-gradient(from 0deg,#00f5ff,#fff,#006eff,#ff00ff,#ffe600,#00ff9d,#00f5ff);filter:blur(12px);opacity:.8;animation:coopRainbowSpin .7s linear infinite}
+.trident-coop-vfx::after{content:"";position:absolute;inset:-70px;border:5px solid #fff;border-radius:50%;box-shadow:0 0 25px #00eaff,0 0 70px #7b00ff,0 0 120px #00ffea;animation:coopRingBlast 1.1s ease-out forwards}
+.trident-coop-rainbow{position:absolute;inset:-190px;border-radius:50%;background:repeating-conic-gradient(#ff004c 0 9deg,#ffea00 9deg 18deg,#00ff8c 18deg 27deg,#00c8ff 27deg 36deg,#8c00ff 36deg 45deg);filter:blur(18px);opacity:.35;animation:coopRainbowSpin .45s linear infinite}
+.trident-coop-shockwave{position:absolute;inset:-40px;border:3px solid #fff;border-radius:50%;box-shadow:0 0 40px #fff,0 0 90px #00eaff;animation:coopShock .8s ease-out forwards}
+@keyframes coopArenaPulse{0%{opacity:0;transform:translate(-50%,-50%) scale(.08)}18%{opacity:1;transform:translate(-50%,-50%) scale(.65)}60%{opacity:1;transform:translate(-50%,-50%) scale(1.25)}100%{opacity:0;transform:translate(-50%,-50%) scale(2.4)}}
+@keyframes coopRainbowSpin{to{transform:rotate(360deg)}}
+@keyframes coopRingBlast{0%{transform:scale(.1);opacity:0}25%{opacity:1}100%{transform:scale(2.7);opacity:0}}
+@keyframes coopShock{0%{transform:scale(.2);opacity:0}25%{opacity:1}100%{transform:scale(3.8);opacity:0}}
+
+
+/* DEATHSRINGER // TARGETED RAINBOW EXECUTION BEAM */
+.deathsringer-alert-impact{animation:deathAlertImpact .32s ease-in-out infinite alternate!important}
+.deathsringer-beam{position:fixed;z-index:10004;left:50%;top:50%;width:18px;height:120vh;transform-origin:50% 100%;background:linear-gradient(90deg,transparent,#ff00e6,#fff,#00eaff,#fff,#ffea00,transparent);box-shadow:0 0 18px #fff,0 0 50px #ff00e6,0 0 100px #00eaff;filter:brightness(2);pointer-events:none;transform:translate(-50%,-100%) rotate(0deg);animation:deathBeamFire .72s cubic-bezier(.2,.8,.2,1) forwards}
+.deathsringer-beam::before{content:"";position:absolute;inset:0;left:-100px;right:-100px;background:repeating-linear-gradient(90deg,transparent 0 18px,#fff 19px 21px,transparent 22px 40px);filter:blur(4px);opacity:.8}
+.deathsringer-beam-out{animation:deathBeamOut .55s ease-in forwards!important}
+@keyframes deathAlertImpact{to{transform:translateX(-50%) scale(1.18);filter:brightness(2)}}
+@keyframes deathBeamFire{0%{opacity:0;transform:translate(-50%,-100%) scaleY(.03)}35%{opacity:1}100%{opacity:1;transform:translate(-50%,-100%) scaleY(1)}}
+@keyframes deathBeamOut{to{opacity:0;transform:translate(-50%,-100%) scaleY(1.8);filter:brightness(4) blur(8px)}}

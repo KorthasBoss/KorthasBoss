@@ -21,6 +21,10 @@ window.YEN_REGISTER_SKILL({
   window.addEventListener("keydown",key);
   await new Promise(resolve=>{const timer=setInterval(()=>{if(!active){clearInterval(timer);resolve();return}if(performance.now()-start>6000){active=false;window.removeEventListener("keydown",key);result.textContent="TOO SLOW. // COUNTER FAILED";result.className="perfect-parry-result fail";clearInterval(timer);resolve()}},50)});
   await ctx.wait(850); overlay.remove();
-  if(won){ctx.state.bossTurnSkip=Math.max(Number(ctx.state.bossTurnSkip||0),8);return {damage:0,message:"PERFECT_PARRY // TARGET WILL LOSE 8 TURNS."};}
+  if(won){
+    try { const a=new Audio("assets/perry.mp3"); a.volume=.9; a.play().catch(()=>{}); } catch {}
+    ctx.showFlash();
+    ctx.shake();
+    ctx.state.bossTurnSkip=Math.max(Number(ctx.state.bossTurnSkip||0),8);return {damage:0,message:"PERFECT_PARRY // TARGET WILL LOSE 8 TURNS."};}
   return {damage:0,message:"PERFECT_PARRY FAILED."};
 });
