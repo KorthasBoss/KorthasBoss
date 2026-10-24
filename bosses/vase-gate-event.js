@@ -13,5 +13,5 @@ window.YEN_BOSSES["vase-gate-event"]={
   id:"vase-gate-event",isVaseGateEvent:true,name:"THE VASE GATE EVENT",stars:0,
   title:"RANDOM KISHIN // 2% FOR TWO FORBIDDEN TARGETS",
   eventChanceText:"96% COMMON KISHIN // 2% ANGELIC'S HORROR // 2% SOUL'S GATE",
-  cardImage:"assets/vase-gate-background.svg",profileFrame:"assets/vase-gate-card-frame.svg"
+  cardImage:"assets/vase.png",profileFrame:"assets/vase_gate_frame.png"
 };
