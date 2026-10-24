@@ -40,7 +40,7 @@ window.YEN_BOSSES["angelic-horror"]={
   id:"angelic-horror", hiddenFromLobby:true, name:"ANGELIC'S HORROR", stars:999999999,
   title:"THE KISHIN BEHIND THE VASE GATE", battleTitle:"THE ANGEL THAT SHOULD NOT EXIST",
   maxHP:180000000, playerMaxHP:2500000, reward:90000000000,
-  idle:"assets/Angelics_horror", fight:"assets/Angelics_horror", cardImage:"assets/angelic-horror-card.svg", profileFrame:"assets/angelic-horror-card-frame.svg",
+  idle:"assets/Angelics_horror.png", fight:"assets/Angelics_horror.png", cardImage:"assets/angelic-horror-card.svg", profileFrame:"assets/angelic-horror-card-frame.svg",
   music:"assets/angelic-horror-theme.mp3", battleBackground:"assets/angelic-horror-background.svg", hitSound:"assets/angelic-horror-hit.mp3",
   intro:["The light above you breaks.","Something holy has become completely wrong.","ANGELIC'S HORROR has accepted the invitation."],
   playerAttacks:[
