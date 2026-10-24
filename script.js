@@ -218,7 +218,7 @@ function renderLobby() {
   });
   const merchant = document.createElement("article");
   merchant.className = "boss-card merchant-lobby-card";
-  merchant.innerHTML = `<div class="boss-card-bg" style="background-image:url('${CONFIG.merchant.background}')"></div><div class="boss-card-badge">MERCHANT // SAFE</div><img class="boss-card-art" src="${CONFIG.merchant.image}" alt="Merchant"><div class="boss-card-info"><div class="stars">8,001 SKILLS IN STOCK</div><h2>MERCHANT</h2><p>NO THREAT // CUSTOM DIALOGUE // SKILL VAULT</p></div>`;
+  merchant.innerHTML = `<div class="boss-card-bg" style="background-image:url('${CONFIG.merchant.background}')"></div><div class="boss-card-badge">MERCHANT // SAFE</div><img class="boss-card-art" src="${CONFIG.merchant.image}" alt="Merchant"><div class="boss-card-info"><div class="stars">10 ULTRA-ENDGAME SKILLS IN STOCK</div><h2>MERCHANT</h2><p>NO THREAT // CUSTOM DIALOGUE // SKILL VAULT</p></div>`;
   merchant.addEventListener("click", async () => { await transition(() => showScreen("merchant-screen")); openMerchant(); });
   list.appendChild(merchant);
 
@@ -367,7 +367,7 @@ $("merchant-next").addEventListener("click", () => {
   merchantIndex = (merchantIndex + 1) % CONFIG.merchant.lines.length;
   $("merchant-line").textContent = CONFIG.merchant.lines[merchantIndex];
   $("merchant-dialog-count").textContent = `${String(merchantIndex+1).padStart(2,"0")} / 50`;
-  $("merchant-subline").textContent = merchantIndex===49 ? "That's all fifty. The vault is yours. Pick your weapon." : merchantIndex%3===0 ? "The vault is still open. Pick something brutal." : "I've got 8,001 ways to make a boss regret meeting you.";
+  $("merchant-subline").textContent = merchantIndex===49 ? "That's all fifty. The vault is yours. Pick your weapon." : merchantIndex%3===0 ? "The vault is still open. Pick something brutal." : "I've got 10 ways to make a boss regret meeting you.";
   if (merchantIndex===49) { buildSkillCatalog(); $("skill-shop").classList.remove("hidden"); renderSkills(); }
 });
 $("open-shop").addEventListener("click", () => { buildSkillCatalog(); $("skill-shop").classList.remove("hidden"); renderSkills(); });
@@ -476,7 +476,7 @@ function buildAttackButtons() {
 }
 function addAttackButton(attack) {
   const button = document.createElement("button");
-  button.className = `attack-button ${attack.type!=="base"?"owned-skill":""} ${attack.source?.enchanted?"enchanted-skill":""} ${attack.source?.special === "rainbow-sword" ? "rainbow-sword-button" : ""} ${attack.source?.special === "trident-of-co-op" ? "trident-coop-button" : ""}`;
+  button.className = `attack-button ${attack.type!=="base"?"owned-skill":""} ${attack.source?.enchanted?"enchanted-skill":""} ${attack.source?.special === "rainbow-sword" ? "rainbow-sword-button" : ""} ${attack.source?.special === "trident-of-co-op" ? "trident-coop-button" : ""} ${attack.source?.special === "deathsringer" ? "deathsringer-button" : ""}`;
   if (currentBossState.introLocked) {
     button.classList.add("battle-locked");
     button.disabled = true;
@@ -766,6 +766,12 @@ async function usePlayerAttack(attack) {
 
 async function bossTurn() {
   if (!bossAttackEnabled || playerHP<=0 || bossHP<=0) return;
+  if (Number(currentBossState.bossTurnSkip||0) > 0) {
+    currentBossState.bossTurnSkip--;
+    updateHP();
+    setMessage(`PERFECT PARRY // ${currentBossState.bossTurnSkip} TURN${currentBossState.bossTurnSkip===1?"":"S"} REMAINING.`);
+    return;
+  }
   const hook=currentBoss.hooks?.bossTurn;
   if (hook) { await hook.call(currentBoss.hooks,ctxForBoss()); return; }
   const move=pick(currentBoss.bossAttacks || []);

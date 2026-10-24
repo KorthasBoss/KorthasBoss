@@ -30,28 +30,20 @@ window.YEN_MERCHANT = {
 
 (() => {
   const M=window.YEN_MERCHANT;
-  const prefixes=["Void","Astral","Dread","Soul","Rune","Blood","Echo","Fallen","Solar","Night","Grave","Tome","Royal","Phantom","Seraph","Ruin","Star","Cursed","Abyssal","Thorn"];
-  const cores=["Slash","Burst","Pierce","Nova","Judgment","Wave","Prism","Chain","Rift","Pulse","Meteor","Brand","Requiem","Tempest","Execution","Sigil","Crash","Sunder","Fang","Cannon"];
-  const rarities=[
-    {name:"COMMON",count:1600,color:"#7e94ae",mult:1,cost:[12000,70000]},
-    {name:"RARE",count:1000,color:"#54cfff",mult:1.25,cost:[70000,250000]},
-    {name:"EPIC",count:700,color:"#bd72ff",mult:1.7,cost:[250000,900000]},
-    {name:"LEGENDARY",count:500,color:"#ffb84e",mult:2.4,cost:[900000,3500000]},
-    {name:"MYTHIC",count:200,color:"#ff5573",mult:3.2,cost:[3500000,10000000]},
-    {name:"ENCHANTED",count:4000,color:"#f6b4ff",mult:8.5,cost:[25000000,500000000]}
-  ];
-  let id=0;
-  for(const rarity of rarities){
-    for(let i=0;i<rarity.count;i++){
-      const name=`${prefixes[(id*7)%prefixes.length]} ${cores[(id*11+i)%cores.length]} ${String(i+1).padStart(3,"0")}`;
-      const seed=(id*1103515245+12345)>>>0;
-      const ratio=seed/4294967296;
-      const powerMin=rarity.name==="ENCHANTED"?90000:9000;
-      const powerMax=rarity.name==="ENCHANTED"?220000:60000;
-      const power=Math.round((powerMin+(powerMax-powerMin)*ratio)*rarity.mult);
-      const cost=Math.floor(rarity.cost[0]+(rarity.cost[1]-rarity.cost[0])*ratio);
-      M.skills.push({id:String(id),name,rarity:rarity.name,color:rarity.color,enchanted:rarity.name==="ENCHANTED",cost,power,description:rarity.name==="ENCHANTED"?`ENCHANTED ENDGAME SKILL. Deals around ${power.toLocaleString("en-US")} damage. Extremely expensive and built to hurt bosses.`:`A ${rarity.name.toLowerCase()} skill. Deals around ${power.toLocaleString("en-US")} damage when it lands.`});
-      id++;
-    }
-  }
+  /*
+     THE OLD RANDOM 8,000-SKILL VAULT IS REPLACED WITH A SMALLER
+     ENDGAME-ONLY STOCK. These are intentionally absurdly expensive.
+  */
+  M.skills.push(
+    {id:"void-king-execution",name:"VOID KING // EXECUTION",rarity:"KISHIN",color:"#b45cff",enchanted:true,cost:"5000000000",power:6500000,description:"A forbidden execution that tears through ancient bosses."},
+    {id:"astral-cataclysm",name:"ASTRAL CATACLYSM",rarity:"KISHIN",color:"#63e6ff",enchanted:true,cost:"7500000000",power:8200000,description:"Summons a collapsing star over the target."},
+    {id:"blood-moon-requiem",name:"BLOOD MOON REQUIEM",rarity:"KISHIN",color:"#ff315d",enchanted:true,cost:"9000000000",power:9000000,description:"A crimson requiem that bites through boss vitality."},
+    {id:"heavens-last-word",name:"HEAVEN'S LAST WORD",rarity:"DIVINE",color:"#fff6b0",enchanted:true,cost:"12000000000",power:12000000,description:"The final word of a dead god."},
+    {id:"abyssal-collapse",name:"ABYSSAL COLLAPSE",rarity:"KISHIN",color:"#8a7dff",enchanted:true,cost:"15000000000",power:15000000,description:"Folds the arena into an abyssal singularity."},
+    {id:"million-blade-judgment",name:"MILLION-BLADE JUDGMENT",rarity:"DIVINE",color:"#ffffff",enchanted:true,cost:"18000000000",power:17500000,description:"A storm of blades descends at once."},
+    {id:"godfall-prism",name:"GODFALL PRISM",rarity:"DIVINE",color:"#ff8cf7",enchanted:true,cost:"22000000000",power:21000000,description:"A prism that turns divine light into raw damage."},
+    {id:"dreadnought-sunder",name:"DREADNOUGHT SUNDER",rarity:"KISHIN",color:"#ff9b45",enchanted:true,cost:"26000000000",power:24000000,description:"Splits armor, shields, and pride in one hit."},
+    {id:"zero-hour-obliteration",name:"ZERO HOUR // OBLITERATION",rarity:"KISHIN",color:"#54ffff",enchanted:true,cost:"35000000000",power:30000000,description:"An endgame strike reserved for hunters with absurd wealth."},
+    {id:"merchant-forbidden-deal",name:"THE MERCHANT'S FORBIDDEN DEAL",rarity:"???",color:"#ffea5c",enchanted:true,cost:"50000000000",power:50000000,description:"The Merchant refuses to explain where this came from."}
+  );
 })();
