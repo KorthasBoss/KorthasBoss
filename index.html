@@ -34,10 +34,46 @@
 
 <!-- MERCHANT -->
 <section id="merchant-screen" class="portal-subscreen hidden merchant-screen">
-  <div class="merchant-wrap"><div class="merchant-art"><div class="merchant-glow"></div><img id="merchant-image" src="assets/merchant-idle.png" alt="Merchant"></div>
+  <div class="merchant-wrap"><div class="merchant-art"><div class="merchant-glow"></div><img id="merchant-image" src="assets/Merchant_Idle.png" alt="Merchant"></div>
   <div class="merchant-dialog"><p class="section-kicker">THE MERCHANT // NO THREAT DETECTED</p><h1 id="merchant-line">OH. YOU'RE BACK.</h1><p id="merchant-subline">I've got something that'll make your next fight considerably less fair.</p><button id="merchant-next" class="menu-button primary">NEXT <span>→</span></button><div class="merchant-meta"><span id="merchant-dialog-count">01 / 50</span><span>8,000 SKILLS IN STOCK</span></div></div></div>
   <div id="skill-shop" class="skill-shop hidden"><div class="shop-heading"><div><p class="section-kicker">THE VAULT</p><h2>SKILLS // 8,000 ITEMS</h2></div><div class="shop-search"><input id="skill-search" placeholder="Search skills..."></div></div><div id="skill-grid" class="skill-grid"></div><div class="potion-vault"><div class="section-kicker"><span class="tiny-diamond"></span> HEALING POTIONS</div><div id="potion-grid" class="potion-grid"></div></div></div>
   <div class="sub-actions"><button class="text-button" data-screen="lobby-screen">← BACK TO LOBBY</button><button class="text-button" id="open-shop">OPEN SKILL VAULT</button></div>
+</section>
+
+<!-- HELMET // SECOND MERCHANT -->
+<section id="helmet-screen" class="portal-subscreen hidden helmet-screen">
+  <div class="helmet-wrap">
+    <div class="helmet-card-stage">
+      <div class="helmet-card-glow"></div>
+      <article class="boss-card helmet-lobby-card helmet-dialog-card">
+        <div class="boss-card-bg"></div>
+        <div class="boss-card-badge">MERCHANT // KISHIN DEALER</div>
+        <img id="helmet-card-art" class="boss-card-art" src="assets/helmet-idle.svg" alt="Helmet">
+        <div class="boss-card-info"><div class="stars">TARGET DEALER // EXTREME STOCK</div><h2>HELMET</h2><p>FINEST KISHINS // PRIVATE INVENTORY</p></div>
+      </article>
+    </div>
+    <div class="helmet-dialog-panel">
+      <div class="section-kicker">HELMET // PRIVATE KISHIN DEALER</div>
+      <div class="helmet-dialog-line" id="helmet-line">WOAH WOAH WOAH.</div>
+      <p class="helmet-dialog-sub" id="helmet-sub">Hey!</p>
+      <div class="helmet-dialog-progress"><span id="helmet-dialog-count">01 / 09</span><span>IDENTITY CHECK</span></div>
+      <button id="helmet-next" class="menu-button primary">NEXT <span>→</span></button>
+      <div id="helmet-choice" class="helmet-choice hidden">
+        <p>COME SHOP FOR ONE OF MY <b>FINEST KISHINS</b> AYE?</p>
+        <div class="choice-row">
+          <button id="helmet-yes" class="choice-button choice-yes"><span>YES, SHOW ME</span><span>↗</span></button>
+          <button id="helmet-no" class="choice-button choice-no"><span>NO</span><span>×</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HELMET KISHIN SHOP -->
+<section id="helmet-shop-screen" class="portal-subscreen hidden helmet-shop-screen">
+  <div class="lobby-top"><div><p class="section-kicker">HELMET'S PRIVATE INVENTORY</p><h1>CHOOSE YOUR KISHIN</h1><p class="helmet-shop-intro">These aren't normal skills. Buy a Kishin and their attack is permanently added to your account.</p></div><div class="wallet"><span>DOX</span><strong id="helmet-wallet-dox">500,000</strong></div></div>
+  <div class="kishin-shop-grid" id="kishin-shop-grid"></div>
+  <div class="sub-actions"><button class="text-button" id="helmet-shop-back">← BACK TO LOBBY</button><span class="helmet-shop-note">HELMET // NO REFUNDS. NO REGRETS.</span></div>
 </section>
 
 <!-- SETTINGS -->
@@ -59,6 +95,6 @@
 <section id="static-screen" class="full-overlay static-screen hidden"><div class="static-noise"></div><p class="section-kicker">UNAUTHORIZED PRESENCE</p><h1>GET OUT.</h1><p class="static-subtitle">CONNECTION TERMINATED</p></section>
 <footer class="site-footer"><span>© YEN! // BOSS WORLD</span><span>EARN. FIGHT. BUY SOMETHING STUPID. <i>✦</i></span></footer>
 </main>
-<audio id="boss-music" src="assets/korthas-theme.mp3" loop preload="auto"></audio><audio id="parry-sound" src="assets/empress-parry.mp3" preload="auto"></audio>
-<script src="accounts.js?v=20261022-skills1"></script><script src="skills/registry.js?v=20261024-special2"></script><script src="skills/win-can-make-sword.js?v=20261022-skills1"></script><script src="skills/trident-of-co-op.js?v=20261024-special2"></script><script src="bosses/merchant.js?v=20261022-skills1"></script><script src="bosses/korthas.js?v=20261022-skills1"></script><script src="bosses/argus.js?v=20261022-skills1"></script><script src="bosses/azael.js?v=20261022-skills1"></script><script src="bosses/malakor.js?v=20261022-skills1"></script><script src="bosses/aethelgard.js?v=20261022-skills1"></script><script src="bosses/amias.js?v=20261022-skills1"></script><script src="bosses/nebula.js?v=20261022-skills1"></script><script src="bosses/sea-predator.js?v=20261022-skills1"></script><script src="bosses/angelic-horror.js?v=20261023-vase1"></script><script src="bosses/souls-gate.js?v=20261023-vase1"></script><script src="bosses/vase-gate-event.js?v=20261023-vase1"></script><script src="skills/deathsringer.js?v=20261024-special2"></script><script src="skills/no-saki.js?v=20261024-special2"></script><script src="skills/perfect-parry.js?v=20261024-special2"></script><script src="script.js?v=20261024-special2"></script>
+<audio id="boss-music" src="assets/korthas-theme.mp3" loop preload="auto"></audio>
+<script src="accounts.js?v=20261022-skills1"></script><script src="skills/registry.js?v=20261024-special2"></script><script src="skills/win-can-make-sword.js?v=20261022-skills1"></script><script src="skills/trident-of-co-op.js?v=20261024-special2"></script><script src="bosses/merchant.js?v=20261022-skills1"></script><script src="bosses/helmet.js?v=20261028-helmet1"></script><script src="bosses/korthas.js?v=20261022-skills1"></script><script src="bosses/argus.js?v=20261022-skills1"></script><script src="bosses/azael.js?v=20261022-skills1"></script><script src="bosses/malakor.js?v=20261022-skills1"></script><script src="bosses/aethelgard.js?v=20261022-skills1"></script><script src="bosses/amias.js?v=20261022-skills1"></script><script src="bosses/nebula.js?v=20261022-skills1"></script><script src="bosses/sea-predator.js?v=20261022-skills1"></script><script src="bosses/angelic-horror.js?v=20261023-vase1"></script><script src="bosses/souls-gate.js?v=20261023-vase1"></script><script src="bosses/vase-gate-event.js?v=20261023-vase1"></script><script src="skills/deathsringer.js?v=20261024-special2"></script><script src="skills/auralis-nyxara.js?v=20261028-helmet1"></script><script src="skills/fallen-samurai.js?v=20261028-helmet1"></script><script src="skills/xenith-01.js?v=20261028-helmet1"></script><script src="skills/lord-zephyrus.js?v=20261028-helmet1"></script><script src="skills/no-saki.js?v=20261024-special2"></script><script src="skills/perfect-parry.js?v=20261024-special2"></script><script src="script.js?v=20261028-helmet1"></script>
 </body></html>

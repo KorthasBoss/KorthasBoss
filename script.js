@@ -58,6 +58,7 @@ let selectedSkill = null;
 let cooldowns = new Map();
 let brokenAttackIds = new Set();
 let lastPlayerDamage = 0;
+let skillUses = new Map();
 
 const settings = JSON.parse(localStorage.getItem("yen_settings") || '{"effects":true,"music":true,"motion":false}');
 
@@ -156,7 +157,7 @@ async function transition(fn) {
 function showScreen(id) {
   document.querySelectorAll(".portal-screen,.portal-subscreen,.battle-screen").forEach(x => x.classList.add("hidden"));
   $(id)?.classList.remove("hidden");
-  setPhaseLabel(id === "lobby-screen" ? "HUNTER LOBBY" : id === "merchant-screen" ? "MERCHANT // OPEN" : id === "start-screen" ? "WELCOME" : "YEN! // READY");
+  setPhaseLabel(id === "lobby-screen" ? "HUNTER LOBBY" : id === "merchant-screen" ? "MERCHANT // OPEN" : id === "helmet-screen" ? "HELMET // PRIVATE DEALER" : id === "helmet-shop-screen" ? "HELMET // KISHIN INVENTORY" : id === "start-screen" ? "WELCOME" : "YEN! // READY");
   if(id === "start-screen") setBackground(CONFIG.background);
   if(id === "lobby-screen") setBackground(CONFIG.background);
 }
@@ -221,6 +222,15 @@ function renderLobby() {
   merchant.innerHTML = `<div class="boss-card-bg" style="background-image:url('${CONFIG.merchant.background}')"></div><div class="boss-card-badge">MERCHANT // SAFE</div><img class="boss-card-art" src="${CONFIG.merchant.image}" alt="Merchant"><div class="boss-card-info"><div class="stars">10 ULTRA-ENDGAME SKILLS IN STOCK</div><h2>MERCHANT</h2><p>NO THREAT // CUSTOM DIALOGUE // SKILL VAULT</p></div>`;
   merchant.addEventListener("click", async () => { await transition(() => showScreen("merchant-screen")); openMerchant(); });
   list.appendChild(merchant);
+
+  const helmetCfg = window.YEN_HELMET;
+  if (helmetCfg) {
+    const helmet = document.createElement("article");
+    helmet.className = "boss-card helmet-lobby-card";
+    helmet.innerHTML = `<div class="boss-card-bg" style="background-image:url(\'${helmetCfg.background}\')"></div><div class="boss-card-badge">MERCHANT // KISHIN DEALER</div><img class="boss-card-art" src="${helmetCfg.image}" alt="Helmet"><div class="boss-card-info"><div class="stars">PRIVATE KISHIN INVENTORY // EXTREME DOX</div><h2>HELMET</h2><p>FINEST KISHINS // CUSTOM TARGET SKILLS</p></div>`;
+    helmet.addEventListener("click", async () => { await transition(() => showScreen("helmet-screen")); openHelmet(); });
+    list.appendChild(helmet);
+  }
 
 }
 
@@ -309,6 +319,66 @@ $("logout-button").addEventListener("click", async () => {
   account = null;
   await transition(() => showScreen("start-screen"));
 });
+
+/* ------------------------- HELMET // KISHIN DEALER ------------------------- */
+let helmetIndex = 0;
+function helmetLine(line){ return String(line||"").replace("${PLAYER}", account?.username || "HUNTER"); }
+function openHelmet(){
+  helmetIndex = 0;
+  $("helmet-line").textContent = helmetLine(window.YEN_HELMET.lines[0]);
+  $("helmet-sub").textContent = window.YEN_HELMET.subLines[0] || "";
+  $("helmet-dialog-count").textContent = `01 / ${String(window.YEN_HELMET.lines.length).padStart(2,"0")}`;
+  $("helmet-next").classList.remove("hidden");
+  $("helmet-choice").classList.add("hidden");
+  setCharacter("helmet-card-art", window.YEN_HELMET.image);
+  setBackground(window.YEN_HELMET.background);
+}
+function openHelmetShop(){
+  showScreen("helmet-shop-screen");
+  setBackground(window.YEN_HELMET.shopBackground || CONFIG.background);
+  updateWallet();
+  $("helmet-wallet-dox").textContent = fmtDox(account.dox);
+  renderHelmetShop();
+}
+function renderHelmetShop(){
+  const grid=$("kishin-shop-grid"); if(!grid) return;
+  grid.innerHTML="";
+  const targets=Array.isArray(window.YEN_HELMET?.targets)?window.YEN_HELMET.targets:[];
+  targets.forEach(skill=>{
+    const owned=isSkillOwned(skill);
+    const card=document.createElement("article");
+    card.className=`kishin-shop-card ${owned?"owned":""}`;
+    card.style.setProperty("--kishin-color", skill.color || "#fff");
+    card.innerHTML=`<div class="kishin-card-art-wrap"><img src="${skill.image}" alt="${skill.name}"></div><div class="kishin-card-top"><span>${skill.rarity}</span><span>${owned?"OWNED":"KISHIN"}</span></div><div class="kishin-card-name-top">${skill.name}</div><div class="kishin-card-body"><h2>${skill.name}</h2><p>${skill.bio}</p><div class="kishin-card-effect">${skill.shopEffect}</div><div class="kishin-card-bottom"><strong>${owned?"ALREADY OWNED":fmtDox(skill.cost)+" DOX"}</strong><button class="kishin-buy" ${owned||account.dox<toDox(skill.cost)?"disabled":""}>${owned?"OWNED":account.dox<toDox(skill.cost)?"NOT ENOUGH DOX":"BUY KISHIN"}</button></div></div>`;
+    card.querySelector(".kishin-buy").onclick=async(e)=>{
+      e.stopPropagation();
+      if(owned) return;
+      const cost=toDox(skill.cost);
+      if(account.dox<cost){showSaveWarning("NOT ENOUGH DOX FOR THIS KISHIN.");return;}
+      account.dox-=cost;
+      account.ownedSkills=Array.isArray(account.ownedSkills)?account.ownedSkills:[];
+      if(!account.ownedSkills.some(v=>String(v)===String(skill.id))) account.ownedSkills.push(skill.id);
+      await saveAccount(); updateWallet(); $("helmet-wallet-dox").textContent=fmtDox(account.dox); renderHelmetShop();
+      showSaveWarning(`${skill.name} ADDED TO YOUR SKILLS.`);
+    };
+    grid.appendChild(card);
+  });
+}
+$("helmet-next")?.addEventListener("click",()=>{
+  helmetIndex++;
+  if(helmetIndex < window.YEN_HELMET.lines.length){
+    $("helmet-line").textContent=helmetLine(window.YEN_HELMET.lines[helmetIndex]);
+    $("helmet-sub").textContent=window.YEN_HELMET.subLines[helmetIndex] || "";
+    $("helmet-dialog-count").textContent=`${String(helmetIndex+1).padStart(2,"0")} / ${String(window.YEN_HELMET.lines.length).padStart(2,"0")}`;
+    if(helmetIndex===window.YEN_HELMET.lines.length-1){$("helmet-next").classList.add("hidden");$("helmet-choice").classList.remove("hidden");}
+  }
+});
+$("helmet-yes")?.addEventListener("click",async()=>{
+  const white=document.createElement("div"); white.className="helmet-white-transition"; document.body.appendChild(white);
+  await wait(520); openHelmetShop(); await wait(420); white.classList.add("out"); await wait(420); white.remove();
+});
+$("helmet-no")?.addEventListener("click",async()=>{await transition(()=>{showScreen("lobby-screen");renderLobby();});});
+$("helmet-shop-back")?.addEventListener("click",async()=>{await transition(()=>{showScreen("lobby-screen");renderLobby();});});
 
 /* ------------------------- MERCHANT ------------------------- */
 function buildSkillCatalog() {
@@ -428,6 +498,7 @@ function resetBattle(boss) {
   cooldowns = new Map();
   brokenAttackIds = new Set();
   lastPlayerDamage = 0;
+  skillUses = new Map();
   document.body.classList.remove("azael-domain");
   document.querySelector(".domain-timer")?.remove();
 }
@@ -476,7 +547,7 @@ function buildAttackButtons() {
 }
 function addAttackButton(attack) {
   const button = document.createElement("button");
-  button.className = `attack-button ${attack.type!=="base"?"owned-skill":""} ${attack.source?.enchanted?"enchanted-skill":""} ${attack.source?.special === "rainbow-sword" ? "rainbow-sword-button" : ""} ${attack.source?.special === "trident-of-co-op" ? "trident-coop-button" : ""} ${attack.source?.special === "deathsringer" ? "deathsringer-button" : ""}`;
+  button.className = `attack-button ${attack.type!=="base"?"owned-skill":""} ${attack.source?.enchanted?"enchanted-skill":""} ${attack.source?.special === "rainbow-sword" ? "rainbow-sword-button" : ""} ${attack.source?.special === "trident-of-co-op" ? "trident-coop-button" : ""} ${attack.source?.special === "deathsringer" ? "deathsringer-button" : ""} ${attack.source?.special === "helmet-kishin" ? `helmet-kishin-button ${attack.source.id}` : ""}`;
   if (currentBossState.introLocked) {
     button.classList.add("battle-locked");
     button.disabled = true;
@@ -693,6 +764,14 @@ async function usePlayerAttack(attack) {
   if (brokenAttackIds.has(attack.key) || isCooling(attack)) return;
   busy=true;
 
+  const sourceSkill = attack.source;
+  const maxUses = Number(sourceSkill?.usesPerBattle || 0);
+  if (maxUses > 0) {
+    const used = Number(skillUses.get(String(sourceSkill.id)) || 0);
+    if (used >= maxUses) { busy=false; return; }
+    skillUses.set(String(sourceSkill.id), used + 1);
+  }
+
   delete attack._seaReducedDamage;
   delete attack._nebulaFixedDamage;
   delete attack._aethelgardFixedDamage;
@@ -737,6 +816,10 @@ async function usePlayerAttack(attack) {
   lastPlayerDamage = damage;
   applyBossDamage(Math.min(bossHP+bossShield,damage));
   updateHP();
+  if (maxUses > 0 && Number(skillUses.get(String(sourceSkill.id)) || 0) >= maxUses) {
+    const spent = [...document.querySelectorAll("#attack-grid .attack-button[data-attack-key]")].find(b=>b.dataset.attackKey===attack.key);
+    if (spent) { spent.disabled=true; spent.classList.add("skill-spent"); spent.dataset.cooldown="SPENT"; }
+  }
   if (bossHP <= 0 && attack.source?.killEffect) playConfiguredSkillVFX(attack,true);
   shake();
 
