@@ -1,7 +1,7 @@
 /* YEN! // HELMET KISHIN // AURALIS & NYXARA */
 window.YEN_REGISTER_SKILL({
   id:"auralis-nyxara", name:"Auralis & Nyxara", rarity:"KISHIN // DUO", color:"#ff6df2", enchanted:true,
-  special:"helmet-kishin", imageId:"auralis-nyxara-card", image:"assets/auralis-nyxara.svg",
+  special:"helmet-kishin", imageId:"auralis-nyxara-card", image:"assets/Auralis & Nyxara.png",
   cost:"999999999999", power:1600000, usesPerBattle:4,
   description:"A brutal two-Kishin duo. Auralis and Nyxara strike together for 800,000 damage each. Four uses per battle.",
   bio:"Two hunters of the same cursed bloodline. They never attack alone. When paid for, both step into the arena and erase 800,000 HP apiece.",

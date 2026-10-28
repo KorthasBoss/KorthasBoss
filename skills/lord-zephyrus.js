@@ -1,7 +1,7 @@
 /* YEN! // HELMET KISHIN // LORD ZEPHYRUS */
 window.YEN_REGISTER_SKILL({
   id:"lord-zephyrus-ivory-overlord", name:"Lord Zephyrus, the Ivory Overlord", rarity:"KISHIN // IVORY OVERLORD", color:"#fff3c4", enchanted:true,
-  special:"helmet-kishin", imageId:"lord-zephyrus-card", image:"assets/lord-zephyrus.svg",
+  special:"helmet-kishin", imageId:"lord-zephyrus-card", image:"assets/Lord Zephyrus, the Ivory Overlord.png",
   cost:"100000000000000", power:30000000, description:"An absurdly expensive Ivory Overlord attack. The arena is buried beneath a catastrophic ivory storm.",
   bio:"Lord Zephyrus is what happens when a Kishin stops considering mortal HP a meaningful number. His attack is designed for hunters who have more DOX than common sense.",
   shopEffect:"30,000,000 DAMAGE // IVORY OVERLORD EXECUTION",

@@ -1,7 +1,7 @@
 /* YEN! // HELMET KISHIN // XENITH-01 */
 window.YEN_REGISTER_SKILL({
   id:"xenith-01-world-weaver", name:"Xenith-01: The World Weaver", rarity:"KISHIN // WORLD WEAVER", color:"#6cf6ff", enchanted:true,
-  special:"helmet-kishin", imageId:"xenith-01-card", image:"assets/xenith-01.svg",
+  special:"helmet-kishin", imageId:"xenith-01-card", image:"assets/Xenith-01 The World Weaver.png",
   cost:"25000000000000", power:12000000, description:"Fires a world-sized beam into the target and has a chance to restore a huge amount of your HP.",
   bio:"Xenith-01 does not swing a weapon. It edits reality. Its beam tears through the target while its woven core can feed the stolen energy back into you.",
   shopEffect:"12,000,000 DAMAGE // 45% HEAL CHANCE",

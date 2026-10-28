@@ -1,7 +1,7 @@
 /* YEN! // HELMET KISHIN // 90K FALLEN SAMURAI */
 window.YEN_REGISTER_SKILL({
   id:"fallen-samurai-90k", name:"90K Fallen Samurai", rarity:"KISHIN // SAMURAI", color:"#ff334f", enchanted:true,
-  special:"helmet-kishin", imageId:"fallen-samurai-card", image:"assets/fallen-samurai.svg",
+  special:"helmet-kishin", imageId:"fallen-samurai-card", image:"assets/assets/9Pk Fallen samurai.png",
   cost:"5000000000000", power:7000000, description:"A seven-million-damage execution with a brutal chance to parry the target and steal its next turn.",
   bio:"The 90K Fallen Samurai was buried with a blade that never learned how to stop. One slash can take seven million HP, and sometimes the target is forced to kneel before answering.",
   shopEffect:"7,000,000 DAMAGE // 35% PARRY CHANCE",
