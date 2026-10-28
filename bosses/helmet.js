@@ -1,8 +1,8 @@
 /* YEN! // HELMET // SECOND MERCHANT + PRIVATE KISHIN SHOP */
 window.YEN_HELMET = {
-  image:"assets/helmet-idle.svg",
-  background:"assets/helmet-background.svg",
-  shopBackground:"assets/helmet-shop-background.svg",
+  image:"assets/Helmet.png",
+  background:"assets/Marketplace_29.webp",
+  shopBackground:"assets/Marketplace_29.webp",
   lines:[
     "WOAH WOAH WOAH.",
     "Hey!",
