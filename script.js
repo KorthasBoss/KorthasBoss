@@ -339,6 +339,17 @@ function openHelmetShop(){
   updateWallet();
   $("helmet-wallet-dox").textContent = fmtDox(account.dox);
   renderHelmetShop();
+
+  // Always open Helmet's inventory at the very top.
+  // The browser was retaining the previous lobby/merchant scroll position,
+  // which could leave the first K,Z,X card above the viewport.
+  requestAnimationFrame(() => {
+    window.scrollTo({top:0,left:0,behavior:"instant"});
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    $("helmet-shop-screen")?.scrollIntoView({block:"start",inline:"nearest"});
+    window.scrollTo({top:0,left:0,behavior:"instant"});
+  });
 }
 function renderHelmetShop(){
   const grid=$("kishin-shop-grid"); if(!grid) return;

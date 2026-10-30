@@ -701,6 +701,8 @@ body.azael-domain .status-dot{background:#ff4263;box-shadow:0 0 12px #ff4263}
 
 
 /* K,Z,X // HELMET KISHIN */
+/* K,Z,X is the first and most important Helmet inventory item. Keep it visible at the top. */
+.kishin-shop-card.kzx-shop-card{order:-10;scroll-margin-top:90px}
 .kzx-shop-card{border-color:#ff35f5!important;background:linear-gradient(145deg,#15051b,#05070d)!important;box-shadow:0 0 22px #ff35f522,0 18px 55px #0008!important}
 .kzx-shop-card:hover{border-color:#fff!important;box-shadow:0 0 20px #ff35f588,0 0 60px #00eaff44,0 22px 70px #000a!important;animation:kzxCardGlitch .18s steps(2) infinite}
 .kzx-shop-card .kishin-card-art-wrap{background:radial-gradient(circle at 50% 48%,#ff35f544,transparent 55%),linear-gradient(135deg,#0b0711,#02050b)}
