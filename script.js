@@ -339,30 +339,15 @@ function openHelmetShop(){
   updateWallet();
   $("helmet-wallet-dox").textContent = fmtDox(account.dox);
   renderHelmetShop();
-
-  // Always open Helmet's inventory at the very top.
-  // The browser was retaining the previous lobby/merchant scroll position,
-  // which could leave the first K,Z,X card above the viewport.
-  requestAnimationFrame(() => {
-    window.scrollTo({top:0,left:0,behavior:"instant"});
-    document.documentElement.scrollTop = 0;
-    document.body.scrollTop = 0;
-    $("helmet-shop-screen")?.scrollIntoView({block:"start",inline:"nearest"});
-    window.scrollTo({top:0,left:0,behavior:"instant"});
-  });
 }
 function renderHelmetShop(){
   const grid=$("kishin-shop-grid"); if(!grid) return;
   grid.innerHTML="";
-  let targets=Array.isArray(window.YEN_HELMET?.targets)?[...window.YEN_HELMET.targets]:[];
-  // K,Z,X HARD GUARANTEE v4: always render it first, even if an older cached helmet.js omitted it.
-  const kzxTarget={id:"k-z-x",name:"K,Z,X",rarity:"KISHIN // GLITCH ENTITY",color:"#ff35f5",image:"assets/k-z-x.png",cost:"999999999999999999999999999999",bio:"K,Z,X is Helmet's corrupted glitch Kishin. Every activation tears a static rainbow slash through the target, plays a random K,Z,X voice line, and may restore 67% of its owner's maximum HP.",shopEffect:"1,000,000 DAMAGE // 67% HEAL CHANCE // RANDOM VOICE",specialShopClass:"kzx-shop-card"};
-  targets=targets.filter(t=>String(t.id)!=="k-z-x");
-  targets.unshift(kzxTarget);
+  const targets=Array.isArray(window.YEN_HELMET?.targets)?window.YEN_HELMET.targets:[];
   targets.forEach(skill=>{
     const owned=isSkillOwned(skill);
     const card=document.createElement("article");
-    card.className=`kishin-shop-card ${skill.specialShopClass||""} ${owned?"owned":""}`;
+    card.className=`kishin-shop-card ${owned?"owned":""} ${skill.id==="k-z-x"?"kzx-kishin-card":""}`;
     card.style.setProperty("--kishin-color", skill.color || "#fff");
     card.innerHTML=`<div class="kishin-card-art-wrap"><img src="${skill.image}" alt="${skill.name}"></div><div class="kishin-card-top"><span>${skill.rarity}</span><span>${owned?"OWNED":"KISHIN"}</span></div><div class="kishin-card-name-top">${skill.name}</div><div class="kishin-card-body"><h2>${skill.name}</h2><p>${skill.bio}</p><div class="kishin-card-effect">${skill.shopEffect}</div><div class="kishin-card-bottom"><strong>${owned?"ALREADY OWNED":fmtDox(skill.cost)+" DOX"}</strong><button class="kishin-buy" ${owned||account.dox<toDox(skill.cost)?"disabled":""}>${owned?"OWNED":account.dox<toDox(skill.cost)?"NOT ENOUGH DOX":"BUY KISHIN"}</button></div></div>`;
     card.querySelector(".kishin-buy").onclick=async(e)=>{

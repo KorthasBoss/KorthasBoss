@@ -700,40 +700,304 @@ body.azael-domain .status-dot{background:#ff4263;box-shadow:0 0 12px #ff4263}
 .helmet-white-transition{position:fixed;inset:0;z-index:10050;background:#fff;pointer-events:none;animation:helmetWhiteIn .5s ease forwards}.helmet-white-transition.out{animation:helmetWhiteOut .4s ease forwards}@keyframes helmetWhiteIn{from{opacity:0}to{opacity:1}}@keyframes helmetWhiteOut{from{opacity:1}to{opacity:0}}
 
 
-/* K,Z,X // HELMET KISHIN */
-/* K,Z,X is the first and most important Helmet inventory item. Keep it visible at the top. */
-.kishin-shop-card.kzx-shop-card{order:-10;scroll-margin-top:90px}
-.kzx-shop-card{border-color:#ff35f5!important;background:linear-gradient(145deg,#15051b,#05070d)!important;box-shadow:0 0 22px #ff35f522,0 18px 55px #0008!important}
-.kzx-shop-card:hover{border-color:#fff!important;box-shadow:0 0 20px #ff35f588,0 0 60px #00eaff44,0 22px 70px #000a!important;animation:kzxCardGlitch .18s steps(2) infinite}
-.kzx-shop-card .kishin-card-art-wrap{background:radial-gradient(circle at 50% 48%,#ff35f544,transparent 55%),linear-gradient(135deg,#0b0711,#02050b)}
-.kzx-shop-card .kishin-card-art-wrap:before{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0 5px,#ff35f50d 6px 7px,#00f6ff0b 8px 9px);mix-blend-mode:screen;animation:kzxScan 1s linear infinite}
-.kzx-shop-card .kishin-card-art-wrap img{filter:drop-shadow(0 0 14px #ff00ff) drop-shadow(0 0 28px #00f6ff) drop-shadow(0 0 48px #ffe600);animation:kzxCardImage 1.1s steps(2) infinite}
-.kzx-shop-card:hover .kishin-card-art-wrap img{transform:scale(1.06) skewX(-1deg);filter:drop-shadow(0 0 18px #ff00ff) drop-shadow(0 0 36px #00f6ff) drop-shadow(0 0 60px #fff)}
-.kzx-shop-card .kishin-card-top,.kzx-shop-card .kishin-card-name-top,.kzx-shop-card .kishin-card-effect{color:#ff35f5!important;text-shadow:0 0 12px #ff35f5,0 0 25px #00eaff}
-.attack-button.k-z-x{border-color:#ff35f5!important;background:linear-gradient(135deg,#17041c,#070914,#11103a)!important;box-shadow:0 0 12px #ff35f544,0 0 28px #00eaff22,inset 0 0 22px #ff00ff12!important;animation:kzxButtonGlitch .75s steps(2) infinite}
-.attack-button.k-z-x:hover:not(:disabled){border-color:#fff!important;transform:translateY(-3px) skewX(-1deg);box-shadow:0 0 18px #ff35f5aa,0 0 40px #00eaff77,0 0 65px #ffe60033,inset 0 0 30px #ff00ff22!important;filter:brightness(1.35)}
-.attack-button.k-z-x .attack-button-image{filter:drop-shadow(0 0 7px #ff00ff) drop-shadow(0 0 12px #00eaff);animation:kzxButtonImage .55s steps(2) infinite}
-.kzx-vfx{position:fixed;inset:0;z-index:10020;pointer-events:none;overflow:hidden;background:radial-gradient(circle at var(--tx) var(--ty),#ffffff33 0,#ff00ff1a 10%,#00eaff0c 22%,transparent 45%);animation:kzxArena .18s steps(2) both}
-.kzx-static{position:absolute;inset:0;background:repeating-linear-gradient(0deg,#fff0 0 2px,#ff00ff16 3px 4px,#00eaff14 5px 6px);mix-blend-mode:screen;animation:kzxStatic .12s steps(2) infinite}
-.kzx-scanlines{position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0 7px,#fff10 8px,#ff00ff18 9px,transparent 10px);opacity:.8;animation:kzxScan 1.1s linear infinite}
-.kzx-glitch-rain{position:absolute;inset:0;background:radial-gradient(circle at 20% 30%,#ff00ff 0 1px,transparent 2px),radial-gradient(circle at 70% 60%,#00ffff 0 1px,transparent 2px),radial-gradient(circle at 45% 75%,#ffe600 0 1px,transparent 2px);background-size:47px 53px,61px 67px,83px 71px;opacity:.6;animation:kzxRain .4s steps(2) infinite}
-.kzx-rgb-ring{position:absolute;left:var(--tx);top:var(--ty);border-radius:50%;transform:translate(-50%,-50%) scale(.1);opacity:0;border:3px solid #fff;box-shadow:0 0 18px #ff00ff,0 0 42px #00eaff,0 0 70px #ffe600;animation:kzxRing .8s ease-out forwards}
-.kzx-rgb-ring.ring-1{width:130px;height:130px}.kzx-rgb-ring.ring-2{width:290px;height:290px;animation-delay:.08s;border-width:5px}
-.kzx-slash-core{position:absolute;left:var(--tx);top:var(--ty);width:34px;height:620px;transform:translate(-50%,-50%) rotate(-35deg) scaleY(.1);background:linear-gradient(90deg,transparent,#ff00ff,#fff,#00eaff,#ffe600,#ff00ff,transparent);box-shadow:0 0 18px #fff,0 0 50px #ff00ff,0 0 100px #00eaff,0 0 150px #ffe600;filter:blur(.5px);opacity:0;animation:kzxSlash .55s cubic-bezier(.2,.8,.1,1) .2s forwards}
-.kzx-slash-echo{position:absolute;left:var(--tx);top:var(--ty);width:12px;height:600px;background:linear-gradient(transparent,#ff00ff,#00eaff,#fff,transparent);opacity:0;transform:translate(-50%,-50%) rotate(-35deg);filter:blur(5px);animation:kzxEcho .65s ease-out .24s forwards}.kzx-slash-echo.echo-2{transform:translate(-50%,-50%) rotate(-35deg) translateX(28px);animation-delay:.3s;filter:blur(8px)}
-.kzx-pixels{position:absolute;left:var(--tx);top:var(--ty);width:500px;height:500px;transform:translate(-50%,-50%);background-image:linear-gradient(90deg,#ff00ff 2px,transparent 2px),linear-gradient(#00eaff 2px,transparent 2px);background-size:19px 23px;mask-image:radial-gradient(circle,#000 0 15%,transparent 65%);opacity:0;animation:kzxPixels .8s steps(2) .15s forwards}
-.kzx-vfx.slash-b .kzx-slash-core,.kzx-vfx.slash-b .kzx-slash-echo{transform:translate(-50%,-50%) rotate(28deg)}
-.kzx-vfx.slash-c .kzx-slash-core,.kzx-vfx.slash-c .kzx-slash-echo{transform:translate(-50%,-50%) rotate(-8deg) scaleX(1.4)}
-.kzx-vfx.slash-d .kzx-slash-core,.kzx-vfx.slash-d .kzx-slash-echo{transform:translate(-50%,-50%) rotate(62deg) scaleY(.85)}
-.kzx-vfx.hit .kzx-slash-core{animation:kzxImpact .4s ease-out forwards}.kzx-vfx.hit .kzx-rgb-ring{animation:kzxImpactRing .55s ease-out forwards}.kzx-vfx.hit .kzx-static{animation-duration:.045s}
-@keyframes kzxCardGlitch{50%{transform:translate(1px,-1px) skewX(-.5deg)}100%{transform:translate(-1px,1px)}}
-@keyframes kzxCardImage{50%{transform:translate(2px,-1px) skewX(1deg)}}@keyframes kzxButtonGlitch{50%{transform:translate(1px,0)}}@keyframes kzxButtonImage{50%{transform:translate(-1px,1px) scale(1.02)}}
-@keyframes kzxArena{from{opacity:0}to{opacity:1}}@keyframes kzxStatic{0%{transform:translateX(-2px)}50%{transform:translateX(3px)}100%{transform:translateX(-1px)}}@keyframes kzxScan{to{background-position-y:18px}}
-@keyframes kzxRain{50%{transform:translate(-12px,8px) scale(1.05);filter:hue-rotate(90deg)}}
-@keyframes kzxRing{0%{opacity:0;transform:translate(-50%,-50%) scale(.1)}25%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(5)}}
-@keyframes kzxSlash{0%{opacity:0;transform:translate(-50%,-50%) rotate(-35deg) scaleY(.05)}35%{opacity:1}100%{opacity:.1;transform:translate(-50%,-50%) rotate(-35deg) scaleY(1.25) scaleX(.55)}}
-@keyframes kzxEcho{0%{opacity:0;transform:translate(-50%,-50%) rotate(-35deg) translateX(0) scaleY(.1)}35%{opacity:.9}100%{opacity:0;transform:translate(-50%,-50%) rotate(-35deg) translateX(90px) scaleY(1.3)}}
-@keyframes kzxPixels{20%{opacity:.9}100%{opacity:0;transform:translate(-50%,-50%) scale(2) rotate(18deg)}}
-@keyframes kzxImpact{0%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(2.4) rotate(35deg)}}
-@keyframes kzxImpactRing{0%{opacity:1;transform:translate(-50%,-50%) scale(.4)}100%{opacity:0;transform:translate(-50%,-50%) scale(8)}}
+/* =========================================================
+   K,Z,X // HELMET PRIVATE KISHIN
+   Rainbow-glitch card + dedicated battle slash VFX
+   ========================================================= */
+.kzx-kishin-card{
+  border-color:#ff38ff!important;
+  background:
+    radial-gradient(circle at 20% 15%,#ff38ff18,transparent 28%),
+    radial-gradient(circle at 85% 75%,#35f7ff18,transparent 30%),
+    linear-gradient(145deg,#130b1c,#05070e 70%)!important;
+  box-shadow:0 0 24px #ff38ff18,0 18px 55px #0008!important;
+}
+.kzx-kishin-card::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:repeating-linear-gradient(0deg,transparent 0 7px,#ff38ff09 8px 9px,#39f6ff08 10px 11px);
+  mix-blend-mode:screen;
+  animation:kzxCardStatic .12s steps(2) infinite;
+}
+.kzx-kishin-card:hover{
+  border-color:#fff!important;
+  box-shadow:0 0 18px #ff38ff55,0 0 55px #39f6ff22,0 22px 75px #000b!important;
+}
+.kzx-kishin-card .kishin-card-art-wrap{
+  background:
+    radial-gradient(circle at 50% 45%,#ff38ff30,transparent 45%),
+    linear-gradient(120deg,#ff00ff10,#00f6ff14,#fff0);
+}
+.kzx-kishin-card .kishin-card-art-wrap img{
+  filter:
+    drop-shadow(0 0 9px #fff)
+    drop-shadow(0 0 24px #ff38ff)
+    drop-shadow(0 0 42px #35f7ff);
+  animation:kzxCardFloat 2.1s ease-in-out infinite;
+}
+.kzx-kishin-card .kishin-card-top,
+.kzx-kishin-card .kishin-card-effect{
+  color:#fff!important;
+  text-shadow:0 0 10px #ff38ff,0 0 20px #35f7ff;
+}
+.kzx-kishin-card .kishin-card-name-top{
+  color:#fff;
+  text-shadow:2px 0 #ff28ff,-2px 0 #22efff;
+  animation:kzxTextGlitch .16s steps(2) infinite;
+}
+.kzx-kishin-card .kishin-buy{
+  border-color:#ff38ff;
+  background:linear-gradient(90deg,#190a22,#07151b);
+  box-shadow:0 0 14px #ff38ff33,0 0 28px #35f7ff18;
+}
+.kzx-kishin-card .kishin-buy:hover:not(:disabled){
+  color:#05070b;
+  background:linear-gradient(90deg,#ff38ff,#fff,#35f7ff);
+  box-shadow:0 0 30px #ff38ff77,0 0 55px #35f7ff55;
+}
+@keyframes kzxCardStatic{
+  0%{transform:translateY(0);opacity:.7}
+  50%{transform:translateY(2px);opacity:1}
+  100%{transform:translateY(-1px);opacity:.65}
+}
+@keyframes kzxCardFloat{
+  0%,100%{transform:translateY(0) scale(1)}
+  50%{transform:translateY(-6px) scale(1.015)}
+}
+@keyframes kzxTextGlitch{
+  0%{transform:translate(0)}
+  50%{transform:translate(2px,-1px)}
+  100%{transform:translate(-2px,1px)}
+}
 
+/* K,Z,X attack button */
+.attack-button.k-z-x{
+  border-color:#fff!important;
+  background:
+    linear-gradient(120deg,#ff00c8,#25082f 30%,#062b35 68%,#00eaff)!important;
+  box-shadow:
+    0 0 16px #ff00dd66,
+    0 0 32px #00eaff44,
+    inset 0 0 25px #ffffff12!important;
+  animation:kzxButtonGlitch .22s steps(2) infinite;
+}
+.attack-button.k-z-x::before{
+  background:linear-gradient(110deg,transparent 8%,#fff 24%,#ff22df 34%,transparent 45%,#00f6ff 63%,#fff 72%,transparent 86%);
+  opacity:.7;
+  animation:kzxButtonSweep .45s linear infinite!important;
+}
+.attack-button.k-z-x::after{
+  height:3px!important;
+  transform:scaleX(1)!important;
+  background:linear-gradient(90deg,#ff00dd,#fff,#00eaff)!important;
+  box-shadow:0 0 14px #fff,0 0 30px #ff00dd;
+}
+.attack-button.k-z-x:hover:not(:disabled){
+  transform:translateY(-4px) skewX(-1deg)!important;
+  filter:brightness(1.25)!important;
+  box-shadow:0 0 28px #ff00ddaa,0 0 55px #00eaff66,inset 0 0 30px #fff2!important;
+}
+@keyframes kzxButtonGlitch{
+  0%,100%{filter:hue-rotate(0deg) brightness(1)}
+  25%{filter:hue-rotate(45deg) brightness(1.18)}
+  50%{filter:hue-rotate(-55deg) brightness(1.05)}
+  75%{filter:hue-rotate(90deg) brightness(1.22)}
+}
+@keyframes kzxButtonSweep{
+  from{transform:translateX(-120%)}
+  to{transform:translateX(120%)}
+}
+
+/* K,Z,X battle VFX */
+.kzx-vfx{
+  --kzx-x:50vw;
+  --kzx-y:48vh;
+  position:fixed;
+  inset:0;
+  z-index:10020;
+  pointer-events:none;
+  overflow:hidden;
+}
+.kzx-static{
+  position:absolute;
+  inset:0;
+  opacity:.12;
+  background:
+    repeating-linear-gradient(0deg,transparent 0 2px,#fff 3px 4px),
+    repeating-linear-gradient(90deg,#ff00c80a 0 3px,#00eaff0a 4px 7px);
+  mix-blend-mode:screen;
+  animation:kzxStaticMove .07s steps(2) infinite;
+}
+.kzx-glitch-frame{
+  position:absolute;
+  left:var(--kzx-x);
+  top:var(--kzx-y);
+  width:clamp(180px,24vw,430px);
+  height:clamp(180px,24vw,430px);
+  transform:translate(-50%,-50%);
+  border:2px solid #fff;
+  box-shadow:
+    0 0 12px #fff,
+    0 0 35px #ff00dd,
+    0 0 75px #00eaff;
+  opacity:0;
+}
+.kzx-target-ring{
+  position:absolute;
+  left:var(--kzx-x);
+  top:var(--kzx-y);
+  width:210px;
+  height:210px;
+  border-radius:50%;
+  transform:translate(-50%,-50%) scale(.1);
+  border:3px solid #fff;
+  background:conic-gradient(#ff00dd,#ff8a00,#fff000,#00ff85,#00eaff,#8b5cff,#ff00dd);
+  -webkit-mask:radial-gradient(circle,transparent 62%,#000 64%,#000 69%,transparent 71%);
+  mask:radial-gradient(circle,transparent 62%,#000 64%,#000 69%,transparent 71%);
+  opacity:0;
+}
+.kzx-slash{
+  position:absolute;
+  left:var(--kzx-x);
+  top:var(--kzx-y);
+  width:min(80vw,1000px);
+  height:clamp(8px,1.2vw,18px);
+  transform-origin:center;
+  background:linear-gradient(90deg,transparent 0%,#ff00dd 18%,#ff7b00 34%,#fff 48%,#00f6ff 65%,#765cff 82%,transparent 100%);
+  box-shadow:
+    0 0 8px #fff,
+    0 0 24px #ff00dd,
+    0 0 48px #00eaff;
+  opacity:0;
+  filter:saturate(1.7);
+}
+.kzx-slash::after{
+  content:"";
+  position:absolute;
+  inset:-8px 0;
+  background:inherit;
+  filter:blur(9px);
+  opacity:.8;
+}
+.kzx-slash-a{transform:translate(-50%,-50%) rotate(-31deg)}
+.kzx-slash-b{transform:translate(-50%,-50%) rotate(27deg) scaleX(.8)}
+.kzx-slash-c{transform:translate(-50%,-50%) rotate(-4deg) scaleX(.65);height:4px}
+.kzx-rainbow-core{
+  position:absolute;
+  left:var(--kzx-x);
+  top:var(--kzx-y);
+  width:70px;
+  height:70px;
+  border-radius:50%;
+  transform:translate(-50%,-50%) scale(.1);
+  background:radial-gradient(circle,#fff 0 12%,#ff00dd 24%,#00eaff 42%,transparent 70%);
+  box-shadow:0 0 40px #fff,0 0 100px #ff00dd,0 0 150px #00eaff;
+  opacity:0;
+}
+.kzx-pixel-burst{
+  position:absolute;
+  left:var(--kzx-x);
+  top:var(--kzx-y);
+  width:12px;
+  height:12px;
+  background:#fff;
+  box-shadow:
+    85px -65px #ff00dd,-95px 45px #00eaff,130px 70px #fff,
+    -140px -55px #7b5cff,70px 115px #ff7b00,-65px -100px #00ff85;
+  transform:translate(-50%,-50%) scale(.1);
+  opacity:0;
+}
+.kzx-scanline{
+  position:absolute;
+  left:0;
+  right:0;
+  top:var(--kzx-y);
+  height:4px;
+  background:linear-gradient(90deg,transparent,#fff,#ff00dd,#00eaff,#fff,transparent);
+  box-shadow:0 0 20px #fff,0 0 50px #00eaff;
+  transform:scaleX(.05);
+  opacity:0;
+}
+.kzx-strike .kzx-glitch-frame{animation:kzxFrame .75s steps(3) forwards}
+.kzx-strike .kzx-target-ring{animation:kzxRing .7s cubic-bezier(.15,.8,.2,1) forwards}
+.kzx-strike .kzx-slash-a{animation:kzxSlashA .42s cubic-bezier(.1,.7,.2,1) forwards}
+.kzx-strike .kzx-slash-b{animation:kzxSlashB .48s .06s cubic-bezier(.1,.7,.2,1) forwards}
+.kzx-strike .kzx-slash-c{animation:kzxSlashC .55s .1s ease-out forwards}
+.kzx-strike .kzx-rainbow-core{animation:kzxCore .55s ease-out forwards}
+.kzx-strike .kzx-pixel-burst{animation:kzxPixels .8s steps(3) forwards}
+.kzx-strike .kzx-scanline{animation:kzxScan .35s steps(2) forwards}
+.kzx-fade{animation:kzxFade .45s ease-out forwards}
+.kzx-variant-2 .kzx-slash-a{transform:translate(-50%,-50%) rotate(42deg)}
+.kzx-variant-2 .kzx-slash-b{transform:translate(-50%,-50%) rotate(-19deg)}
+.kzx-variant-3 .kzx-slash-a{transform:translate(-50%,-50%) rotate(-7deg) scaleX(1.12)}
+.kzx-variant-3 .kzx-slash-b{transform:translate(-50%,-50%) rotate(57deg) scaleX(.72)}
+@keyframes kzxStaticMove{
+  0%{transform:translate(0,0);filter:hue-rotate(0deg)}
+  50%{transform:translate(-2px,3px);filter:hue-rotate(90deg)}
+  100%{transform:translate(3px,-2px);filter:hue-rotate(-90deg)}
+}
+@keyframes kzxFrame{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(.35) skew(20deg)}
+  25%{opacity:1;transform:translate(-48%,-53%) scale(1.15) skew(-14deg)}
+  55%{opacity:.75;transform:translate(-52%,-47%) scale(.9) skew(8deg)}
+  100%{opacity:0;transform:translate(-50%,-50%) scale(1.4) skew(0)}
+}
+@keyframes kzxRing{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(.1) rotate(0)}
+  25%{opacity:1}
+  100%{opacity:0;transform:translate(-50%,-50%) scale(2.5) rotate(250deg)}
+}
+@keyframes kzxSlashA{
+  0%{opacity:0;transform:translate(-50%,-50%) rotate(-31deg) scaleX(.05)}
+  18%{opacity:1}
+  55%{opacity:1;filter:brightness(2.5)}
+  100%{opacity:0;transform:translate(-50%,-50%) rotate(-31deg) scaleX(1.35)}
+}
+@keyframes kzxSlashB{
+  0%{opacity:0;transform:translate(-50%,-50%) rotate(27deg) scaleX(.03)}
+  20%{opacity:.95}
+  100%{opacity:0;transform:translate(-50%,-50%) rotate(27deg) scaleX(1.2)}
+}
+@keyframes kzxSlashC{
+  0%{opacity:0;transform:translate(-50%,-50%) rotate(-4deg) scaleX(.1)}
+  30%{opacity:1}
+  100%{opacity:0;transform:translate(-50%,-50%) rotate(-4deg) scaleX(1.6)}
+}
+@keyframes kzxCore{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(.1)}
+  35%{opacity:1}
+  100%{opacity:0;transform:translate(-50%,-50%) scale(2.8)}
+}
+@keyframes kzxPixels{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(.1)}
+  20%{opacity:1}
+  100%{opacity:0;transform:translate(-50%,-50%) scale(9)}
+}
+@keyframes kzxScan{
+  0%{opacity:0;transform:scaleX(.05)}
+  30%{opacity:1}
+  100%{opacity:0;transform:scaleX(1.3)}
+}
+@keyframes kzxFade{
+  to{opacity:0;filter:brightness(2) saturate(0)}
+}
+.kzx-heal-burst{
+  position:fixed;
+  left:50%;
+  top:58%;
+  z-index:10030;
+  pointer-events:none;
+  transform:translate(-50%,-50%);
+  font:14px var(--mono);
+  letter-spacing:.1em;
+  color:#fff;
+  text-shadow:0 0 10px #fff,0 0 24px #00ffbf,0 0 50px #00eaff;
+  animation:kzxHeal .95s ease-out forwards;
+}
+@keyframes kzxHeal{
+  0%{opacity:0;transform:translate(-50%,-20%) scale(.7)}
+  20%{opacity:1}
+  100%{opacity:0;transform:translate(-50%,-170%) scale(1.2)}
+}

@@ -24,6 +24,7 @@ SPECIAL SKILL IDS READY TO ASSIGN:
   "deathsringer"
   "no-saki"
   "perfect-parry"
+  "k-z-x"
 
 
  {

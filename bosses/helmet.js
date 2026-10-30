@@ -26,7 +26,8 @@ window.YEN_HELMET = {
     "WILL YOU BUY ONE OF MY FINEST KISHINS?"
   ],
   targets:[
-    {id:"k-z-x",name:"K,Z,X",rarity:"KISHIN // GLITCH ENTITY",color:"#ff35f5",image:"assets/k-z-x.png",cost:"999999999999999999999999999999",bio:"K,Z,X is a corrupted Kishin sealed behind Helmet's most absurd price tag. Once purchased, every activation tears a static rainbow slash through the target and may return a huge portion of its owner's life.",shopEffect:"1,000,000 DAMAGE // 67% HEAL CHANCE // RANDOM VOICE",specialShopClass:"kzx-shop-card"},
+    {id:"k-z-x",name:"K,Z,X",rarity:"KISHIN // GLITCH ENTITY",color:"#ff38ff",image:"assets/k-z-x.png",cost:"999999999999999999",bio:"K,Z,X is a corrupted Kishin wrapped in rainbow static. Buy it and its attack is added to your battle skill roster. Every activation tears the target with a one-million-damage glitch slash and has a 67% chance to restore 67% of the hunter's maximum HP.",shopEffect:"1,000,000 DAMAGE // 67% CHANCE TO HEAL 67% MAX HP"},
+
     {id:"auralis-nyxara",name:"Auralis & Nyxara",rarity:"KISHIN // DUO",color:"#ff6df2",image:"assets/Auralis & Nyxara.png",cost:"999999999999",bio:"Auralis and Nyxara are the strongest duo Helmet keeps hidden from normal hunters. Purchase them and both enter your skill roster together, striking for 800,000 damage each.",shopEffect:"800,000 DAMAGE EACH // 4 USES PER BATTLE"},
     {id:"fallen-samurai-90k",name:"90K Fallen Samurai",rarity:"KISHIN // SAMURAI",color:"#ff334f",image:"assets/9Pk Fallen samurai.png",cost:"5000000000000",bio:"A cursed samurai whose blade can carve seven million HP from a target. His timing is so vicious that he can parry a target and erase its next turn.",shopEffect:"7,000,000 DAMAGE // 35% PARRY CHANCE"},
     {id:"xenith-01-world-weaver",name:"Xenith-01: The World Weaver",rarity:"KISHIN // WORLD WEAVER",color:"#6cf6ff",image:"assets/Xenith-01 The World Weaver.png",cost:"25000000000000",bio:"Xenith-01 weaves reality into a colossal beam. It can also convert the stolen energy into a massive heal for its owner.",shopEffect:"12,000,000 DAMAGE // 45% HEAL CHANCE"},
@@ -34,11 +35,3 @@ window.YEN_HELMET = {
   ]
 };
 window.YEN_HELMET.lines = window.YEN_HELMET.lines.map(line => line.replace("[PLAYER]", "${PLAYER}"));
-
-/* KZX SHOP SAFETY v4: K,Z,X MUST appear in Helmet's private inventory. */
-(function(){
-  const kzx={id:"k-z-x",name:"K,Z,X",rarity:"KISHIN // GLITCH ENTITY",color:"#ff35f5",image:"assets/k-z-x.png",cost:"999999999999999999999999999999",bio:"K,Z,X is a corrupted Kishin sealed behind Helmet's most absurd price tag. Every activation tears a static rainbow slash through the target and may restore 67% of its owner's maximum HP.",shopEffect:"1,000,000 DAMAGE // 67% HEAL CHANCE // RANDOM VOICE",specialShopClass:"kzx-shop-card"};
-  window.YEN_HELMET=window.YEN_HELMET||{};
-  window.YEN_HELMET.targets=Array.isArray(window.YEN_HELMET.targets)?window.YEN_HELMET.targets:[];
-  if(!window.YEN_HELMET.targets.some(t=>String(t.id)==="k-z-x")) window.YEN_HELMET.targets.unshift(kzx);
-})();
