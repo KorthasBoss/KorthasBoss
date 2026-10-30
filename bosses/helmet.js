@@ -35,7 +35,7 @@ window.YEN_HELMET = {
 };
 window.YEN_HELMET.lines = window.YEN_HELMET.lines.map(line => line.replace("[PLAYER]", "${PLAYER}"));
 
-/* KZX SHOP SAFETY: Helmet's K,Z,X card is always injected into the private inventory. */
+/* KZX SHOP SAFETY v4: K,Z,X MUST appear in Helmet's private inventory. */
 (function(){
   const kzx={id:"k-z-x",name:"K,Z,X",rarity:"KISHIN // GLITCH ENTITY",color:"#ff35f5",image:"assets/k-z-x.png",cost:"999999999999999999999999999999",bio:"K,Z,X is a corrupted Kishin sealed behind Helmet's most absurd price tag. Every activation tears a static rainbow slash through the target and may restore 67% of its owner's maximum HP.",shopEffect:"1,000,000 DAMAGE // 67% HEAL CHANCE // RANDOM VOICE",specialShopClass:"kzx-shop-card"};
   window.YEN_HELMET=window.YEN_HELMET||{};

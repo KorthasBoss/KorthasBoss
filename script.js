@@ -355,10 +355,10 @@ function renderHelmetShop(){
   const grid=$("kishin-shop-grid"); if(!grid) return;
   grid.innerHTML="";
   let targets=Array.isArray(window.YEN_HELMET?.targets)?[...window.YEN_HELMET.targets]:[];
-  // Defensive fallback: never allow K,Z,X to vanish from Helmet's shop.
-  if(!targets.some(t=>String(t.id)==="k-z-x")){
-    targets.unshift({id:"k-z-x",name:"K,Z,X",rarity:"KISHIN // GLITCH ENTITY",color:"#ff35f5",image:"assets/k-z-x.png",cost:"999999999999999999999999999999",bio:"K,Z,X is a corrupted Kishin sealed behind Helmet's most absurd price tag. Every activation tears a static rainbow slash through the target and may restore 67% of its owner's maximum HP.",shopEffect:"1,000,000 DAMAGE // 67% HEAL CHANCE // RANDOM VOICE",specialShopClass:"kzx-shop-card"});
-  }
+  // K,Z,X HARD GUARANTEE v4: always render it first, even if an older cached helmet.js omitted it.
+  const kzxTarget={id:"k-z-x",name:"K,Z,X",rarity:"KISHIN // GLITCH ENTITY",color:"#ff35f5",image:"assets/k-z-x.png",cost:"999999999999999999999999999999",bio:"K,Z,X is Helmet's corrupted glitch Kishin. Every activation tears a static rainbow slash through the target, plays a random K,Z,X voice line, and may restore 67% of its owner's maximum HP.",shopEffect:"1,000,000 DAMAGE // 67% HEAL CHANCE // RANDOM VOICE",specialShopClass:"kzx-shop-card"};
+  targets=targets.filter(t=>String(t.id)!=="k-z-x");
+  targets.unshift(kzxTarget);
   targets.forEach(skill=>{
     const owned=isSkillOwned(skill);
     const card=document.createElement("article");
