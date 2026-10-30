@@ -343,11 +343,15 @@ function openHelmetShop(){
 function renderHelmetShop(){
   const grid=$("kishin-shop-grid"); if(!grid) return;
   grid.innerHTML="";
-  const targets=Array.isArray(window.YEN_HELMET?.targets)?window.YEN_HELMET.targets:[];
+  let targets=Array.isArray(window.YEN_HELMET?.targets)?[...window.YEN_HELMET.targets]:[];
+  // Defensive fallback: never allow K,Z,X to vanish from Helmet's shop.
+  if(!targets.some(t=>String(t.id)==="k-z-x")){
+    targets.unshift({id:"k-z-x",name:"K,Z,X",rarity:"KISHIN // GLITCH ENTITY",color:"#ff35f5",image:"assets/k-z-x.png",cost:"999999999999999999999999999999",bio:"K,Z,X is a corrupted Kishin sealed behind Helmet's most absurd price tag. Every activation tears a static rainbow slash through the target and may restore 67% of its owner's maximum HP.",shopEffect:"1,000,000 DAMAGE // 67% HEAL CHANCE // RANDOM VOICE",specialShopClass:"kzx-shop-card"});
+  }
   targets.forEach(skill=>{
     const owned=isSkillOwned(skill);
     const card=document.createElement("article");
-    card.className=`kishin-shop-card ${owned?"owned":""}`;
+    card.className=`kishin-shop-card ${skill.specialShopClass||""} ${owned?"owned":""}`;
     card.style.setProperty("--kishin-color", skill.color || "#fff");
     card.innerHTML=`<div class="kishin-card-art-wrap"><img src="${skill.image}" alt="${skill.name}"></div><div class="kishin-card-top"><span>${skill.rarity}</span><span>${owned?"OWNED":"KISHIN"}</span></div><div class="kishin-card-name-top">${skill.name}</div><div class="kishin-card-body"><h2>${skill.name}</h2><p>${skill.bio}</p><div class="kishin-card-effect">${skill.shopEffect}</div><div class="kishin-card-bottom"><strong>${owned?"ALREADY OWNED":fmtDox(skill.cost)+" DOX"}</strong><button class="kishin-buy" ${owned||account.dox<toDox(skill.cost)?"disabled":""}>${owned?"OWNED":account.dox<toDox(skill.cost)?"NOT ENOUGH DOX":"BUY KISHIN"}</button></div></div>`;
     card.querySelector(".kishin-buy").onclick=async(e)=>{
