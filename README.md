@@ -72,3 +72,12 @@ Losing shows the defeat sequence with retry/lobby controls.
 ## Character art
 
 Character images are forced to remain fully visible. A missing image no longer changes its opacity to a faded state.
+
+
+## Helmet Kishin: K,Z,X
+- ID: `k-z-x`
+- Helmet private inventory only; not part of the normal Merchant.
+- 1,000,000 damage per activation.
+- 67% chance to restore 67% of the owner's maximum HP.
+- Each activation chooses one of three supplied voice lines at random and one of four static rainbow slash variants.
+- Asset files: `assets/k-z-x.png`, `assets/kzx-voice-1.mp3`, `assets/kzx-voice-2.mp3`, `assets/kzx-voice-3.mp3`.
