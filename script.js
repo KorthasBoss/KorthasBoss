@@ -297,6 +297,12 @@ async function registerOrLogin() {
     potions: found.potions && typeof found.potions === "object" ? Object.fromEntries(Object.entries(found.potions).map(([k,v])=>[k,Math.max(0,Math.floor(Number(v)||0))])) : {}
   };
 
+  if (String(account.username).trim().toUpperCase() === "A-SHEN-TADES") {
+    ["jorkaprime", "jorkaprime-crown-split", "jorkaprime-horizon-ruin", "jorkaprime-last-reason"].forEach(id => {
+      if (!account.ownedSkills.includes(id)) account.ownedSkills.push(id);
+    });
+  }
+
   await transition(() => showScreen("lobby-screen"));
   renderLobby();
 }
@@ -346,10 +352,11 @@ function renderHelmetShop(){
   const targets=Array.isArray(window.YEN_HELMET?.targets)?window.YEN_HELMET.targets:[];
   targets.forEach(skill=>{
     const owned=isSkillOwned(skill);
+    const offSale=Boolean(skill.offSale);
     const card=document.createElement("article");
-    card.className=`kishin-shop-card ${owned?"owned":""} ${skill.id==="k-z-x"?"kzx-kishin-card":""}`;
+    card.className=`kishin-shop-card ${owned?"owned":""} ${offSale?"off-sale":""} ${skill.id==="k-z-x"?"kzx-kishin-card":""} ${skill.id==="jorkaprime"?"jorkaprime-card":""}`;
     card.style.setProperty("--kishin-color", skill.color || "#fff");
-    card.innerHTML=`<div class="kishin-card-art-wrap"><img src="${skill.image}" alt="${skill.name}"></div><div class="kishin-card-top"><span>${skill.rarity}</span><span>${owned?"OWNED":"KISHIN"}</span></div><div class="kishin-card-name-top">${skill.name}</div><div class="kishin-card-body"><h2>${skill.name}</h2><p>${skill.bio}</p><div class="kishin-card-effect">${skill.shopEffect}</div><div class="kishin-card-bottom"><strong>${owned?"ALREADY OWNED":fmtDox(skill.cost)+" DOX"}</strong><button class="kishin-buy" ${owned||account.dox<toDox(skill.cost)?"disabled":""}>${owned?"OWNED":account.dox<toDox(skill.cost)?"NOT ENOUGH DOX":"BUY KISHIN"}</button></div></div>`;
+    card.innerHTML=`<div class="kishin-card-art-wrap"><img src="${skill.image}" alt="${skill.name}"></div><div class="kishin-card-top"><span>${skill.rarity}</span><span>${owned?"OWNED":offSale?"OFF-SALE":"KISHIN"}</span></div><div class="kishin-card-name-top">${skill.name}</div><div class="kishin-card-body"><h2>${skill.name}</h2><p>${skill.bio}</p><div class="kishin-card-effect">${skill.shopEffect}</div><div class="kishin-card-bottom"><strong>${owned?"ALREADY OWNED":offSale?"NOT CURRENTLY SOLD":fmtDox(skill.cost)+" DOX"}</strong><button class="kishin-buy" ${owned||offSale||account.dox<toDox(skill.cost)?"disabled":""}>${owned?"OWNED":offSale?"OFF-SALE":account.dox<toDox(skill.cost)?"NOT ENOUGH DOX":"BUY KISHIN"}</button></div></div>`;
     card.querySelector(".kishin-buy").onclick=async(e)=>{
       e.stopPropagation();
       if(owned) return;
