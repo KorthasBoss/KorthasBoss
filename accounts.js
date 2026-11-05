@@ -54,7 +54,7 @@ window.YEN_ACCOUNTS = [
   {
     username: "TestACT",
     password: "+",
-    dox: "99999999999999999999",
+    dox: "99999999999999999999999999999999999999999999999999999999999999999999999999999999",
     ownedSkills: ["win-can-make-sword", "trident-of-co-op","deathsringer","no-saki","perfect-parry",""],
     attacks: [
   {
