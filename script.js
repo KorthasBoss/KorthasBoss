@@ -354,7 +354,7 @@ function renderHelmetShop(){
     const owned=isSkillOwned(skill);
     const offSale=Boolean(skill.offSale);
     const card=document.createElement("article");
-    card.className=`kishin-shop-card ${owned?"owned":""} ${offSale?"off-sale":""} ${skill.id==="k-z-x"?"kzx-kishin-card":""} ${skill.id==="jorkaprime"?"jorkaprime-card":""}`;
+    card.className=`kishin-shop-card ${owned?"owned":""} ${offSale?"off-sale":""} ${skill.id==="k-z-x"?"kzx-kishin-card":""} ${skill.id==="jorkaprime"?"jorkaprime-card":""} ${skill.id==="henmercy"?"henmercy-kishin-card":""}`;
     card.style.setProperty("--kishin-color", skill.color || "#fff");
     card.innerHTML=`<div class="kishin-card-art-wrap"><img src="${skill.image}" alt="${skill.name}"></div><div class="kishin-card-top"><span>${skill.rarity}</span><span>${owned?"OWNED":offSale?"OFF-SALE":"KISHIN"}</span></div><div class="kishin-card-name-top">${skill.name}</div><div class="kishin-card-body"><h2>${skill.name}</h2><p>${skill.bio}</p><div class="kishin-card-effect">${skill.shopEffect}</div><div class="kishin-card-bottom"><strong>${owned?"ALREADY OWNED":offSale?"NOT CURRENTLY SOLD":fmtDox(skill.cost)+" DOX"}</strong><button class="kishin-buy" ${owned||offSale||account.dox<toDox(skill.cost)?"disabled":""}>${owned?"OWNED":offSale?"OFF-SALE":account.dox<toDox(skill.cost)?"NOT ENOUGH DOX":"BUY KISHIN"}</button></div></div>`;
     card.querySelector(".kishin-buy").onclick=async(e)=>{
@@ -364,7 +364,12 @@ function renderHelmetShop(){
       if(account.dox<cost){showSaveWarning("NOT ENOUGH DOX FOR THIS KISHIN.");return;}
       account.dox-=cost;
       account.ownedSkills=Array.isArray(account.ownedSkills)?account.ownedSkills:[];
-      if(!account.ownedSkills.some(v=>String(v)===String(skill.id))) account.ownedSkills.push(skill.id);
+      const acquiredSkills=skill.id==="henmercy"
+        ? ["henmercy","henmercy-mercy","henmercy-cards-wish","henmercy-nornos-mask","henmercy-hell-arrived"]
+        : [skill.id];
+      acquiredSkills.forEach(id=>{
+        if(!account.ownedSkills.some(v=>String(v)===String(id))) account.ownedSkills.push(id);
+      });
       await saveAccount(); updateWallet(); $("helmet-wallet-dox").textContent=fmtDox(account.dox); renderHelmetShop();
       showSaveWarning(`${skill.name} ADDED TO YOUR SKILLS.`);
     };
@@ -825,6 +830,12 @@ async function usePlayerAttack(attack) {
   const skillHandler = attack.source?.skillHandler && window.YEN_SKILL_HANDLERS?.[attack.source.skillHandler];
   if (skillHandler) {
     skillResult = await skillHandler(ctx, attack) || {};
+  }
+  if(skillResult?.cancelled) return;
+  if(Number(skillResult?.playerDamage)>0){
+    damagePlayer(skillResult.playerDamage);
+    updateHP();
+    if(playerHP<=0){showGameOver();return;}
   }
 
   let range=attackToRange(attack);

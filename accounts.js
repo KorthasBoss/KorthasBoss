@@ -55,7 +55,7 @@ window.YEN_ACCOUNTS = [
     username: "A-SHEN-TADES",
     password: "+",
     dox: "99999999999999999999999999999999999999999999999999999999999999999999999999999999",
-    ownedSkills: ["win-can-make-sword", "trident-of-co-op","deathsringer","no-saki","perfect-parry","","k-z-x","jorkaprime","auralis-nyxara","fallen-samurai-90k","xenith-01-world-weaver","lord-zephyrus-ivory-overlord","japanhunter"],
+    ownedSkills: ["win-can-make-sword", "trident-of-co-op","deathsringer","no-saki","perfect-parry","","k-z-x","jorkaprime","auralis-nyxara","fallen-samurai-90k","xenith-01-world-weaver","lord-zephyrus-ivory-overlord","japanhunter","henmercy","henmercy-mercy","henmercy-cards-wish","henmercy-nornos-mask","henmercy-hell-arrived"],
     attacks: [
   {
     id: "slap",

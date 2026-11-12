@@ -21,6 +21,7 @@ const KISHINS={
  'lord-zephyrus-ivory-overlord':{hp:30000000},
  'k-z-x':{hp:12000000},
  'jorkaprime':{hp:50000000},
+ 'henmercy':{hp:30000000},
  'hunter':{hp:5000000}
 };
 
@@ -233,21 +234,58 @@ io.on('connection',socket=>{
     damage=0;
     if(effects.parryWon)target.skipTurns=Math.max(target.skipTurns||0,8);
    }
+   if(skill?.id==='henmercy-mercy'){
+    effects.heal=player.maxHp-player.hp;
+    player.hp=player.maxHp;
+    damage=0;
+   }
+   if(skill?.id==='henmercy-cards-wish'){
+    const cardPick=data?.cardPick;
+    if(!Number.isInteger(cardPick)||cardPick<0||cardPick>2)return socket.emit('battle:action-rejected','Choose one of the three Cards Wish cards.');
+    effects.cardPick=cardPick;
+    effects.cardCorrect=Math.floor(Math.random()*3)===cardPick;
+    if(effects.cardCorrect)damage=10000000;
+    else{
+     player.hp=Math.max(0,player.hp-4000000);
+     target.skipTurns=Math.max(target.skipTurns||0,2);
+     effects.selfDamage=4000000;
+     effects.extraTurns=2;
+    }
+   }
+   if(skill?.id==='henmercy-nornos-mask'){
+    damage=0;
+    target.skipTurns=Math.max(target.skipTurns||0,1);
+    effects.skippedTurns=1;
+   }
+   if(skill?.id==='henmercy-hell-arrived')damage=200000;
    if(skill?.id==='k-z-x'&&Math.random()<0.67){
     effects.heal=Math.min(player.maxHp-player.hp,Math.round(player.maxHp*0.67));
    }
    if(skill?.id==='xenith-01-world-weaver'&&Math.random()<0.45){
     effects.heal=Math.min(player.maxHp-player.hp,650000);
    }
-   if(effects.heal>0)player.hp+=effects.heal;
+   if(effects.heal>0&&skill?.id!=='henmercy-mercy')player.hp+=effects.heal;
    target.hp=Math.max(0,target.hp-damage);
    message=skill?.id==='perfect-parry'
     ?effects.parryWon?`${player.username} landed a PERFECT PARRY. ${target.username} loses the next 8 turns.`:`${player.username} missed the Perfect Parry timing trial.`
+    :skill?.id==='henmercy-cards-wish'
+    ?effects.cardCorrect?`${player.username} won Cards Wish. ${target.username} takes 10,000,000 damage.`:`${player.username} lost Cards Wish, takes 4,000,000 damage, and gains two turns.`
+    :skill?.id==='henmercy-mercy'
+    ?`${player.username} used Mercy and restored ${effects.heal.toLocaleString()} HP.`
+    :skill?.id==='henmercy-nornos-mask'
+    ?`${player.username} used Nornos Mask. ${target.username}'s next turn is skipped.`
+    :skill?.id==='henmercy-hell-arrived'
+    ?`${player.username}: "You're hell arriveed.." // 200,000 damage.`
     :`${player.username} used ${action.name} for ${damage.toLocaleString()} damage.${effects.heal?` Restored ${effects.heal.toLocaleString()} HP.`:''}`;
   }
   room.lastMove={actionId:++room.actionCount,username:player.username,moveId:action.actionId,
    skillId:action.type==='skill'?action.id:null,targetHpBefore,attackerHpBefore,effects};
   room.message=message;
+  if(player.hp<=0){
+   room.over=true;
+   io.to(roomCode).emit('match:over',{state:stateOf(room),message:`${target.username} wins the Public Rivals match!`});
+   return;
+  }
   if(target.hp<=0){
    room.over=true;
    io.to(roomCode).emit('match:over',{state:stateOf(room),message:`${player.username} wins the Public Rivals match!`});

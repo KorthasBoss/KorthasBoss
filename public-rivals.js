@@ -9,6 +9,7 @@
   "lord-zephyrus-ivory-overlord":{hp:30000000},
   "k-z-x":{hp:12000000},
   "jorkaprime":{hp:50000000},
+  "henmercy":{hp:30000000},
   "hunter":{hp:5000000}
  };
  const defaultTarget={id:"hunter",name:"HUNTER",image:"assets/menu-idle.png"};
@@ -149,14 +150,31 @@
     :action.id==='perfect-parry'?`${action.name} // TIMING COUNTER`
     :action.id==='deathsringer'?`${action.name} // LEAVE 1 HP`
     :action.id==='no-saki'?`${action.name} // LEAVE 200 HP`
+    :action.id==='henmercy-mercy'?`${action.name} // RESTORE HP`
+    :action.id==='henmercy-cards-wish'?`${action.name} // PICK A CARD`
+    :action.id==='henmercy-nornos-mask'?`${action.name} // SKIP TURN`
+    :action.id==='henmercy-hell-arrived'?`${action.name} // 200K DAMAGE`
     :`${action.name} // ${Number(action.damage).toLocaleString()} DMG`;
-   button.disabled=disabled||action.usesRemaining===0||(action.type==='potion'&&game?.players.find(player=>player.username===me)?.hp>=game?.players.find(player=>player.username===me)?.maxHp);
+   const currentPlayer=game?.players.find(player=>player.username===me);
+   button.disabled=disabled||action.usesRemaining===0
+    ||((action.type==='potion'||action.id==='henmercy-mercy')&&currentPlayer?.hp>=currentPlayer?.maxHp);
    if(action.color)button.style.setProperty('--rarity',action.color);
    button.title=action.description||action.name;
    button.onclick=async()=>{
     if(!room||button.disabled)return;
     button.disabled=true;
-    let parryWon=false;
+    let parryWon=false,cardPick;
+    if(action.id==='henmercy-cards-wish'){
+     try{
+      cardPick=await window.YEN_CHOOSE_HENMERCY_CARD?.();
+     }catch(error){
+      console.error("Could not open Cards Wish:",error);
+      $('rivals-battle-status').textContent="Cards Wish could not open. Try again.";
+      button.disabled=false;
+      return;
+     }
+     if(cardPick==null){button.disabled=false;return;}
+    }
     if(action.type==='skill'&&action.id==='perfect-parry'){
      const attacker=game?.players.find(player=>player.username===me);
      const rival=game?.players.find(player=>player.username!==me);
@@ -174,7 +192,7 @@
       }
     }
     if(!room||!socket?.connected){preplayedParry=null;return;}
-    socket.emit('battle:attack',{code:room.code,actionId:action.actionId,parryWon});
+    socket.emit('battle:attack',{code:room.code,actionId:action.actionId,parryWon,cardPick});
    };
    grid.appendChild(button);
   });
