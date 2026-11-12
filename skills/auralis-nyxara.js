@@ -12,7 +12,7 @@ window.YEN_REGISTER_SKILL({
   wrap.innerHTML='<div class="duo-ring duo-a"></div><div class="duo-ring duo-b"></div><div class="duo-blade blade-a"></div><div class="duo-blade blade-b"></div><div class="duo-beam"></div><div class="duo-burst"></div>';
   document.body.appendChild(wrap); ctx.setMessage("AURALIS & NYXARA // DOUBLE EXECUTION."); ctx.showFlash(); ctx.shake();
   await ctx.wait(900);
-  const target=document.querySelector("#battle-boss");
+  const target=window.YEN_GET_BATTLE_TARGET?.();
   if(target){const r=target.getBoundingClientRect();wrap.style.setProperty("--tx",`${r.left+r.width/2}px`);wrap.style.setProperty("--ty",`${r.top+r.height*.42}px`);}
   await ctx.wait(500); wrap.classList.add("hit");
   await ctx.wait(850); wrap.remove();

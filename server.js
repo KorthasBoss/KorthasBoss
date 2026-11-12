@@ -19,23 +19,35 @@ const KISHINS={
  'xenith-01-world-weaver':{hp:15000000},
  'lord-zephyrus-ivory-overlord':{hp:30000000},
  'k-z-x':{hp:12000000},
- 'jorkaprime':{hp:50000000}
+ 'jorkaprime':{hp:50000000},
+ 'hunter':{hp:5000000}
 };
 
-function loadMerchantSkills(){
- const window={YEN_SPECIAL_SKILLS:[]};
- window.YEN_REGISTER_SKILL=skill=>window.YEN_SPECIAL_SKILLS.push(skill);
+function loadBattleSkills(){
+ const window={};
  const sandbox={window};
- for(const file of ['bosses/merchant.js','skills/win-can-make-sword.js']){
+ const html=fs.readFileSync(path.join(ROOT,'index.html'),'utf8');
+ const skillFiles=[...html.matchAll(/<script\s+src="(skills\/[^"?]+\.js)(?:\?[^"]*)?"/g)].map(match=>match[1]);
+ const registry='skills/registry.js';
+ vm.runInNewContext(fs.readFileSync(path.join(ROOT,'bosses/merchant.js'),'utf8'),sandbox,{timeout:1000});
+ vm.runInNewContext(fs.readFileSync(path.join(ROOT,registry),'utf8'),sandbox,{timeout:1000});
+ for(const file of skillFiles){
+  if(file===registry)continue;
   vm.runInNewContext(fs.readFileSync(path.join(ROOT,file),'utf8'),sandbox,{timeout:1000});
  }
- const main=window.YEN_MERCHANT?.skills||[];
- const special=window.YEN_SPECIAL_SKILLS.filter(skill=>skill.shopVisible);
- return new Map([...main,...special]
-  .filter(skill=>skill?.id&&Number(skill.power)>0&&!skill.rewardOnly)
-  .map(skill=>[String(skill.id),{id:String(skill.id),name:String(skill.name),power:Number(skill.power)}]));
+ return new Map([...(window.YEN_MERCHANT?.skills||[]),...(window.YEN_SPECIAL_SKILLS||[])]
+  .filter(skill=>skill?.id&&Number.isFinite(Number(skill.power))&&Number(skill.power)>=0)
+  .map(skill=>[String(skill.id),{
+   id:String(skill.id),
+   name:String(skill.name||skill.id),
+   power:Number(skill.power),
+   special:skill.special||"",
+   skillHandler:skill.skillHandler||"",
+   enchanted:Boolean(skill.enchanted),
+   vfxClass:skill.vfxClass||""
+  }]));
 }
-const MERCHANT_SKILLS=loadMerchantSkills();
+const BATTLE_SKILLS=loadBattleSkills();
 
 const accountSandbox={window:{}};
 try{
@@ -84,12 +96,13 @@ function stateOf(room){
    hp:player.hp,
    maxHp:player.maxHp,
    skills:(player.skills||[]).map(id=>{
-    const skill=MERCHANT_SKILLS.get(id);
-    return {id:skill.id,name:skill.name,damage:skill.power};
+    const skill=BATTLE_SKILLS.get(id);
+    return {...skill,damage:skill.power};
    })
   })),
   turn:room.turn,
   over:room.over,
+  lastMove:room.lastMove||null,
   message:room.message||'MATCH LIVE'
  };
 }
@@ -100,7 +113,7 @@ io.on('connection',socket=>{
   if(!username||!isKnownAccount(username))return socket.emit('room:error','Use an existing username from accounts.js.');
   leave(socket);
   const roomCode=code();
-  const room={code:roomCode,players:[{socketId:socket.id,username,kishin:null,skills:[]}],started:false,turn:null,over:false};
+  const room={code:roomCode,players:[{socketId:socket.id,username,kishin:null,skills:[]}],started:false,turn:null,over:false,actionCount:0};
   rooms.set(roomCode,room);
   socketRoom.set(socket.id,roomCode);
   socket.join(roomCode);
@@ -126,8 +139,8 @@ io.on('connection',socket=>{
   const kishin=String(data?.kishin||'');
   if(!room||!player||room.started||!KISHINS[kishin])return socket.emit('room:error','That Kishin is not eligible for Rivals.');
   const skills=[...new Set((Array.isArray(data?.skills)?data.skills:[]).map(String))]
-   .filter(id=>MERCHANT_SKILLS.has(id));
-  if(!skills.length)return socket.emit('room:error','Buy a Merchant-vault skill before joining a Rivals match.');
+   .filter(id=>BATTLE_SKILLS.has(id));
+  if(!skills.length)return socket.emit('room:error','Own at least one configured skill before joining a Rivals match.');
   player.kishin=kishin;
   player.skills=skills;
   emitRoom(room);
@@ -152,10 +165,11 @@ io.on('connection',socket=>{
   const moveIndex=Number(data?.move);
   if(!room||!player||!room.started||room.over||room.turn!==player.username)return;
   if(!Number.isInteger(moveIndex)||moveIndex<0||moveIndex>=player.skills.length)return;
-  const skill=MERCHANT_SKILLS.get(player.skills[moveIndex]);
+  const skill=BATTLE_SKILLS.get(player.skills[moveIndex]);
   if(!skill)return;
   const target=room.players.find(entry=>entry!==player);
   target.hp=Math.max(0,target.hp-skill.power);
+  room.lastMove={actionId:++room.actionCount,username:player.username,skillId:skill.id};
   room.message=`${player.username} used ${skill.name} for ${skill.power.toLocaleString()} damage.`;
   if(target.hp<=0){
    room.over=true;

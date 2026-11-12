@@ -30,7 +30,7 @@ window.YEN_REGISTER_SKILL({
   ctx.setMessage("TRIDENT OF CO-OP // THE ABYSS ANSWERS.");
   ctx.showFlash();
   ctx.shake();
-  const target=document.querySelector("#battle-boss");
+  const target=window.YEN_GET_BATTLE_TARGET?.();
   if(target){
     const r=target.getBoundingClientRect();
     arena.style.left=`${r.left+r.width/2}px`;

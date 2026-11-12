@@ -39,7 +39,7 @@ window.YEN_REGISTER_SKILL({
     <div class="kzx-scanline"></div>`;
   document.body.appendChild(arena);
 
-  const target = document.querySelector("#battle-boss");
+  const target = window.YEN_GET_BATTLE_TARGET?.();
   if (target) {
     const r = target.getBoundingClientRect();
     arena.style.setProperty("--kzx-x", `${r.left + r.width / 2}px`);

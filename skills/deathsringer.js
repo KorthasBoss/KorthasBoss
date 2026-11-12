@@ -36,7 +36,7 @@ window.YEN_REGISTER_SKILL({
   sound.play().catch(()=>{});
 
   await ctx.wait(950);
-  const target=document.querySelector("#battle-boss");
+  const target=window.YEN_GET_BATTLE_TARGET?.();
   const beam=document.createElement("div");
   beam.className="deathsringer-beam";
   if(target){
