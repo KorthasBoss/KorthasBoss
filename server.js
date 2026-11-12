@@ -47,6 +47,10 @@ function loadBattleSkills(){
    power:Number(skill.power),
    special:skill.special||"",
    effect:skill.effect||"",
+   bossMin:Number(skill.bossMin)||0,
+   bossMax:Number(skill.bossMax)||0,
+   hits:Number(skill.hits)||0,
+   damagePerHit:Number(skill.damagePerHit)||0,
    skillHandler:skill.skillHandler||"",
    enchanted:Boolean(skill.enchanted),
    vfxClass:skill.vfxClass||"",
@@ -236,6 +240,10 @@ io.on('connection',socket=>{
     effects.parryWon=Boolean(data?.parryWon);
     damage=0;
     if(effects.parryWon)target.skipTurns=Math.max(target.skipTurns||0,8);
+   }
+   if(skill?.bossMax>0){
+    damage=skill.hits?skill.damagePerHit*skill.hits:Math.floor(Math.random()*(skill.bossMax-skill.bossMin+1))+skill.bossMin;
+    effects.damage=damage;
    }
    if(skill?.id==='henmercy-mercy'){
     effects.heal=player.maxHp-player.hp;

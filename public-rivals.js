@@ -158,6 +158,8 @@
     :action.id==='henmercy-hell-arrived'?`${action.name} // 200K DAMAGE`
     :action.id==='starly-mercy'?`${action.name} // CHOOSE WHO HEALS`
     :action.id==='starly-fallen-constellation'?`${action.name} // ${Number(action.damage).toLocaleString()} // ONCE`
+    :action.id==='sea-kishin-tidal-guillotine'?`${action.name} // 5 × 170,000`
+    :action.bossMin?`${action.name} // ${Number(action.bossMin).toLocaleString()}-${Number(action.bossMax).toLocaleString()} DMG`
     :`${action.name} // ${Number(action.damage).toLocaleString()} DMG`;
    const currentPlayer=game?.players.find(player=>player.username===me);
    button.disabled=disabled||action.usesRemaining===0

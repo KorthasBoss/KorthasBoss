@@ -302,6 +302,13 @@ async function registerOrLogin() {
       if (!account.ownedSkills.includes(id)) account.ownedSkills.push(id);
     });
   }
+  const ownedHelmetKishins=new Set(account.ownedSkills.map(String));
+  (window.YEN_HELMET?.targets||[]).forEach(target=>{
+    if(!ownedHelmetKishins.has(String(target.id))||!Array.isArray(target.skillIds))return;
+    target.skillIds.forEach(id=>{
+      if(!account.ownedSkills.includes(id))account.ownedSkills.push(id);
+    });
+  });
 
   await transition(() => showScreen("lobby-screen"));
   renderLobby();
