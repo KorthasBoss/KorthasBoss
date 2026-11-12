@@ -35,6 +35,15 @@
   socket.on('match:countdown',d=>{$('rivals-status').textContent=`MATCH STARTING IN ${d.seconds} SECONDS...`;});
   socket.on('match:start',startMatch);
   socket.on('match:state',renderMatch);
+  socket.on('match:starly-vfx',effect=>{
+   try{
+    if(typeof window.YEN_PLAY_STARLY_VFX!=='function')throw new Error('StarlyLands VFX is not loaded.');
+    window.YEN_PLAY_STARLY_VFX(effect.message,effect.kind);
+   }catch(error){
+    console.error("Could not play the shared StarlyLands effect:",error);
+    $('rivals-battle-status').textContent="StarlyLands' move landed, but its shared visual effect could not play.";
+   }
+  });
   socket.on('match:over',d=>{renderMatch(d.state);$('rivals-battle-status').textContent=d.message;$('rivals-turn-status').textContent=d.message;$('rivals-attack-buttons').querySelectorAll('button').forEach(b=>b.disabled=true);});
   socket.on('battle:action-rejected',message=>{preplayedParry=null;if(game)renderMatch(game);$('rivals-battle-status').textContent=String(message);});
   socket.on('room:error',m=>alert(m));
@@ -130,7 +139,9 @@
    const target=g.players.find(player=>player.username!==g.lastMove.username);
    const action=attacker?.actions.find(owned=>owned.actionId===g.lastMove.moveId);
    if(action&&attacker&&target){
-    if(attacker.username===me&&preplayedParry===action.id){
+    if(action.id.startsWith('starly-')){
+     preplayedParry=null;
+    }else if(attacker.username===me&&preplayedParry===action.id){
      preplayedParry=null;
     }else{
      void playSkillVfx(action,attacker,target,attacker.username===me,g.lastMove.effects).catch(error=>{

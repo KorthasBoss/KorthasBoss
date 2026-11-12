@@ -32,6 +32,7 @@ function showStarlyVfx(message,kind="starfall"){
   window.showFlash?.();
   window.shake?.();
 }
+window.YEN_PLAY_STARLY_VFX=showStarlyVfx;
 
 for(const skill of STARLY_SKILLS){
   window.YEN_REGISTER_SKILL({

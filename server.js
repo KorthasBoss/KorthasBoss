@@ -303,6 +303,20 @@ io.on('connection',socket=>{
   room.lastMove={actionId:++room.actionCount,username:player.username,moveId:action.actionId,
    skillId:action.type==='skill'?action.id:null,targetHpBefore,attackerHpBefore,effects};
   room.message=message;
+  if(action.type==='skill'&&action.id.startsWith('starly-')){
+   const skill=BATTLE_SKILLS.get(action.id);
+   const kind=skill?.effect==='mercy'?'mercy':action.id==='starly-judge-stars-of-fallen'?'judgment':'starfall';
+   io.to(roomCode).emit('match:starly-vfx',{
+    skillId:action.id,
+    username:player.username,
+    kind,
+    message:skill?.effect==='mercy'
+     ?`STARLYLANDS MERCY // ${effects.healTarget==='self'?player.username:target.username} RESTORED TO FULL`
+     :action.id==='starly-judge-stars-of-fallen'
+      ?"JUDGE THE STARS OF FALLEN // BLUE STARS DESCEND ON BOTH FIGHTERS."
+      :`${skill?.name||action.name} // THE FALLEN CONSTELLATION STRIKES.`
+   });
+  }
   if(player.hp<=0){
    room.over=true;
    io.to(roomCode).emit('match:over',{state:stateOf(room),message:`${target.username} wins the Public Rivals match!`});
