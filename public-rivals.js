@@ -9,7 +9,7 @@
   "lord-zephyrus-ivory-overlord":{hp:30000000},
   "k-z-x":{hp:12000000},
   "jorkaprime":{hp:50000000},
-  "henmercy":{hp:30000000},
+  "henmercy":{hp:200000000},
   "hunter":{hp:5000000}
  };
  const defaultTarget={id:"hunter",name:"HUNTER",image:"assets/menu-idle.png"};
