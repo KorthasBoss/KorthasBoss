@@ -42,7 +42,7 @@ window.YEN_ACCOUNTS = [
   {
     username: "Solstice",
     password: "666",
-   dox: "6000000000",
+   dox: "118500000000",
     ownedSkills: ["win-can-make-sword","auralis-nyxara","fallen-samurai-90k", "lord-zephyrus-ivory-overlord"],
     attacks: [],
     potions: {
@@ -55,7 +55,7 @@ window.YEN_ACCOUNTS = [
     username: "A-SHEN-TADES",
     password: "+",
     dox: "99999999999999999999999999999999999999999999999999999999999999999999999999999999",
-    ownedSkills: ["win-can-make-sword", "trident-of-co-op","deathsringer","no-saki","perfect-parry","","k-z-x","jorkaprime","auralis-nyxara","fallen-samurai-90k","xenith-01-world-weaver","lord-zephyrus-ivory-overlord","japanhunter","henmercy","henmercy-mercy","henmercy-cards-wish","henmercy-nornos-mask","henmercy-hell-arrived"],
+    ownedSkills: ["win-can-make-sword", "trident-of-co-op","deathsringer","no-saki","perfect-parry","","k-z-x","jorkaprime","auralis-nyxara","fallen-samurai-90k","xenith-01-world-weaver","lord-zephyrus-ivory-overlord","japanhunter","henmercy","henmercy-mercy","henmercy-cards-wish","henmercy-nornos-mask","henmercy-hell-arrived","starlylands","starly-hearts-of-fallen","starly-judge-stars-of-fallen","starly-mercy","starly-comet-of-last-light","starly-blue-star-deluge","starly-astral-collapse","starly-fallen-constellation","starly-event-horizon"],
     attacks: [
   {
     id: "slap",

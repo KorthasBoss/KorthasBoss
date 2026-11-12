@@ -22,6 +22,8 @@ const KISHINS={
  'k-z-x':{hp:12000000},
  'jorkaprime':{hp:50000000},
  'henmercy':{hp:200000000},
+ 'starlylands':{hp:1000000000},
+ 'sea-predator-kishin':{hp:500000000},
  'hunter':{hp:5000000}
 };
 
@@ -44,6 +46,7 @@ function loadBattleSkills(){
    name:String(skill.name||skill.id),
    power:Number(skill.power),
    special:skill.special||"",
+   effect:skill.effect||"",
    skillHandler:skill.skillHandler||"",
    enchanted:Boolean(skill.enchanted),
    vfxClass:skill.vfxClass||"",
@@ -258,13 +261,22 @@ io.on('connection',socket=>{
     effects.skippedTurns=1;
    }
    if(skill?.id==='henmercy-hell-arrived')damage=200000;
+   if(skill?.effect==='mercy'){
+    const mercyTarget=data?.mercyTarget;
+    if(mercyTarget!=='self'&&mercyTarget!=='opponent')return socket.emit('battle:action-rejected','Choose who receives StarlyLands Mercy.');
+    const recipient=mercyTarget==='self'?player:target;
+    effects.healTarget=mercyTarget;
+    effects.heal=recipient.maxHp-recipient.hp;
+    recipient.hp=recipient.maxHp;
+    damage=0;
+   }
    if(skill?.id==='k-z-x'&&Math.random()<0.67){
     effects.heal=Math.min(player.maxHp-player.hp,Math.round(player.maxHp*0.67));
    }
    if(skill?.id==='xenith-01-world-weaver'&&Math.random()<0.45){
     effects.heal=Math.min(player.maxHp-player.hp,650000);
    }
-   if(effects.heal>0&&skill?.id!=='henmercy-mercy')player.hp+=effects.heal;
+   if(effects.heal>0&&skill?.id!=='henmercy-mercy'&&skill?.effect!=='mercy')player.hp+=effects.heal;
    target.hp=Math.max(0,target.hp-damage);
    message=skill?.id==='perfect-parry'
     ?effects.parryWon?`${player.username} landed a PERFECT PARRY. ${target.username} loses the next 8 turns.`:`${player.username} missed the Perfect Parry timing trial.`
@@ -276,6 +288,8 @@ io.on('connection',socket=>{
     ?`${player.username} used Nornos Mask. ${target.username}'s next turn is skipped.`
     :skill?.id==='henmercy-hell-arrived'
     ?`${player.username}: "You're hell arriveed.." // 200,000 damage.`
+    :skill?.effect==='mercy'
+    ?`${player.username} used StarlyLands Mercy. ${effects.healTarget==='self'?player.username:target.username} was restored to full HP.`
     :`${player.username} used ${action.name} for ${damage.toLocaleString()} damage.${effects.heal?` Restored ${effects.heal.toLocaleString()} HP.`:''}`;
   }
   room.lastMove={actionId:++room.actionCount,username:player.username,moveId:action.actionId,

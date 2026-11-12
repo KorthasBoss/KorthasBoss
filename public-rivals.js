@@ -10,6 +10,8 @@
   "k-z-x":{hp:12000000},
   "jorkaprime":{hp:50000000},
   "henmercy":{hp:200000000},
+  "starlylands":{hp:1000000000},
+  "sea-predator-kishin":{hp:500000000},
   "hunter":{hp:5000000}
  };
  const defaultTarget={id:"hunter",name:"HUNTER",image:"assets/menu-idle.png"};
@@ -154,6 +156,8 @@
     :action.id==='henmercy-cards-wish'?`${action.name} // PICK A CARD`
     :action.id==='henmercy-nornos-mask'?`${action.name} // SKIP TURN`
     :action.id==='henmercy-hell-arrived'?`${action.name} // 200K DAMAGE`
+    :action.id==='starly-mercy'?`${action.name} // CHOOSE WHO HEALS`
+    :action.id==='starly-fallen-constellation'?`${action.name} // ${Number(action.damage).toLocaleString()} // ONCE`
     :`${action.name} // ${Number(action.damage).toLocaleString()} DMG`;
    const currentPlayer=game?.players.find(player=>player.username===me);
    button.disabled=disabled||action.usesRemaining===0
@@ -163,7 +167,7 @@
    button.onclick=async()=>{
     if(!room||button.disabled)return;
     button.disabled=true;
-    let parryWon=false,cardPick;
+    let parryWon=false,cardPick,mercyTarget;
     if(action.id==='henmercy-cards-wish'){
      try{
       cardPick=await window.YEN_CHOOSE_HENMERCY_CARD?.();
@@ -174,6 +178,17 @@
       return;
      }
      if(cardPick==null){button.disabled=false;return;}
+    }
+    if(action.id==='starly-mercy'){
+     try{
+      mercyTarget=await window.YEN_CHOOSE_STARLY_MERCY?.();
+     }catch(error){
+      console.error("Could not open StarlyLands Mercy:",error);
+      $('rivals-battle-status').textContent="StarlyLands Mercy could not open. Try again.";
+      button.disabled=false;
+      return;
+     }
+     if(!mercyTarget){button.disabled=false;return;}
     }
     if(action.type==='skill'&&action.id==='perfect-parry'){
      const attacker=game?.players.find(player=>player.username===me);
@@ -192,7 +207,7 @@
       }
     }
     if(!room||!socket?.connected){preplayedParry=null;return;}
-    socket.emit('battle:attack',{code:room.code,actionId:action.actionId,parryWon,cardPick});
+    socket.emit('battle:attack',{code:room.code,actionId:action.actionId,parryWon,cardPick,mercyTarget});
    };
    grid.appendChild(button);
   });
@@ -229,7 +244,7 @@
    showFlash:()=>window.showFlash?.(),
    shake:()=>window.shake?.(),
    wait:milliseconds=>new Promise(resolve=>window.setTimeout(resolve,milliseconds)),
-   boss:{name:rival.username,playerMaxHP:attacker.maxHp},
+   boss:{name:rival.username,playerMaxHP:attacker.maxHp,maxHP:rival.maxHp},
    bossHP:game?.lastMove?.targetHpBefore??rival.hp,
    playerHP:game?.lastMove?.attackerHpBefore??attacker.hp,
    rivalsEffect:effects||{},

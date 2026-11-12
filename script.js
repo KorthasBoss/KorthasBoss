@@ -354,7 +354,7 @@ function renderHelmetShop(){
     const owned=isSkillOwned(skill);
     const offSale=Boolean(skill.offSale);
     const card=document.createElement("article");
-    card.className=`kishin-shop-card ${owned?"owned":""} ${offSale?"off-sale":""} ${skill.id==="k-z-x"?"kzx-kishin-card":""} ${skill.id==="jorkaprime"?"jorkaprime-card":""} ${skill.id==="henmercy"?"henmercy-kishin-card":""}`;
+    card.className=`kishin-shop-card ${owned?"owned":""} ${offSale?"off-sale":""} ${skill.id==="k-z-x"?"kzx-kishin-card":""} ${skill.id==="jorkaprime"?"jorkaprime-card":""} ${skill.id==="henmercy"?"henmercy-kishin-card":""} ${skill.id==="starlylands"?"starlylands-kishin-card":""} ${skill.id==="sea-predator-kishin"?"sea-predator-kishin-card":""}`;
     card.style.setProperty("--kishin-color", skill.color || "#fff");
     card.innerHTML=`<div class="kishin-card-art-wrap"><img src="${skill.image}" alt="${skill.name}"></div><div class="kishin-card-top"><span>${skill.rarity}</span><span>${owned?"OWNED":offSale?"OFF-SALE":"KISHIN"}</span></div><div class="kishin-card-name-top">${skill.name}</div><div class="kishin-card-body"><h2>${skill.name}</h2><p>${skill.bio}</p><div class="kishin-card-effect">${skill.shopEffect}</div><div class="kishin-card-bottom"><strong>${owned?"ALREADY OWNED":offSale?"NOT CURRENTLY SOLD":fmtDox(skill.cost)+" DOX"}</strong><button class="kishin-buy" ${owned||offSale||account.dox<toDox(skill.cost)?"disabled":""}>${owned?"OWNED":offSale?"OFF-SALE":account.dox<toDox(skill.cost)?"NOT ENOUGH DOX":"BUY KISHIN"}</button></div></div>`;
     card.querySelector(".kishin-buy").onclick=async(e)=>{
@@ -364,7 +364,9 @@ function renderHelmetShop(){
       if(account.dox<cost){showSaveWarning("NOT ENOUGH DOX FOR THIS KISHIN.");return;}
       account.dox-=cost;
       account.ownedSkills=Array.isArray(account.ownedSkills)?account.ownedSkills:[];
-      const acquiredSkills=skill.id==="henmercy"
+      const acquiredSkills=Array.isArray(skill.skillIds)
+        ? [skill.id,...skill.skillIds]
+        : skill.id==="henmercy"
         ? ["henmercy","henmercy-mercy","henmercy-cards-wish","henmercy-nornos-mask","henmercy-hell-arrived"]
         : [skill.id];
       acquiredSkills.forEach(id=>{
@@ -836,6 +838,11 @@ async function usePlayerAttack(attack) {
     damagePlayer(skillResult.playerDamage);
     updateHP();
     if(playerHP<=0){showGameOver();return;}
+  }
+  if(Number(skillResult?.targetHealing)>0){
+    const targetMax=currentBossState.empress?currentBoss.empress.maxHP:currentBoss.maxHP;
+    bossHP=Math.min(targetMax,bossHP+Number(skillResult.targetHealing));
+    updateHP();
   }
 
   let range=attackToRange(attack);
