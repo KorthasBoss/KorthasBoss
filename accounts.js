@@ -42,7 +42,7 @@ window.YEN_ACCOUNTS = [
   {
     username: "Solstice",
     password: "666",
-   dox: "200087200",
+   dox: "6000000000",
     ownedSkills: ["win-can-make-sword","auralis-nyxara","fallen-samurai-90k"],
     attacks: [],
     potions: {
