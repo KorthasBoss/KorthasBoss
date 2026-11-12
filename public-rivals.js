@@ -2,6 +2,7 @@
  const $=id=>document.getElementById(id);
  let socket=null,room=null,selected=null,me=null,game=null,lastEffectAction=null,preplayedParry=null;
  const stats={
+  "japanhunter":{hp:1000000000000000},
   "auralis-nyxara":{hp:5000000},
   "fallen-samurai-90k":{hp:9000000},
   "xenith-01-world-weaver":{hp:15000000},

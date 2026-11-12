@@ -681,7 +681,23 @@ body.azael-domain .status-dot{background:#ff4263;box-shadow:0 0 12px #ff4263}
 
 /* Purchased Helmet Kishin skill buttons */
 .attack-button.helmet-kishin-button{position:relative;overflow:hidden;border-color:var(--rarity,#fff);box-shadow:0 0 22px color-mix(in srgb,var(--rarity,#fff) 15%,transparent),inset 0 0 24px color-mix(in srgb,var(--rarity,#fff) 7%,transparent)}
+.attack-button.japanhunter{color:#fff3dd;border-color:#ff7b32;background:linear-gradient(115deg,#270808,#15100f 48%,#3a1608);box-shadow:0 0 28px #ff4d1f55,inset 0 0 22px #ff7b3222;text-shadow:0 0 12px #ff6a32}
 .attack-button.helmet-kishin-button:hover:not(:disabled){transform:translateY(-2px);border-color:#fff;box-shadow:0 0 30px color-mix(in srgb,var(--rarity,#fff) 35%,transparent),inset 0 0 30px color-mix(in srgb,var(--rarity,#fff) 12%,transparent)}
+.japanhunter-vfx{position:fixed;inset:0;z-index:10005;overflow:hidden;pointer-events:none;opacity:0;background:radial-gradient(ellipse at 50% 45%,#7d130c55,transparent 58%);transition:opacity .2s}
+.japanhunter-vfx.japanhunter-strike{opacity:1}
+.japanhunter-sun{position:absolute;width:min(34vw,360px);aspect-ratio:1;left:50%;top:48%;border-radius:50%;transform:translate(-50%,-50%) scale(.12);opacity:0;background:radial-gradient(circle at 38% 36%,#fff5cf,#ffbb4b 24%,#f44320 55%,#7a0818 75%,transparent 76%);filter:drop-shadow(0 0 36px #ff4b21) drop-shadow(0 0 100px #f00);transition:transform .7s cubic-bezier(.15,.85,.25,1),opacity .3s}
+.japanhunter-rings{position:absolute;left:var(--japanhunter-x,50%);top:var(--japanhunter-y,48%);width:12vw;height:12vw;border:2px solid #fff3d4;border-radius:50%;transform:translate(-50%,-50%) scale(.1);box-shadow:0 0 35px #ff4b2b,inset 0 0 35px #ff4b2b;opacity:0}
+.japanhunter-kanji{position:absolute;left:50%;top:17%;transform:translateX(-50%) scale(.5);color:#fff0d6;font:clamp(34px,7vw,86px) serif;text-shadow:0 0 18px #ff2e1b,0 0 55px #ff4b21;opacity:0;transition:opacity .25s,transform .5s}
+.japanhunter-blade{position:absolute;left:var(--japanhunter-x,50%);top:var(--japanhunter-y,48%);width:150vw;height:clamp(8px,1.8vw,22px);background:linear-gradient(90deg,transparent,#ff4a26,#fff8dd,#fff,#ffb443,transparent);box-shadow:0 0 22px #ff4b21,0 0 70px #fff3c4;transform:translate(-50%,-50%) rotate(-24deg) scaleX(.01);transform-origin:center;opacity:0}
+.japanhunter-impact{position:absolute;inset:0;background:radial-gradient(circle at var(--japanhunter-x,50%) var(--japanhunter-y,48%),#fff8ddee,transparent 4%,#ff3b2088 18%,transparent 55%);opacity:0}
+.japanhunter-strike .japanhunter-sun{opacity:.9;transform:translate(-50%,-50%) scale(1)}
+.japanhunter-strike .japanhunter-kanji{opacity:1;transform:translateX(-50%) scale(1)}
+.japanhunter-strike .japanhunter-rings{animation:japanHunterRing .9s ease-out forwards}
+.japanhunter-strike .japanhunter-blade{animation:japanHunterSlash .42s .15s ease-out forwards}
+.japanhunter-vfx.japanhunter-impact .japanhunter-impact{animation:japanHunterFlash .65s ease-out forwards}
+@keyframes japanHunterRing{20%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(8)}}
+@keyframes japanHunterSlash{0%{opacity:0;transform:translate(-50%,-50%) rotate(-24deg) scaleX(.01)}25%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) rotate(-24deg) scaleX(1.2)}}
+@keyframes japanHunterFlash{15%{opacity:1}100%{opacity:0}}
 .attack-button.skill-spent{filter:grayscale(1);opacity:.35}
 
 /* Auralis & Nyxara */

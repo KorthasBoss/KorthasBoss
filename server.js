@@ -14,6 +14,7 @@ app.use(express.static(ROOT));
 app.get('/health',(req,res)=>res.json({ok:true,service:'yen-public-rivals'}));
 
 const KISHINS={
+ 'japanhunter':{hp:1000000000000000},
  'auralis-nyxara':{hp:5000000},
  'fallen-samurai-90k':{hp:9000000},
  'xenith-01-world-weaver':{hp:15000000},

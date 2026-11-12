@@ -26,6 +26,7 @@ window.YEN_HELMET = {
     "WILL YOU BUY ONE OF MY FINEST KISHINS?"
   ],
   targets:[
+    {id:"japanhunter",name:"JapanHunter",rarity:"OFF-SALE // MYTHIC HUNTER",offSale:true,color:"#ff7b32",image:"assets/JapanHunter.png",cost:"999999999999999999999999999999",bio:"JapanHunter is an off-sale mythic Kishin. Its owner can wield Nihon no Owari, a catastrophic strike that tears through the arena beneath a burning red sun.",shopEffect:"1,000,000,000,000 DAMAGE // MYTHIC HUNTER // OFF-SALE"},
     {id:"k-z-x",name:"K,Z,X",rarity:"OFF-SALE // GLITCH ENTITY",offSale:true,color:"#ff38ff",image:"assets/k-z-x.png",cost:"999999999999999999",bio:"K,Z,X is a corrupted Kishin wrapped in rainbow static. Buy it and its attack is added to your battle skill roster. Every activation tears the target with a one-million-damage glitch slash and has a 67% chance to restore 67% of the hunter's maximum HP.",shopEffect:"1,000,000 DAMAGE // 67% CHANCE TO HEAL 67% MAX HP"},
 
     {id:"jorkaprime",name:"JorkaPrime",rarity:"OFF-SALE // PRIME KISHIN",offSale:true,color:"#ff263d",image:"assets/JorkaPrime.png",cost:"999999999999999999999999999",bio:"JorkaPrime is an off-sale prime Kishin. Its owner commands three devastating techniques, each with its own battle effect and voice line.",shopEffect:"THREE UNIQUE ATTACKS // PRIME EXECUTION // OFF-SALE"},
