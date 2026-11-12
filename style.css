@@ -100,11 +100,12 @@ button{font:inherit;cursor:pointer}
 .red-diamond{background:var(--red);box-shadow:0 0 10px #ff426377}
 .attack-heading{margin-bottom:13px}
 .attack-count{font-size:8px;color:#8292aa;white-space:nowrap}
-.attack-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
-.attack-button{position:relative;overflow:hidden;min-height:68px;padding:10px 6px;border:1px solid #493443;background:linear-gradient(145deg,#1b1522,#0e101a);color:#f2eaf1;font:10px var(--mono);letter-spacing:.04em;transition:transform .16s,border-color .16s,box-shadow .16s}
-.attack-button::before{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 20%,#ff426318 50%,transparent 75%);transform:translateX(-120%)}
-.attack-button::after{content:"";position:absolute;bottom:0;left:0;width:100%;height:2px;background:#ff4263;transform:scaleX(0);transform-origin:left;transition:transform .2s}
+.attack-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;max-height:480px;overflow-y:auto;align-content:start;padding:2px 6px 6px 2px;scrollbar-color:#493443 #0a0e18;scrollbar-width:thin}
+.attack-button{position:relative;overflow:hidden;min-width:0;min-height:68px;padding:10px 6px;border:1px solid #493443;background:linear-gradient(145deg,#1b1522,#0e101a);color:#f2eaf1;font:10px/1.35 var(--mono);letter-spacing:.04em;overflow-wrap:anywhere;transition:transform .16s,border-color .16s,box-shadow .16s}
+.attack-button::before{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 20%,#ff426318 50%,transparent 75%);transform:translateX(-120%);pointer-events:none}
+.attack-button::after{content:"";position:absolute;bottom:0;left:0;width:100%;height:2px;background:#ff4263;transform:scaleX(0);transform-origin:left;transition:transform .2s;pointer-events:none}
 .attack-button:hover:not(:disabled){transform:translateY(-3px);border-color:#ff5873;box-shadow:0 8px 20px #ff29441a}
+.attack-button:focus-visible{outline:2px solid #ff8da0;outline-offset:2px}
 .attack-button:hover:not(:disabled)::before{animation:buttonSweep .7s}
 .attack-button:hover:not(:disabled)::after{transform:scaleX(1)}
 @keyframes buttonSweep{to{transform:translateX(120%)}}
@@ -1008,3 +1009,38 @@ body.azael-domain .status-dot{background:#ff4263;box-shadow:0 0 12px #ff4263}
 
 /* JorkaPrime // dedicated boss-battle VFX */
 .jorka-vfx{position:fixed;inset:0;z-index:10000;pointer-events:none;overflow:hidden;background:radial-gradient(ellipse at 70% 48%,#8b0c2444,transparent 58%);opacity:0;transition:opacity .16s}.jorka-vfx.jorka-strike{opacity:1}.jorka-red-scan{position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0 5px,#ff244b18 6px 7px);animation:jorkaScan .12s steps(2) infinite}.jorka-blade{position:absolute;left:-20%;top:45%;width:145%;height:13px;background:linear-gradient(90deg,transparent,#ff263e,#fff,#ff6a36,transparent);box-shadow:0 0 18px #ff173f,0 0 55px #ff173f;transform:rotate(-18deg) scaleX(0);transform-origin:left;transition:transform .3s}.jorka-strike .jorka-blade{transform:rotate(-18deg) scaleX(1)}.jorka-impact{position:absolute;left:68%;top:44%;width:20vw;height:20vw;border:4px solid #ff3156;border-radius:50%;box-shadow:0 0 35px #ff3156,inset 0 0 35px #ff3156;transform:scale(.1);opacity:0}.jorka-strike .jorka-impact{animation:jorkaImpact .7s ease-out forwards}.jorka-runes{position:absolute;left:50%;top:20%;transform:translateX(-50%);font:clamp(24px,5vw,60px) var(--pixel);color:#fff;text-shadow:0 0 12px #ff244b,0 0 35px #ff244b;letter-spacing:.2em}.jorka-horizon .jorka-blade{height:25px;filter:hue-rotate(15deg)}.jorka-execution .jorka-blade{height:42px;box-shadow:0 0 35px #ff1744,0 0 90px #ff1744}.jorka-out{opacity:0;transition:opacity .35s}@keyframes jorkaScan{to{transform:translateY(7px)}}@keyframes jorkaImpact{to{transform:scale(2.8);opacity:0}}
+
+/* Rivals matches reuse the regular boss-fight presentation. */
+.rivals-battle-view{flex:1;padding:30px 0 40px}
+.rivals-screen.rivals-in-match .rivals-hero,.rivals-screen.rivals-in-match>.sub-actions{display:none}
+.rivals-duel-panel{display:block;min-height:0;padding:16px 22px}
+.rivals-duel-grid{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:22px;width:100%}
+.rivals-fighter{position:relative;z-index:1;min-width:0;min-height:0;padding:0;border:0;background:transparent;text-align:left}
+.rivals-fighter-art{height:190px;display:grid;place-items:center}
+.rivals-fighter-art img{width:min(100%,280px);height:185px;object-fit:contain;filter:drop-shadow(0 0 20px #168bff44)}
+.rivals-fighter-info{position:relative;z-index:1;padding:0 8px}
+.rivals-fighter-info h2{margin:6px 0;font-size:clamp(18px,2.4vw,27px);letter-spacing:.06em;overflow-wrap:anywhere}
+.rivals-fighter-info>p{margin:0 0 16px;color:#7f93af;font:9px var(--mono);letter-spacing:.1em}
+.rivals-fighter-info .hp-title{margin:0 0 8px;font-size:9px}
+.rivals-fighter-info .hp-track{height:14px}
+.rivals-vs-mark{position:relative;z-index:1;font:32px var(--pixel);color:#ff496d;text-shadow:0 0 20px #ff3155}
+.rivals-battle-view .battle-log{min-height:76px;margin-bottom:20px}
+.rivals-battle-view .battle-log p{font:16px/1.5 var(--mono);overflow-wrap:anywhere}
+.rivals-attack-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.rivals-attack-grid .attack-button{min-height:60px}
+.rivals-battle-view .player-panel .text-button{align-self:start;margin-top:18px}
+.rivals-battle-view .player-status-row{overflow-wrap:anywhere}
+@media(max-width:700px){
+ .rivals-battle-view{padding-top:22px}
+ .rivals-duel-panel{padding:14px 10px}
+ .rivals-duel-grid{grid-template-columns:minmax(0,1fr) 28px minmax(0,1fr);gap:7px}
+ .rivals-fighter-art{height:130px}
+ .rivals-fighter-art img{height:125px}
+ .rivals-fighter-info{padding:0 3px}
+ .rivals-fighter-info h2{font-size:clamp(14px,4vw,20px)}
+ .rivals-fighter-info>p{font-size:7px}
+ .rivals-fighter-info .hp-title{font-size:7px;letter-spacing:0}
+ .rivals-vs-mark{font-size:24px}
+ .rivals-attack-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:420px){.rivals-attack-grid{grid-template-columns:1fr}}

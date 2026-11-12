@@ -297,7 +297,7 @@ async function registerOrLogin() {
     potions: found.potions && typeof found.potions === "object" ? Object.fromEntries(Object.entries(found.potions).map(([k,v])=>[k,Math.max(0,Math.floor(Number(v)||0))])) : {}
   };
 
-  if (String(account.username).trim().toUpperCase() === "A-SHEN-TADES") {
+  if (account.ownedSkills.some(value => String(value).trim().toLowerCase() === "jorkaprime")) {
     ["jorkaprime", "jorkaprime-crown-split", "jorkaprime-horizon-ruin", "jorkaprime-last-reason"].forEach(id => {
       if (!account.ownedSkills.includes(id)) account.ownedSkills.push(id);
     });
