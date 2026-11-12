@@ -14,6 +14,6 @@ window.YEN_REGISTER_SKILL({
   overlay.className="nosaki-void";
   overlay.innerHTML="<div class=\"nosaki-line\">Well.. That's all you got?</div><div class=\"nosaki-phatatic\">Phatatic.</div>";
   document.body.appendChild(overlay);
-  await ctx.wait(1500); overlay.classList.add("nosaki-hit"); await ctx.wait(750);
+  await ctx.wait(1500); overlay.classList.add("nosaki-hit"); await ctx.wait(750); overlay.remove();
   return {damage:Math.max(0,ctx.bossHP-200),message:"No_Saki // The void leaves the target at 200 HP."};
 });

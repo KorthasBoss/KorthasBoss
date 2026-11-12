@@ -64,13 +64,15 @@ window.YEN_REGISTER_SKILL({
   await ctx.wait(520);
 
   const maxHP = Number(ctx.boss?.playerMaxHP || 180000);
-  const healChance = Math.random() < .67;
+  const healChance = ctx.rivalsEffect ? Number(ctx.rivalsEffect.heal||0)>0 : Math.random() < .67;
   let healed = 0;
 
   if (healChance) {
-    healed = Math.round(maxHP * .67);
-    ctx.playerHP = Math.min(maxHP, Number(ctx.playerHP || 0) + healed);
-    ctx.updateHP();
+    healed = Number(ctx.rivalsEffect?.heal)||Math.round(maxHP * .67);
+    if(!ctx.rivalsEffect){
+      ctx.playerHP = Math.min(maxHP, Number(ctx.playerHP || 0) + healed);
+      ctx.updateHP();
+    }
 
     const heal = document.createElement("div");
     heal.className = "kzx-heal-burst";

@@ -12,6 +12,7 @@ window.YEN_REGISTER_SKILL({
   description:"A forbidden account-only execution. Leaves the target at exactly 1 HP."
 }, async (ctx) => {
   const all=[...document.querySelectorAll("#attack-grid .attack-button:not(.potion-button)")];
+  const buttonStates=all.map(button=>button.disabled);
   all.forEach(b=>{b.classList.add("deathsringer-lock");b.disabled=true;});
   const title=document.createElement("div");
   title.className="deathsringer-title";
@@ -59,6 +60,10 @@ window.YEN_REGISTER_SKILL({
     b.style.setProperty("--death-delay",`${i*35}ms`);
   });
   await ctx.wait(5000);
-  all.forEach(b=>b.remove());
+  all.forEach((button,index)=>{
+    button.classList.remove("deathsringer-lock","deathsringer-doomed");
+    button.style.removeProperty("--death-delay");
+    button.disabled=buttonStates[index];
+  });
   return {damage:Math.max(0,ctx.bossHP-1),message:"D-E-A-T-H-S-R-I-N-G-E-R // IT'S OVER."};
 });

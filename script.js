@@ -22,7 +22,7 @@ const CONFIG = {
   bosses: window.YEN_BOSSES || {},
   merchant: window.YEN_MERCHANT || { image:"assets/Merchant_Idle.png", background:"assets/Merchant_background.gif", music:"assets/merchant-theme.mp3", lines:[] },
   merchantFallbackLines: [
-      "Oh you're back.","Welcome back, hunter.","You look like somebody who needs a better skill.","I don't ask where you got that DOX.","You survived. That's enough for me.","The vault is open. Try not to go broke.","I've seen your type before.","You fight loud. I sell louder.","Pick something nasty.","Some skills bite back.","Enchanted ones cost what they cost.","Don't stare at the price. Earn more.","You want power? Pay for it.","I keep the good stuff behind the expensive stuff.","A cheap skill can still save your life.","A rare skill can ruin somebody else's.","The vault has eight thousand answers.","You only need one.","Unless you're greedy.","Greedy is fine here.","That one? Interesting choice.","I wouldn't use it against Argus first.","Korthas hates flashy skills.","Argus hates everything.","The enchanted stock is temperamental.","Buy before the price feels worse.","You came back with more DOX.","Now you're speaking my language.","A hunter without skills is just target practice.","A hunter with too many skills is expensive target practice.","I've got something mean today.","I've got something beautiful today.","I've got something that should probably be illegal.","Relax. It's only a game.","Probably.","You want the vault? Hit the button.","Don't make me repeat myself.","The good stuff is glowing for a reason.","That purple glow means trouble.","The gold ones hurt wallets.","The red ones hurt bosses.","The blue ones save mistakes.","Buy wisely.","Or don't. I still get paid.","You look ready.","You're almost dangerous.","Almost.","Come back after another boss.","I'll have more bad ideas waiting.","Now go make me proud.","Welcome back, hunter."
+      "Oh you're back.","Welcome back, hunter.","You look like somebody who needs a better skill.","I don't ask where you got that DOX.","You survived. That's enough for me.","The vault is open. Try not to go broke.","I've seen your type before.","You fight loud. I sell louder.","Pick something nasty.","Some skills bite back.","Enchanted ones cost what they cost.","Don't stare at the price. Earn more.","You want power? Pay for it.","I keep the good stuff behind the expensive stuff.","A cheap skill can still save your life.","A rare skill can ruin somebody else's.","The vault has every configured technique.","You only need one.","Unless you're greedy.","Greedy is fine here.","That one? Interesting choice.","I wouldn't use it against Argus first.","Korthas hates flashy skills.","Argus hates everything.","The enchanted stock is temperamental.","Buy before the price feels worse.","You came back with more DOX.","Now you're speaking my language.","A hunter without skills is just target practice.","A hunter with too many skills is expensive target practice.","I've got something mean today.","I've got something beautiful today.","I've got something that should probably be illegal.","Relax. It's only a game.","Probably.","You want the vault? Hit the button.","Don't make me repeat myself.","The good stuff is glowing for a reason.","That purple glow means trouble.","The gold ones hurt wallets.","The red ones hurt bosses.","The blue ones save mistakes.","Buy wisely.","Or don't. I still get paid.","You look ready.","You're almost dangerous.","Almost.","Come back after another boss.","I'll have more bad ideas waiting.","Now go make me proud.","Welcome back, hunter."
     ]
 };
 
@@ -294,7 +294,7 @@ async function registerOrLogin() {
       description: String(a.description || "A custom account-only attack."),
       enchanted: Boolean(a.enchanted)
     })) : [],
-    potions: found.potions && typeof found.potions === "object" ? Object.fromEntries(Object.entries(found.potions).map(([k,v])=>[k,Math.max(0,Math.floor(Number(v)||0))])) : {}
+    potions: found.potions && typeof found.potions === "object" ? Object.fromEntries(Object.entries(found.potions).map(([k,v])=>[k,Math.min(Number.MAX_SAFE_INTEGER,Math.max(0,Math.floor(Number(v)||0)))])) : {}
   };
 
   if (account.ownedSkills.some(value => String(value).trim().toLowerCase() === "jorkaprime")) {
@@ -449,22 +449,44 @@ $("merchant-next").addEventListener("click", () => {
 });
 $("open-shop").addEventListener("click", () => { buildSkillCatalog(); $("skill-shop").classList.remove("hidden"); renderSkills(); });
 $("skill-search").addEventListener("input", renderSkills);
+$("skill-load-more").addEventListener("click",()=>{
+  const query=$("skill-search").value.trim().toLowerCase();
+  const filtered=buildSkillCatalog().filter(s=>!query||`${s.name} ${s.rarity} ${s.description}`.toLowerCase().includes(query));
+  const start=document.querySelectorAll("#skill-grid .skill-card").length;
+  const next=filtered.slice(start,start+180);
+  const grid=$("skill-grid");
+  next.forEach(skill=>grid.appendChild(createSkillCard(skill)));
+  renderSkillsStatus();
+});
+function renderSkillsStatus(){
+  const query=$("skill-search").value.trim().toLowerCase();
+  const filtered=buildSkillCatalog().filter(s=>!query||`${s.name} ${s.rarity} ${s.description}`.toLowerCase().includes(query));
+  const shown=document.querySelectorAll("#skill-grid .skill-card").length;
+  $("skill-catalog-status").textContent=`SHOWING ${shown.toLocaleString()} OF ${filtered.length.toLocaleString()} MATCHING SKILLS`;
+  $("skill-load-more").classList.toggle("hidden",shown>=filtered.length);
+}
+function createSkillCard(skill) {
+  const owned=isSkillOwned(skill),el=document.createElement("article");
+  el.className=`skill-card ${skill.enchanted?"enchanted":""} ${owned?"owned":""} ${skill.rewardOnly?"reward-only":""}`;
+  el.style.setProperty("--rarity",skill.color);
+  el.innerHTML=`<div class="skill-rarity">${skill.rarity}${skill.enchanted?" // ✦ ENCHANTED":""}</div>${owned?'<span class="owned-tag">OWNED</span>':skill.rewardOnly?'<span class="owned-tag">BOSS REWARD</span>':''}<h3>${skill.name}</h3><p>${skill.description}</p><div class="skill-price">${owned?"ALREADY OWNED":skill.rewardOnly?"DEFEAT SEA PREDATOR":fmtDox(skill.cost)+" DOX"}</div>`;
+  el.addEventListener("click",()=>openSkillDetail(skill));
+  return el;
+}
 
 function renderSkills() {
   renderPotions();
   const query = $("skill-search").value.trim().toLowerCase();
-  const skills = buildSkillCatalog().filter(s => !query || `${s.name} ${s.rarity} ${s.description}`.toLowerCase().includes(query)).slice(0,180);
+  const catalog=buildSkillCatalog();
+  const filtered=catalog.filter(s => !query || `${s.name} ${s.rarity} ${s.description}`.toLowerCase().includes(query));
+  const skills=filtered.slice(0,180);
   const grid = $("skill-grid");
   grid.innerHTML = "";
-  skills.forEach(skill => {
-    const owned = isSkillOwned(skill);
-    const el = document.createElement("article");
-    el.className = `skill-card ${skill.enchanted?"enchanted":""} ${owned?"owned":""} ${skill.rewardOnly?"reward-only":""}`;
-    el.style.setProperty("--rarity",skill.color);
-    el.innerHTML = `<div class="skill-rarity">${skill.rarity}${skill.enchanted?" // ✦ ENCHANTED":""}</div>${owned?'<span class="owned-tag">OWNED</span>':skill.rewardOnly?'<span class="owned-tag">BOSS REWARD</span>':''}<h3>${skill.name}</h3><p>${skill.description}</p><div class="skill-price">${owned?"ALREADY OWNED":skill.rewardOnly?"DEFEAT SEA PREDATOR":fmtDox(skill.cost)+" DOX"}</div>`;
-    el.addEventListener("click", () => openSkillDetail(skill));
-    grid.appendChild(el);
-  });
+  $("skill-catalog-count").textContent=`// ${catalog.length.toLocaleString()} ITEMS`;
+  $("merchant-skill-count").textContent=`${catalog.length.toLocaleString()} SKILLS IN STOCK`;
+  $("skill-catalog-status").textContent=`SHOWING ${skills.length.toLocaleString()} OF ${filtered.length.toLocaleString()} MATCHING SKILLS`;
+  skills.forEach(skill=>grid.appendChild(createSkillCard(skill)));
+  $("skill-load-more").classList.toggle("hidden",skills.length>=filtered.length);
 }
 function openSkillDetail(skill, shop="main") {
   selectedSkill = skill;
@@ -726,6 +748,7 @@ function playConfiguredSkillVFX(attack, kill=false) {
   if(!klass) return;
   const v=document.createElement("div");
   v.className=`configured-skill-vfx ${klass}${kill && source?.killEffect ? " skill-kill-vfx" : ""}`;
+  v.style.setProperty("--rarity",source?.color||"#f6b4ff");
   document.body.appendChild(v);
   setTimeout(()=>v.remove(),kill ? 1500 : 900);
 }
@@ -773,12 +796,13 @@ async function usePlayerAttack(attack) {
 
   const sourceSkill = attack.source;
   const maxUses = Number(sourceSkill?.usesPerBattle || 0);
+  const usesBefore=sourceSkill?.id?Number(skillUses.get(String(sourceSkill.id))||0):0;
   if (maxUses > 0) {
-    const used = Number(skillUses.get(String(sourceSkill.id)) || 0);
-    if (used >= maxUses) { busy=false; return; }
-    skillUses.set(String(sourceSkill.id), used + 1);
+    if (usesBefore >= maxUses) { busy=false; return; }
+    skillUses.set(String(sourceSkill.id), usesBefore + 1);
   }
 
+  try {
   delete attack._seaReducedDamage;
   delete attack._nebulaFixedDamage;
   delete attack._aethelgardFixedDamage;
@@ -851,7 +875,14 @@ async function usePlayerAttack(attack) {
   }
 
   await bossTurn();
-  busy=false;
+  } catch(error) {
+    if(maxUses>0)skillUses.set(String(sourceSkill.id),usesBefore);
+    console.error(`Battle action failed for ${attack.name}:`,error);
+    setMessage(`${attack.name} could not complete. The battle is ready for another action.`);
+    updateHP();
+  } finally {
+    busy=false;
+  }
 }
 
 async function bossTurn() {

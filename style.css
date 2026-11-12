@@ -498,7 +498,13 @@ body.azael-domain .status-dot{background:#ff4263;box-shadow:0 0 12px #ff4263}
 
 /* Dedicated skill system: ordinary Merchant skills get their own neutral
    enchanted treatment stays independent. */
-.enchanted-skill-vfx{color:#f6b4ff;background:radial-gradient(circle at 50% 50%,#f6b4ff33,transparent 38%)}
+.configured-skill-vfx{position:fixed;z-index:9990;inset:0;pointer-events:none;display:grid;place-items:center;opacity:0;animation:configuredSkillImpact .9s ease-out forwards}
+.enchanted-skill-vfx{color:var(--rarity,#f6b4ff);background:radial-gradient(circle at 50% 50%,#f6b4ff33,transparent 42%);background:radial-gradient(circle at 50% 50%,color-mix(in srgb,var(--rarity,#f6b4ff) 28%,transparent),transparent 42%);filter:drop-shadow(0 0 20px var(--rarity,#f6b4ff))}
+.skill-catalog-status{margin:10px 0;color:#7f91a9;font:9px var(--mono);letter-spacing:.1em}
+#skill-load-more{display:block;margin:14px auto}
+@keyframes configuredSkillImpact{0%{opacity:0;transform:scale(.7)}25%{opacity:1}100%{opacity:0;transform:scale(1.12)}}
+.rivals-heal-vfx{position:fixed;z-index:10001;left:50%;top:42%;transform:translateX(-50%);padding:16px 24px;border:1px solid #6affc0;background:#032318eF;color:#a8ffcf;font:14px var(--mono);letter-spacing:.12em;box-shadow:0 0 35px #2bff9a66;pointer-events:none;animation:rivalsHealRise 1.2s ease-out forwards}
+@keyframes rivalsHealRise{0%{opacity:0;translate:0 20px}15%{opacity:1}100%{opacity:0;translate:0 -35px}}
 .attack-button.enchanted-skill::before{content:"✦";position:absolute;right:10px;top:7px;font-size:10px;opacity:.75;color:var(--rarity,#f6b4ff)}
 
 /* ==========================================================

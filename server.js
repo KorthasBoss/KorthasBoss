@@ -35,7 +35,7 @@ function loadBattleSkills(){
   if(file===registry)continue;
   vm.runInNewContext(fs.readFileSync(path.join(ROOT,file),'utf8'),sandbox,{timeout:1000});
  }
- return new Map([...(window.YEN_MERCHANT?.skills||[]),...(window.YEN_SPECIAL_SKILLS||[])]
+ const skills=new Map([...(window.YEN_MERCHANT?.skills||[]),...(window.YEN_SPECIAL_SKILLS||[])]
   .filter(skill=>skill?.id&&Number.isFinite(Number(skill.power))&&Number(skill.power)>=0)
   .map(skill=>[String(skill.id),{
    id:String(skill.id),
@@ -44,10 +44,17 @@ function loadBattleSkills(){
    special:skill.special||"",
    skillHandler:skill.skillHandler||"",
    enchanted:Boolean(skill.enchanted),
-   vfxClass:skill.vfxClass||""
+   vfxClass:skill.vfxClass||"",
+   usesPerBattle:Number(skill.usesPerBattle)||0,
+   killEffect:Boolean(skill.killEffect)
   }]));
+ const potions=new Map((window.YEN_MERCHANT?.potions||[]).map(potion=>[String(potion.id),{
+  id:String(potion.id),name:String(potion.name||potion.id),heal:Math.max(0,Number(potion.heal)||0)
+ }]));
+ return {skills,potions};
 }
-const BATTLE_SKILLS=loadBattleSkills();
+const battleCatalog=loadBattleSkills();
+const BATTLE_SKILLS=battleCatalog.skills;
 
 const accountSandbox={window:{}};
 try{
@@ -55,8 +62,33 @@ try{
 }catch(error){
  console.error('Could not read accounts.js allowlist:',error.message);
 }
-const knownAccounts=new Set((accountSandbox.window.YEN_ACCOUNTS||[]).map(account=>String(account.username||'').trim().toLowerCase()));
+const accountEntries=Array.isArray(accountSandbox.window.YEN_ACCOUNTS)?accountSandbox.window.YEN_ACCOUNTS:[];
+const accountsByName=new Map(accountEntries.map(account=>[String(account.username||'').trim().toLowerCase(),account]));
+const knownAccounts=new Set(accountsByName.keys());
+const POTIONS=battleCatalog.potions;
 function isKnownAccount(name){return knownAccounts.has(String(name||'').trim().toLowerCase());}
+function accountFor(name){return accountsByName.get(String(name||'').trim().toLowerCase());}
+function playerActions(player){
+ const skills=(player.skills||[]).map(id=>{
+  const skill=BATTLE_SKILLS.get(id);
+  const usesRemaining=skill?.usesPerBattle?Math.max(0,skill.usesPerBattle-Number(player.skillUses?.[id]||0)):null;
+  return skill?{...skill,damage:skill.power,usesRemaining,actionId:`skill:${skill.id}`,type:'skill'}:null;
+ }).filter(Boolean);
+ const custom=(Array.isArray(accountFor(player.username)?.attacks)?accountFor(player.username).attacks:[])
+  .map((attack,index)=>{
+   const id=String(attack.id||`custom-${index}`);
+   const power=Math.max(1,Math.floor(Number(attack.power)||10000));
+   return {id,name:String(attack.name||`CUSTOM ATTACK ${index+1}`),power,damage:power,
+    rarity:String(attack.rarity||'CUSTOM'),color:String(attack.color||'#ff5573'),
+    description:String(attack.description||'A custom account-only attack.'),
+    enchanted:Boolean(attack.enchanted),actionId:`attack:${id}`,type:'attack'};
+  });
+ const potions=Object.entries(player.potions||{}).flatMap(([id,count])=>{
+  const potion=POTIONS.get(id),amount=Math.min(Number.MAX_SAFE_INTEGER,Math.max(0,Math.floor(Number(count)||0)));
+  return potion&&amount>0?[{...potion,count:amount,actionId:`potion:${id}`,type:'potion'}]:[];
+ });
+ return [...skills,...custom,...potions];
+}
 
 const rooms=new Map();
 const socketRoom=new Map();
@@ -95,10 +127,7 @@ function stateOf(room){
    kishin:player.kishin,
    hp:player.hp,
    maxHp:player.maxHp,
-   skills:(player.skills||[]).map(id=>{
-    const skill=BATTLE_SKILLS.get(id);
-    return {...skill,damage:skill.power};
-   })
+   actions:playerActions(player)
   })),
   turn:room.turn,
   over:room.over,
@@ -113,7 +142,7 @@ io.on('connection',socket=>{
   if(!username||!isKnownAccount(username))return socket.emit('room:error','Use an existing username from accounts.js.');
   leave(socket);
   const roomCode=code();
-  const room={code:roomCode,players:[{socketId:socket.id,username,kishin:null,skills:[]}],started:false,turn:null,over:false,actionCount:0};
+  const room={code:roomCode,players:[{socketId:socket.id,username,kishin:null,skills:[],potions:{},skillUses:{},skipTurns:0}],started:false,turn:null,over:false,actionCount:0};
   rooms.set(roomCode,room);
   socketRoom.set(socket.id,roomCode);
   socket.join(roomCode);
@@ -127,7 +156,7 @@ io.on('connection',socket=>{
   if(!room||room.started||room.players.length>=2)return socket.emit('room:error','That room code is invalid, full, or already in battle.');
   if(room.players.some(player=>player.username.toLowerCase()===username.toLowerCase()))return socket.emit('room:error','A room needs two different account usernames.');
   leave(socket);
-  room.players.push({socketId:socket.id,username,kishin:null,skills:[]});
+  room.players.push({socketId:socket.id,username,kishin:null,skills:[],potions:{},skillUses:{},skipTurns:0});
   socketRoom.set(socket.id,roomCode);
   socket.join(roomCode);
   emitRoom(room);
@@ -140,11 +169,22 @@ io.on('connection',socket=>{
   if(!room||!player||room.started||!KISHINS[kishin])return socket.emit('room:error','That Kishin is not eligible for Rivals.');
   const skills=[...new Set((Array.isArray(data?.skills)?data.skills:[]).map(String))]
    .filter(id=>BATTLE_SKILLS.has(id));
-  if(!skills.length)return socket.emit('room:error','Own at least one configured skill before joining a Rivals match.');
+  const potions=Object.fromEntries(Object.entries(data?.potions||{}).flatMap(([id,count])=>{
+   const amount=Math.min(Number.MAX_SAFE_INTEGER,Math.max(0,Math.floor(Number(count)||0)));
+   return POTIONS.has(id)&&amount>0?[[id,amount]]:[];
+  }));
   player.kishin=kishin;
   player.skills=skills;
+  player.potions=potions;
+  player.skillUses={};
+  if(!playerActions(player).length){
+   player.kishin=null;
+   player.skills=[];
+   player.potions={};
+   return socket.emit('room:error','Equip at least one owned skill, custom attack, or healing item before joining a Rivals match.');
+  }
   emitRoom(room);
-  if(room.players.length===2&&room.players.every(entry=>entry.kishin&&entry.skills.length)){
+  if(room.players.length===2&&room.players.every(entry=>entry.kishin&&playerActions(entry).length)){
    room.started=true;
    room.players.forEach(entry=>{
     entry.maxHp=KISHINS[entry.kishin].hp;
@@ -162,21 +202,61 @@ io.on('connection',socket=>{
   const roomCode=String(data?.code||'');
   const room=rooms.get(roomCode);
   const player=room?.players.find(entry=>entry.socketId===socket.id);
-  const moveIndex=Number(data?.move);
   if(!room||!player||!room.started||room.over||room.turn!==player.username)return;
-  if(!Number.isInteger(moveIndex)||moveIndex<0||moveIndex>=player.skills.length)return;
-  const skill=BATTLE_SKILLS.get(player.skills[moveIndex]);
-  if(!skill)return;
+  const action=playerActions(player).find(entry=>entry.actionId===String(data?.actionId||''));
+  if(!action)return;
   const target=room.players.find(entry=>entry!==player);
-  target.hp=Math.max(0,target.hp-skill.power);
-  room.lastMove={actionId:++room.actionCount,username:player.username,skillId:skill.id};
-  room.message=`${player.username} used ${skill.name} for ${skill.power.toLocaleString()} damage.`;
+  const targetHpBefore=target.hp,attackerHpBefore=player.hp;
+  const effects={};
+  let damage=0,message='';
+  if(action.type==='potion'){
+   if(player.hp>=player.maxHp)return socket.emit('battle:action-rejected','Your HP is already full.');
+   if(!player.potions[action.id])return socket.emit('battle:action-rejected','You do not have that healing item.');
+   const healed=Math.min(action.heal,player.maxHp-player.hp);
+   player.potions[action.id]--;
+   player.hp+=healed;
+   effects.heal=healed;
+   message=`${player.username} used ${action.name} and restored ${healed.toLocaleString()} HP.`;
+  }else{
+   const skill=action.type==='skill'?BATTLE_SKILLS.get(action.id):null;
+   if(skill?.usesPerBattle){
+    const used=Number(player.skillUses[skill.id]||0);
+    if(used>=skill.usesPerBattle)return socket.emit('battle:action-rejected',`${skill.name} has no uses remaining.`);
+    player.skillUses[skill.id]=used+1;
+   }
+   damage=action.power;
+   if(skill?.id==='deathsringer')damage=Math.max(0,target.hp-1);
+   if(skill?.id==='no-saki')damage=Math.max(0,target.hp-200);
+   if(skill?.id==='perfect-parry'){
+    effects.parryWon=Boolean(data?.parryWon);
+    damage=0;
+    if(effects.parryWon)target.skipTurns=Math.max(target.skipTurns||0,8);
+   }
+   if(skill?.id==='k-z-x'&&Math.random()<0.67){
+    effects.heal=Math.min(player.maxHp-player.hp,Math.round(player.maxHp*0.67));
+   }
+   if(skill?.id==='xenith-01-world-weaver'&&Math.random()<0.45){
+    effects.heal=Math.min(player.maxHp-player.hp,650000);
+   }
+   if(effects.heal>0)player.hp+=effects.heal;
+   target.hp=Math.max(0,target.hp-damage);
+   message=skill?.id==='perfect-parry'
+    ?effects.parryWon?`${player.username} landed a PERFECT PARRY. ${target.username} loses the next 8 turns.`:`${player.username} missed the Perfect Parry timing trial.`
+    :`${player.username} used ${action.name} for ${damage.toLocaleString()} damage.${effects.heal?` Restored ${effects.heal.toLocaleString()} HP.`:''}`;
+  }
+  room.lastMove={actionId:++room.actionCount,username:player.username,moveId:action.actionId,
+   skillId:action.type==='skill'?action.id:null,targetHpBefore,attackerHpBefore,effects};
+  room.message=message;
   if(target.hp<=0){
    room.over=true;
    io.to(roomCode).emit('match:over',{state:stateOf(room),message:`${player.username} wins the Public Rivals match!`});
    return;
   }
-  room.turn=target.username;
+  if(target.skipTurns>0){
+   target.skipTurns--;
+   room.turn=player.username;
+   room.message+=` ${target.username}'s turn is skipped.`;
+  }else room.turn=target.username;
   io.to(roomCode).emit('match:state',stateOf(room));
  });
  socket.on('room:leave',()=>leave(socket));

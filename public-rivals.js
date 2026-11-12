@@ -1,6 +1,6 @@
 (()=>{
  const $=id=>document.getElementById(id);
- let socket=null,room=null,selected=null,me=null,game=null,lastEffectAction=null;
+ let socket=null,room=null,selected=null,me=null,game=null,lastEffectAction=null,preplayedParry=null;
  const stats={
   "auralis-nyxara":{hp:5000000},
   "fallen-samurai-90k":{hp:9000000},
@@ -32,9 +32,10 @@
   socket.on('match:start',startMatch);
   socket.on('match:state',renderMatch);
   socket.on('match:over',d=>{renderMatch(d.state);$('rivals-battle-status').textContent=d.message;$('rivals-turn-status').textContent=d.message;$('rivals-attack-buttons').querySelectorAll('button').forEach(b=>b.disabled=true);});
+  socket.on('battle:action-rejected',message=>{preplayedParry=null;if(game)renderMatch(game);$('rivals-battle-status').textContent=String(message);});
   socket.on('room:error',m=>alert(m));
   socket.on('room:left',()=>{
-   room=null;selected=null;game=null;lastEffectAction=null;
+   room=null;selected=null;game=null;lastEffectAction=null;preplayedParry=null;
    $('public-rivals-screen').classList.remove('rivals-in-match');
    show('public-rivals-screen');
    $('rivals-waiting').classList.add('hidden');
@@ -71,8 +72,10 @@
    return;
   }
   const skills=ownedBattleSkills();
-  if(!skills.length){
-   grid.innerHTML='<p class="rivals-muted">This account has no configured battle skills to use in Rivals.</p>';
+  const hasCustomAttacks=Array.isArray(account?.attacks)&&account.attacks.length>0;
+  const hasHealing=Object.values(account?.potions||{}).some(count=>Number(count)>0);
+  if(!skills.length&&!hasCustomAttacks&&!hasHealing){
+   grid.innerHTML='<p class="rivals-muted">This account has no owned skills, custom attacks, or healing items to use in Rivals.</p>';
    $('rivals-ready').disabled=true;
    return;
   }
@@ -91,6 +94,11 @@
   const mine=g.players.find(p=>p.username===me);
   const opp=g.players.find(p=>p.username!==me);
   if(!mine||!opp)return;
+  if(account?.username===mine.username){
+   account.potions=account.potions||{};
+   Object.keys(account.potions).forEach(id=>{account.potions[id]=0;});
+   (mine.actions||[]).filter(action=>action.type==='potion').forEach(action=>{account.potions[action.id]=action.count;});
+  }
   const t1=getTargets().find(t=>t.id===mine.kishin)||defaultTarget;
   const t2=getTargets().find(t=>t.id===opp.kishin)||defaultTarget;
   $('rivals-room-label').textContent=g.code;
@@ -106,49 +114,78 @@
   $('rivals-opponent-hp-label').textContent=`${opp.hp.toLocaleString()} / ${opp.maxHp.toLocaleString()} HP`;
   $('rivals-self-hp').style.width=`${Math.max(0,100*mine.hp/mine.maxHp)}%`;
   $('rivals-opponent-hp').style.width=`${Math.max(0,100*opp.hp/opp.maxHp)}%`;
-  $('rivals-battle-status').textContent=g.message|| (g.turn===me?'Your turn. Choose an owned skill.':'Waiting for opponent...');
+  $('rivals-battle-status').textContent=g.message|| (g.turn===me?'Your turn. Choose an owned move.':'Waiting for opponent...');
   $('rivals-turn-title').textContent=g.over?'MATCH OVER':g.turn===me?'YOUR TURN':'OPPONENT TURN';
-  $('rivals-turn-status').textContent=g.over?'MATCH COMPLETE':g.turn===me?'Choose an owned skill':'Waiting for opponent';
+  $('rivals-turn-status').textContent=g.over?'MATCH COMPLETE':g.turn===me?'Choose an owned move':'Waiting for opponent';
   $('rivals-self-status').textContent=`${mine.hp.toLocaleString()} HP`;
   $('rivals-opponent-status').textContent=`${opp.hp.toLocaleString()} HP`;
-  renderAttackButtons(mine.skills||[],g.turn!==me||g.over);
+  renderAttackButtons(mine.actions||[],g.turn!==me||g.over);
   if(g.lastMove&&g.lastMove.actionId!==lastEffectAction){
    lastEffectAction=g.lastMove.actionId;
    const attacker=g.players.find(player=>player.username===g.lastMove.username);
    const target=g.players.find(player=>player.username!==g.lastMove.username);
-   const skill=attacker?.skills.find(owned=>owned.id===g.lastMove.skillId);
-   if(skill&&attacker&&target){
-    void playSkillVfx(skill,attacker,target,attacker.username===me).catch(error=>{
-     console.error(`Could not play ${skill.name} effect:`,error);
-     $('rivals-battle-status').textContent=`${skill.name} landed, but its visual effect failed to play.`;
-    });
+   const action=attacker?.actions.find(owned=>owned.actionId===g.lastMove.moveId);
+   if(action&&attacker&&target){
+    if(attacker.username===me&&preplayedParry===action.id){
+     preplayedParry=null;
+    }else{
+     void playSkillVfx(action,attacker,target,attacker.username===me,g.lastMove.effects).catch(error=>{
+      console.error(`Could not play ${action.name} effect:`,error);
+      $('rivals-battle-status').textContent=`${action.name} landed, but its visual effect failed to play.`;
+     });
+    }
    }
-  }
  }
- function renderAttackButtons(skills,disabled){
+ }
+ function renderAttackButtons(actions,disabled){
   const grid=$('rivals-attack-buttons');
   grid.innerHTML='';
-  skills.forEach((skill,index)=>{
+  actions.forEach(action=>{
    const button=document.createElement('button');
-   button.className=`attack-button owned-skill ${skill.special==='rainbow-sword'?'rainbow-sword-button':''} ${skill.special==='trident-of-co-op'?'trident-coop-button':''} ${skill.special==='deathsringer'?'deathsringer-button':''} ${skill.special==='helmet-kishin'?`helmet-kishin-button ${skill.id}`:''}`;
-   button.textContent=`${skill.name} // ${Number(skill.damage).toLocaleString()} DMG`;
-   button.disabled=disabled;
-   button.onclick=()=>{
+   button.className=`attack-button ${action.type==='potion'?'potion-button':'owned-skill'} ${action.special==='rainbow-sword'?'rainbow-sword-button':''} ${action.special==='trident-of-co-op'?'trident-coop-button':''} ${action.special==='deathsringer'?'deathsringer-button':''} ${action.special==='helmet-kishin'?`helmet-kishin-button ${action.id}`:''}`;
+   button.textContent=action.type==='potion'
+    ?`${action.name} x${action.count} // +${Number(action.heal).toLocaleString()} HP`
+    :action.id==='perfect-parry'?`${action.name} // TIMING COUNTER`
+    :action.id==='deathsringer'?`${action.name} // LEAVE 1 HP`
+    :action.id==='no-saki'?`${action.name} // LEAVE 200 HP`
+    :`${action.name} // ${Number(action.damage).toLocaleString()} DMG`;
+   button.disabled=disabled||action.usesRemaining===0||(action.type==='potion'&&game?.players.find(player=>player.username===me)?.hp>=game?.players.find(player=>player.username===me)?.maxHp);
+   if(action.color)button.style.setProperty('--rarity',action.color);
+   button.title=action.description||action.name;
+   button.onclick=async()=>{
     if(!room||button.disabled)return;
     button.disabled=true;
-    socket.emit('battle:attack',{code:room.code,move:index});
+    let parryWon=false;
+    if(action.type==='skill'&&action.id==='perfect-parry'){
+     const attacker=game?.players.find(player=>player.username===me);
+     const rival=game?.players.find(player=>player.username!==me);
+      if(!attacker||!rival){button.disabled=false;return;}
+     preplayedParry=action.id;
+      try{
+       const result=await playSkillVfx(action,attacker,rival,true,{});
+       parryWon=Boolean(result?.parryWon);
+      }catch(error){
+       preplayedParry=null;
+       console.error(`Could not play ${action.name} effect:`,error);
+       $('rivals-battle-status').textContent=`${action.name} could not complete. Try again.`;
+       button.disabled=false;
+       return;
+      }
+    }
+    if(!room||!socket?.connected){preplayedParry=null;return;}
+    socket.emit('battle:attack',{code:room.code,actionId:action.actionId,parryWon});
    };
    grid.appendChild(button);
   });
-  if(!skills.length){
+  if(!actions.length){
    const empty=document.createElement('p');
    empty.className='rivals-muted';
    empty.textContent='No owned skills are available for this match.';
    grid.appendChild(empty);
   }
  }
- async function playSkillVfx(skill,attacker,rival,isOwner){
-  if(!isOwner&&skill.id==='perfect-parry'){
+ async function playSkillVfx(action,attacker,rival,isOwner,effects){
+  if(action.id==='perfect-parry'&&!isOwner){
    const effect=document.createElement('div');
    effect.className='perfect-parry-overlay';
    effect.innerHTML='<div class="perfect-parry-card"><div class="perfect-parry-kicker">COUNTER TRIAL // PERFECT PARRY</div><h2>PERFECT PARRY</h2><div class="perfect-parry-bar"><div class="perfect-parry-zone"></div><div class="perfect-parry-cursor"></div></div><p>THE RIVAL ENTERED A PERFECT PARRY TRIAL.</p></div>';
@@ -158,25 +195,35 @@
    window.shake?.();
    return;
   }
-  const handler=skill.skillHandler&&window.YEN_SKILL_HANDLERS?.[skill.skillHandler];
+  if(action.type==='potion'){
+   const elixir=document.createElement('div');
+   elixir.className='rivals-heal-vfx';
+   elixir.textContent=`+${Number(effects?.heal||action.heal).toLocaleString()} HP`;
+   document.body.appendChild(elixir);
+   window.setTimeout(()=>elixir.remove(),1200);
+   window.showFlash?.();
+   return;
+  }
+  const handler=action.skillHandler&&window.YEN_SKILL_HANDLERS?.[action.skillHandler];
   const context={
    setMessage:text=>{$('rivals-battle-status').textContent=String(text);},
    showFlash:()=>window.showFlash?.(),
    shake:()=>window.shake?.(),
    wait:milliseconds=>new Promise(resolve=>window.setTimeout(resolve,milliseconds)),
    boss:{name:rival.username,playerMaxHP:attacker.maxHp},
-   bossHP:rival.hp,
-   playerHP:attacker.hp,
+   bossHP:game?.lastMove?.targetHpBefore??rival.hp,
+   playerHP:game?.lastMove?.attackerHpBefore??attacker.hp,
+   rivalsEffect:effects||{},
    state:{bossTurnSkip:0},
    updateHP:()=>{},
    fmt:value=>Math.max(0,Math.floor(Number(value)||0)).toLocaleString('en-US')
   };
   if(typeof handler==='function'){
-   await handler(context,skill);
-   return;
+   const result=await handler(context,action);
+   return action.id==='perfect-parry'?{parryWon:context.state.bossTurnSkip>0}:result;
   }
-  if(skill.skillHandler)console.warn(`Missing visual handler for ${skill.id}; using its configured effect.`);
-  window.playConfiguredSkillVFX?.({source:skill},false);
+  if(action.skillHandler)console.warn(`Missing visual handler for ${action.id}; using its configured effect.`);
+  window.playConfiguredSkillVFX?.({source:action.type==='attack'?{...action,enchanted:true}:action},false);
  }
  function startMatch(g){
   game=g;
@@ -193,7 +240,7 @@
  $('rivals-ready')?.addEventListener('click',()=>{
   if(selected&&room){
    const skills=ownedBattleSkills().map(skill=>skill.id);
-   socket.emit('room:ready',{code:room.code,kishin:selected,skills});
+  socket.emit('room:ready',{code:room.code,kishin:selected,skills,potions:account?.potions||{}});
   }
  });
  $('rivals-copy-code')?.addEventListener('click',()=>navigator.clipboard?.writeText(room?.code||''));
