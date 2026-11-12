@@ -43,7 +43,7 @@ window.YEN_ACCOUNTS = [
     username: "Solstice",
     password: "666",
    dox: "118500000000",
-    ownedSkills: ["win-can-make-sword","auralis-nyxara","fallen-samurai-90k", "lord-zephyrus-ivory-overlord"],
+    ownedSkills: ["win-can-make-sword","auralis-nyxara","fallen-samurai-90k", "lord-zephyrus-ivory-overlord","sea-predator-kishin"],
     attacks: [],
     potions: {
       minor: 0,
