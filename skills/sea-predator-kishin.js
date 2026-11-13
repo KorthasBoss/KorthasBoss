@@ -1,12 +1,12 @@
 /* YEN! // HELMET KISHIN // SEA PREDATOR SIGNATURE ATTACKS */
 const SEA_PREDATOR_MOVES=[
-  {id:"sea-kishin-abyssal-trident",name:"ABYSSAL TRIDENT",power:650000,bossMin:420000,bossMax:650000,vfx:"sea-trident-vfx",delay:650,message:"SEA PREDATOR // ABYSSAL TRIDENT"},
-  {id:"sea-kishin-leviathan-crash",name:"LEVIATHAN CRASH",power:900000,bossMin:650000,bossMax:900000,vfx:"sea-crash-vfx",delay:700,message:"LEVIATHAN CRASH // THE ENTIRE ARENA BREAKS"},
-  {id:"sea-kishin-tidal-guillotine",name:"TIDAL GUILLOTINE",power:850000,bossMin:850000,bossMax:850000,hits:5,damagePerHit:170000,vfx:"sea-tidal-slash",delay:115,message:"TIDAL GUILLOTINE // FIVE OCEAN BLADES"},
-  {id:"sea-kishin-shell-judgment",name:"SHELL JUDGMENT",power:1150000,bossMin:800000,bossMax:1150000,vfx:"sea-shell-judgment-vfx",delay:800,message:"SHELL JUDGMENT // THE KISHIN SHELL OPENS"},
-  {id:"sea-kishin-black-tide",name:"BLACK TIDE",power:1350000,bossMin:950000,bossMax:1350000,vfx:"sea-black-tide-vfx",delay:900,message:"BLACK TIDE // THE SEA FORGETS YOUR NAME"},
-  {id:"sea-kishin-ocean-devourer",name:"OCEAN DEVOURER",power:1700000,bossMin:1200000,bossMax:1700000,vfx:"sea-devour-vfx",delay:1000,message:"OCEAN DEVOURER // EVERYTHING GETS DRAGGED UNDER"},
-  {id:"sea-kishin-co-op-trident",name:"CO-OP TRIDENT // ABYSSAL EXECUTION",power:2400000,bossMin:1800000,bossMax:2400000,vfx:"sea-coop-vfx",delay:1100,message:"CO-OP TRIDENT // ABYSSAL EXECUTION"}
+  {id:"sea-kishin-abyssal-trident",name:"ABYSSAL TRIDENT",power:3250000,bossMin:2100000,bossMax:3250000,vfx:"sea-trident-vfx",delay:650,message:"SEA PREDATOR // ABYSSAL TRIDENT"},
+  {id:"sea-kishin-leviathan-crash",name:"LEVIATHAN CRASH",power:4500000,bossMin:3250000,bossMax:4500000,vfx:"sea-crash-vfx",delay:700,message:"LEVIATHAN CRASH // THE ENTIRE ARENA BREAKS"},
+  {id:"sea-kishin-tidal-guillotine",name:"TIDAL GUILLOTINE",power:4250000,bossMin:4250000,bossMax:4250000,hits:5,damagePerHit:850000,vfx:"sea-tidal-slash",delay:115,message:"TIDAL GUILLOTINE // FIVE OCEAN BLADES"},
+  {id:"sea-kishin-shell-judgment",name:"SHELL JUDGMENT",power:5750000,bossMin:4000000,bossMax:5750000,vfx:"sea-shell-judgment-vfx",delay:800,message:"SHELL JUDGMENT // THE KISHIN SHELL OPENS"},
+  {id:"sea-kishin-black-tide",name:"BLACK TIDE",power:6750000,bossMin:4750000,bossMax:6750000,vfx:"sea-black-tide-vfx",delay:900,message:"BLACK TIDE // THE SEA FORGETS YOUR NAME"},
+  {id:"sea-kishin-ocean-devourer",name:"OCEAN DEVOURER",power:8500000,bossMin:6000000,bossMax:8500000,vfx:"sea-devour-vfx",delay:1000,message:"OCEAN DEVOURER // EVERYTHING GETS DRAGGED UNDER"},
+  {id:"sea-kishin-co-op-trident",name:"CO-OP TRIDENT // ABYSSAL EXECUTION",power:12000000,bossMin:9000000,bossMax:12000000,vfx:"sea-coop-vfx",delay:1100,message:"CO-OP TRIDENT // ABYSSAL EXECUTION"}
 ];
 
 for(const move of SEA_PREDATOR_MOVES){

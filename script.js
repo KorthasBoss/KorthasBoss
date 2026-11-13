@@ -748,7 +748,7 @@ async function startBattle(boss) {
   await wait(1500);
   if (boss.id === "argus") setMessage(boss.intro[0]);
   else if (boss.id === "azael") setMessage("Azael watches you. Something feels wrong.");
-  else setMessage(`${boss.name} watches you. Choose your attack.`);
+  else setMessage(boss.readyMessage || `${boss.name} watches you. Choose your attack.`);
   bossAttackEnabled=true;
   busy=false;
 }

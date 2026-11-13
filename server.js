@@ -23,7 +23,7 @@ const KISHINS={
  'jorkaprime':{hp:50000000},
  'henmercy':{hp:200000000},
  'starlylands':{hp:1000000000},
- 'sea-predator-kishin':{hp:500000000},
+ 'sea-predator-kishin':{hp:2500000000},
  'unconscious-singer':{hp:30000000},
  'hunter':{hp:5000000}
 };

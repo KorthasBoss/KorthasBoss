@@ -24,6 +24,16 @@ const HENMERCY_GAMES = {
   bell:{title:"BELL OF ABSOLUTION",prompt:"A bell rings once. Match its echo before the final toll.",symbols:["Ⅰ","Ⅱ","Ⅲ"]}
 };
 
+const HENMERCY_PHASES = [
+  {threshold:0.75,damageMultiplier:1.5,name:"THE CURSE AWAKENS",message:"PHASE TWO // THE CURSE AWAKENS. HENMERCY'S attacks grow stronger."},
+  {threshold:0.5,damageMultiplier:2.5,name:"THE HALO BREAKS",message:"PHASE THREE // THE HALO BREAKS. HENMERCY's power surges again."},
+  {threshold:0.25,damageMultiplier:5,name:"FIVEFOLD ABOMINATION",message:"PHASE FOUR // FIVEFOLD ABOMINATION. HENMERCY unleashes the full curse."}
+];
+
+function henmercyDamage(ctx,damage){
+  return Math.round(damage*(HENMERCY_PHASES[ctx.state.stage-2]?.damageMultiplier||1));
+}
+
 function showHenmercyBossVfx(message,kind=""){
   const effect=document.createElement("div");
   effect.className=`henmercy-vfx ${kind}`.trim();
@@ -73,7 +83,7 @@ window.YEN_BOSSES.henmercy = {
   id:"henmercy",
   name:"HENMERCY",
   stars:700000000,
-  title:"THE GOLDEN KISHIN // 13 HOLY SKILLS // 4 LIVE TRIALS",
+  title:"THE GOLDEN KISHIN // FOUR CURSE STAGES",
   battleTitle:"THE HEAVENLY COURT HAS CHOSEN YOU",
   maxHP:2000000000,
   playerMaxHP:3800000,
@@ -84,15 +94,31 @@ window.YEN_BOSSES.henmercy = {
   music:"assets/korthas-theme.mp3",
   battleBackground:"assets/royal.jpg",
   battleClass:"henmercy-battle",
+  readyMessage:"Well. Its time to show you why curses are really dangerus.",
   moves:HENMERCY_BOSS_MOVES,
-  intro:["A golden cross burns into the floor.","Four wings unfold behind a smiling mask.","HENMERCY raises one hand.","Thirteen holy skills answer the gesture.","Choose your move. The trial has already begun."],
+  intro:["Well.","Its time to show you why curses are really dangerus.","A golden cross burns into the floor.","Four wings unfold behind a smiling mask."],
   playerAttacks:[
     ["HUNTER'S CUT",260000,390000,["Your blade crosses the golden light.","The impact ripples through the chapel."]],
     ["WARD BREAKER",340000,510000,["You force a path through the radiance.","A fracture appears in the halo."]],
     ["LAST LIGHT",420000,620000,["Your strike catches Henmercy between blessings.","The golden wings recoil."]]
   ],
   hooks:{
-    createState(){return {turn:0};},
+    createState(){return {turn:0,stage:1};},
+    async afterPlayerHit(ctx){
+      while(ctx.state.stage<=HENMERCY_PHASES.length){
+        const nextPhase=HENMERCY_PHASES[ctx.state.stage-1];
+        if(ctx.bossHP>ctx.boss.maxHP*nextPhase.threshold)return;
+        ctx.state.stage++;
+        const phase=HENMERCY_PHASES[ctx.state.stage-2];
+        ctx.setPhase(`PHASE ${ctx.state.stage} // HENMERCY`);
+        ctx.setStatus(phase.name);
+        showHenmercyBossVfx(phase.name,"phase-change");
+        ctx.setMessage(phase.message);
+        ctx.showFlash();
+        ctx.shake();
+        await ctx.wait(900);
+      }
+    },
     async bossTurn(ctx){
       const move=ctx.pick(ctx.boss.moves);
       ctx.state.turn++;
@@ -109,7 +135,7 @@ window.YEN_BOSSES.henmercy = {
           if(ctx.bossHP<=0)await ctx.completeVictory(ctx.boss.reward,ctx.boss.name);
           return;
         }
-        await this.hit(ctx,move,ctx.randomInt(...move.damage),`THE ${move.name} IS FAILED. THE GOLDEN CROSS DESCENDS.`);
+        await this.hit(ctx,move,henmercyDamage(ctx,ctx.randomInt(...move.damage)),`THE ${move.name} IS FAILED. THE GOLDEN CROSS DESCENDS.`);
         return;
       }
       if(move.heal){
@@ -125,7 +151,7 @@ window.YEN_BOSSES.henmercy = {
         showHenmercyBossVfx(`${move.name} // FOUR CROSSES FALL`);
         for(let hit=1;hit<=move.hits;hit++){
           if(ctx.playerHP<=0)return;
-          const damage=Math.min(ctx.playerHP,move.damagePerHit);
+          const damage=Math.min(ctx.playerHP,henmercyDamage(ctx,move.damagePerHit));
           ctx.damagePlayer(damage);
           ctx.updateHP();
           ctx.setMessage(`${move.name} // ${hit}/${move.hits} // ${ctx.fmt(damage)} DAMAGE.`);
@@ -135,7 +161,7 @@ window.YEN_BOSSES.henmercy = {
         if(ctx.playerHP<=0)ctx.lose();
         return;
       }
-      await this.hit(ctx,move,ctx.randomInt(...move.damage),`HENMERCY // ${move.name}`);
+      await this.hit(ctx,move,henmercyDamage(ctx,ctx.randomInt(...move.damage)),`HENMERCY // ${move.name}`);
     },
     async hit(ctx,move,damage,message){
       showHenmercyBossVfx(move.name);
