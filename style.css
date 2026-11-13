@@ -7,8 +7,8 @@
 }
 *{box-sizing:border-box}
 html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text)}
-body{background-color:#05060b;background-image:radial-gradient(ellipse at 50% 0%,#17243d 0%,#090d17 45%,#05060b 100%);background-size:cover;background-position:center;background-attachment:fixed}
-body{font-family:var(--display);overflow-x:hidden;background:radial-gradient(ellipse at 50% 0%,#17243d 0%,#090d17 45%,#05060b 100%)}
+body{background-color:#05060b;background-image:radial-gradient(ellipse at 50% 0%,#17243d 0%,#090d17 45%,#05060b 100%);background-repeat:no-repeat;background-size:cover;background-position:center;background-attachment:fixed}
+body{font-family:var(--display);overflow-x:hidden;background:radial-gradient(ellipse at 50% 0%,#17243d 0%,#090d17 45%,#05060b 100%);background-repeat:no-repeat;background-size:cover;background-position:center;background-attachment:fixed}
 button{font:inherit;cursor:pointer}
 .hidden{display:none!important}
 .ambient{position:fixed;pointer-events:none;border-radius:50%;filter:blur(90px);opacity:.13;z-index:0}
@@ -100,11 +100,12 @@ button{font:inherit;cursor:pointer}
 .red-diamond{background:var(--red);box-shadow:0 0 10px #ff426377}
 .attack-heading{margin-bottom:13px}
 .attack-count{font-size:8px;color:#8292aa;white-space:nowrap}
-.attack-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
-.attack-button{position:relative;overflow:hidden;min-height:68px;padding:10px 6px;border:1px solid #493443;background:linear-gradient(145deg,#1b1522,#0e101a);color:#f2eaf1;font:10px var(--mono);letter-spacing:.04em;transition:transform .16s,border-color .16s,box-shadow .16s}
-.attack-button::before{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 20%,#ff426318 50%,transparent 75%);transform:translateX(-120%)}
-.attack-button::after{content:"";position:absolute;bottom:0;left:0;width:100%;height:2px;background:#ff4263;transform:scaleX(0);transform-origin:left;transition:transform .2s}
+.attack-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;max-height:480px;overflow-y:auto;align-content:start;padding:2px 6px 6px 2px;scrollbar-color:#493443 #0a0e18;scrollbar-width:thin}
+.attack-button{position:relative;overflow:hidden;min-width:0;min-height:68px;padding:10px 6px;border:1px solid #493443;background:linear-gradient(145deg,#1b1522,#0e101a);color:#f2eaf1;font:10px/1.35 var(--mono);letter-spacing:.04em;overflow-wrap:anywhere;transition:transform .16s,border-color .16s,box-shadow .16s}
+.attack-button::before{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 20%,#ff426318 50%,transparent 75%);transform:translateX(-120%);pointer-events:none}
+.attack-button::after{content:"";position:absolute;bottom:0;left:0;width:100%;height:2px;background:#ff4263;transform:scaleX(0);transform-origin:left;transition:transform .2s;pointer-events:none}
 .attack-button:hover:not(:disabled){transform:translateY(-3px);border-color:#ff5873;box-shadow:0 8px 20px #ff29441a}
+.attack-button:focus-visible{outline:2px solid #ff8da0;outline-offset:2px}
 .attack-button:hover:not(:disabled)::before{animation:buttonSweep .7s}
 .attack-button:hover:not(:disabled)::after{transform:scaleX(1)}
 @keyframes buttonSweep{to{transform:translateX(120%)}}
@@ -217,4 +218,1144 @@ button{font:inherit;cursor:pointer}
 @media(max-width:850px){.portal-screen{grid-template-columns:1fr;gap:20px}.portal-art{min-height:370px}.portal-character{height:330px}.menu-buttons{grid-template-columns:1fr}.lobby-grid{grid-template-columns:1fr}.merchant-wrap{grid-template-columns:1fr}.merchant-art{min-height:320px}.merchant-art img{height:290px}.skill-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.shop-heading{align-items:stretch;flex-direction:column}.shop-search{width:100%}.lobby-actions{flex-wrap:wrap}.lobby-action{min-width:30%}}
 @media(max-width:560px){.portal-screen,.portal-subscreen{padding-top:22px}.portal-title{font-size:92px}.portal-subtitle{font-size:19px}.portal-note{flex-wrap:wrap}.subscreen-card{margin-top:18px;padding:22px}.lobby-top{align-items:start;flex-direction:column}.wallet{width:100%;text-align:left}.skill-grid{grid-template-columns:1fr}.confirm-card{padding:24px}.confirm-card h1{font-size:30px}.merchant-dialog h1{font-size:45px}.merchant-meta{gap:10px}.merchant-meta span{font-size:7px}}
 .merchant-lobby-card{border-color:#4b3b2d;background:linear-gradient(145deg,#1c1711,#0b0b0d)}.merchant-lobby-card:hover{border-color:#ffbf65;box-shadow:0 18px 45px #ff9f2618}.merchant-lobby-card .boss-card-art{filter:drop-shadow(0 0 24px #ff9f264d)}.merchant-lobby-card .stars{color:#ffc56d}
-.owned-skill{border-color:color-mix(in srgb,var(--rarity) 55%,#29384e)}.owned-skill::after{background:var(--rarity)}.enchanted-skill{border-color:#c984ff!important;box-shadow:0 0 18px #b04cff1d,inset 0 0 20px #b04cff0c}.enchanted-skill::after{background:#e3a0ff}.skill-card.enchanted h3{color:#f2d5ff;text-shadow:0 0 13px #b65cff66}
+.owned-skill{border-color:color-mix(in srgb,var(--rarity) 55%,#29384e)}.owned-skill::after{background:var(--rarity)}.enchanted-skill{border-color:var(--rarity)!important;box-shadow:0 0 18px color-mix(in srgb,var(--rarity) 55%,transparent),inset 0 0 20px color-mix(in srgb,var(--rarity) 16%,transparent)}.enchanted-skill::after{background:var(--rarity)}.skill-card.enchanted h3{color:#f2d5ff;text-shadow:0 0 13px #b65cff66}
+
+/* ==========================================================
+   YEN! // STABLE CHARACTER ART
+   Boss/character images are never intentionally faded.
+   Missing files stay fully visible while a warning is logged.
+========================================================== */
+.character-art,.battle-art,.boss-card-art,.portal-character,.idle-art,#battle-boss,#merchant-image{
+  opacity:1!important;
+  visibility:visible!important;
+}
+
+/* ==========================================================
+   MERCHANT // HEALING POTIONS
+========================================================== */
+.potion-vault{margin-top:28px;padding-top:22px;border-top:1px solid #27364b}
+.potion-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin-top:12px}
+.potion-card{position:relative;min-height:115px;padding:15px;border:1px solid #4a3340;background:linear-gradient(145deg,#17121d,#0c1018);color:#f4eff5;cursor:pointer;transition:transform .16s,border-color .16s,box-shadow .16s}
+.potion-card:hover{transform:translateY(-3px);border-color:#ff6b87;box-shadow:0 10px 24px #ff29441c}
+.potion-card h3{margin:8px 0 5px;font:600 14px var(--display);letter-spacing:.04em}
+.potion-card p{margin:0;color:#8997ad;font:9px/1.45 var(--mono)}
+.potion-card .potion-price{margin-top:10px;color:#ff8299;font:10px var(--mono)}
+.potion-card .potion-owned{position:absolute;top:10px;right:10px;color:#74dfff;font:8px var(--mono)}
+.attack-button.potion-button{border-color:#5b3946;color:#ffb7c4}
+.attack-button.potion-button:disabled{opacity:.3}
+
+/* ==========================================================
+   AZAEL // DOMAIN
+========================================================== */
+body.azael-domain{
+  --bg:#090003;
+  background-color:#090003!important;
+  color:#ffe9ed;
+}
+body.azael-domain .site-header,
+body.azael-domain .combat-main,
+body.azael-domain .player-panel,
+body.azael-domain .boss-panel{
+  border-color:#6b1829;
+}
+body.azael-domain .boss-panel{background:linear-gradient(105deg,#210812,#100207 65%,#240711)}
+body.azael-domain .combat-main{background:#12050a}
+body.azael-domain .player-panel{background:linear-gradient(155deg,#260a12,#100309 75%)}
+body.azael-domain .panel-line{background:#541323}
+body.azael-domain .boss-fill{background:linear-gradient(90deg,#7b0d22,#e22d4e,#ff9eaa);box-shadow:0 0 18px #ff214d}
+body.azael-domain .battle-log{background:linear-gradient(100deg,#260b14,#12050a);border-color:#5b1628}
+body.azael-domain .attack-button{border-color:#6b2738;background:linear-gradient(145deg,#24101a,#11060b)}
+body.azael-domain .attack-button:hover:not(:disabled){border-color:#ff4263;box-shadow:0 8px 24px #ff29442b}
+body.azael-domain .boss-name-line h2,
+body.azael-domain .battle-heading h2{color:#fff0f3;text-shadow:0 0 22px #ff214d66}
+body.azael-domain .status-dot{background:#ff4263;box-shadow:0 0 12px #ff4263}
+.domain-transition{position:fixed;inset:0;z-index:9998;background:#000;opacity:0;pointer-events:none;animation:domainFadeBlack 2.2s ease-in-out forwards}
+@keyframes domainFadeBlack{0%{opacity:0}38%{opacity:1}70%{opacity:1}100%{opacity:0}}
+.domain-mini-game{position:fixed;z-index:9999;inset:0;display:grid;place-items:center;background:#030207cc;backdrop-filter:blur(5px)}
+.domain-mini-card{width:min(560px,92vw);padding:28px;border:1px solid #8c2941;background:linear-gradient(145deg,#17070d,#090308);box-shadow:0 0 70px #ff173d22;text-align:center}
+.domain-mini-card .section-kicker{justify-content:center;color:#ff8198}
+.domain-mini-card h2{margin:10px 0;font-size:30px;letter-spacing:.08em}
+.domain-mini-card p{color:#aeb7c7;font:13px/1.6 var(--mono)}
+.domain-reaction{position:relative;height:28px;margin:22px 0;border:1px solid #5d2434;background:#09030a;overflow:hidden}
+.domain-reaction-target{position:absolute;left:50%;top:0;width:20%;height:100%;transform:translateX(-50%);background:#ff365c55;border-left:1px solid #ff6680;border-right:1px solid #ff6680}
+.domain-reaction-cursor{position:absolute;top:-4px;width:5px;height:36px;background:#fff;box-shadow:0 0 15px #ff4868;left:0}
+.domain-hit-button{width:100%;min-height:52px;border:1px solid #ff4263;background:#210a12;color:#ffe9ee;font:700 12px var(--mono);letter-spacing:.14em}
+.domain-hit-button:hover{background:#3a0c18;box-shadow:0 0 25px #ff29443b}
+.domain-timer{position:fixed;z-index:65;right:18px;top:18px;padding:7px 10px;border:1px solid #792238;background:#100208dd;color:#ff9cad;font:9px var(--mono);letter-spacing:.1em;pointer-events:none}
+@media(max-width:850px){.potion-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.potion-grid{grid-template-columns:1fr}.domain-mini-card{padding:20px}.domain-mini-card h2{font-size:24px}}
+
+/* ==========================================================
+   RESULT SEQUENCES // VICTORY + DEFEAT
+========================================================== */
+.result-sequence{position:fixed;inset:0;z-index:10000;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 42%,#102b3bde 0%,#03060cf7 58%,#010207 100%);overflow:hidden;text-align:center;animation:resultIn .45s ease-out both}
+.result-sequence::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0 5px,#fff00007 6px);pointer-events:none}
+.result-center{position:relative;z-index:3;animation:victoryText .8s cubic-bezier(.2,.9,.2,1) both}
+.result-center h1{margin:8px 0;font-size:clamp(60px,11vw,150px);letter-spacing:.04em;line-height:.9;text-shadow:0 0 18px #73e8ff66,0 0 70px #3bd4ff33}
+.result-center p{margin:12px 0;color:#8ea4ba;font:11px var(--mono);letter-spacing:.25em}
+.result-kicker{color:#69dfff;font:10px var(--mono);letter-spacing:.18em}
+.money-reward,.loss-reward{position:absolute;z-index:5;bottom:48px;min-width:min(520px,86vw);padding:15px 24px;border:1px solid #3c7287;background:#06121add;box-shadow:0 0 35px #27d5ff1c;animation:moneyRise 1s .35s cubic-bezier(.2,.9,.2,1) both}
+.money-reward span,.loss-reward span{display:block;color:#68859b;font:8px var(--mono);letter-spacing:.18em}
+.money-reward strong{display:block;color:#9df0ff;font:32px var(--mono);margin-top:4px;text-shadow:0 0 18px #2dd8ff}
+.result-actions{position:absolute;z-index:6;bottom:34px;display:flex;gap:10px;opacity:0;animation:actionsIn .5s 1.2s forwards}
+.result-actions .menu-button{min-width:210px}
+.result-runes{position:absolute;inset:-20%;background:conic-gradient(from 0deg,transparent,#3edfff22,transparent 18%,#7beeff12,transparent 38%);animation:runeSpin 8s linear infinite}
+.victory-sequence .result-runes::after{content:"✦   ✧   ✦   ◇   ✦   ✧";position:absolute;inset:0;display:grid;place-items:center;color:#9cf2ff55;font-size:8vw;letter-spacing:3vw;animation:starPulse 1.4s infinite}
+.defeat-sequence{background:radial-gradient(circle at 50% 50%,#350813ee 0%,#090207f7 48%,#010105 100%)}
+.defeat-sequence .result-center h1{color:#ff607c;text-shadow:0 0 20px #ff274d88,0 0 80px #ff123d44;animation:defeatText .22s infinite alternate}
+.defeat-sequence .result-kicker{color:#ff718b}
+.defeat-static{position:absolute;inset:0;opacity:.15;background:repeating-linear-gradient(0deg,transparent 0 3px,#ff315015 4px 5px);animation:staticJitter .12s infinite}
+.loss-reward{bottom:auto;top:72%;border-color:#672536;background:#18050be8;box-shadow:0 0 35px #ff24441a}
+.loss-reward strong{display:block;color:#ff9aaa;font:25px var(--mono);margin-top:4px}
+.result-out{animation:resultOut .6s ease forwards}
+@keyframes resultIn{from{opacity:0;transform:scale(1.04)}to{opacity:1;transform:scale(1)}}
+@keyframes resultOut{to{opacity:0;transform:scale(.98)}}
+@keyframes victoryText{from{opacity:0;transform:translateY(25px) scale(.85);filter:blur(7px)}to{opacity:1;transform:none;filter:none}}
+@keyframes defeatText{from{transform:translateX(-3px)}to{transform:translateX(3px)}}
+@keyframes moneyRise{from{opacity:0;transform:translateY(45px) scale(.8)}to{opacity:1;transform:none}}
+@keyframes actionsIn{to{opacity:1;transform:translateY(0)}}
+@keyframes runeSpin{to{transform:rotate(360deg)}}
+@keyframes starPulse{50%{opacity:.25;transform:scale(1.08)}}
+@keyframes staticJitter{50%{transform:translateX(2px)}100%{transform:translateX(-2px)}}
+.yen-save-warning{position:fixed;z-index:12000;left:50%;bottom:22px;transform:translateX(-50%);max-width:min(92vw,560px);padding:12px 16px;border:1px solid #ff647c;background:#170b12;color:#fff;border-radius:10px;font:600 13px/1.45 system-ui;box-shadow:0 8px 34px #0009;text-align:center}
+
+/* Characters never fade because of image-load errors. */
+#battle-boss,.battle-art,.boss-card-art,#merchant-image,.portal-character,.character-art{opacity:1!important;visibility:visible!important}
+
+@media(max-width:560px){.result-center h1{font-size:58px}.money-reward,.loss-reward{bottom:28px}.loss-reward{top:72%;bottom:auto}.result-actions{bottom:18px;flex-direction:column;width:min(88vw,360px)}.result-actions .menu-button{width:100%}}
+
+/* MALAKOR */
+.malakor-reflect-vfx{position:fixed;z-index:9990;left:50%;top:34%;transform:translate(-50%,-50%);padding:14px 24px;border:1px solid #ff354f;color:#fff;background:#24030ae8;box-shadow:0 0 30px #ff203f66,0 0 80px #ff203f33;font:12px var(--mono);letter-spacing:.18em;animation:malakorReflect .65s ease-out forwards;pointer-events:none}
+@keyframes malakorReflect{0%{opacity:0;transform:translate(-50%,-50%) scale(.7)}25%{opacity:1;transform:translate(-50%,-50%) scale(1.08)}100%{opacity:0;transform:translate(-50%,-75%) scale(1)}}
+.malakor-rush-vfx{position:fixed;z-index:9988;left:-30vw;top:50%;width:30vw;height:9px;background:linear-gradient(90deg,transparent,#ff334f,#fff);box-shadow:0 0 18px #ff203f,0 0 55px #ff203f;transform:translateY(-50%) skewX(-20deg);pointer-events:none;opacity:0}
+.malakor-rush-vfx:not(.impact){animation:malakorRush .55s cubic-bezier(.2,.8,.2,1) forwards}
+.malakor-rush-vfx.impact{left:70%;opacity:1;animation:malakorImpact .35s ease-out forwards}
+@keyframes malakorRush{0%{left:-30vw;opacity:0}25%{opacity:1}100%{left:65%;opacity:1}}
+@keyframes malakorImpact{0%{transform:translateY(-50%) scaleX(1)}100%{transform:translateY(-50%) scaleX(3);opacity:0}}
+.malakor-sword-slash{position:fixed;z-index:9989;left:50%;top:48%;width:58vw;height:8px;background:linear-gradient(90deg,transparent,#ff314d,#fff,#ff314d,transparent);box-shadow:0 0 14px #ff314d,0 0 38px #ff203f;transform:translate(-50%,-50%) rotate(calc(-18deg + var(--slash-index) * 7deg));animation:malakorSlash .18s ease-out forwards;pointer-events:none}
+@keyframes malakorSlash{0%{opacity:0;transform:translate(-50%,-50%) rotate(calc(-18deg + var(--slash-index) * 7deg)) scaleX(.1)}35%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) rotate(calc(-18deg + var(--slash-index) * 7deg)) scaleX(1.2)}}
+.malakor-mini-game{position:fixed;z-index:9999;inset:0;display:grid;place-items:center;background:#050207d9;backdrop-filter:blur(6px)}
+.malakor-mini-card{width:min(580px,92vw);padding:30px;border:1px solid #8e263d;background:linear-gradient(145deg,#19070d,#070309);box-shadow:0 0 90px #ff1e3d25;text-align:center}
+.malakor-mini-card h2{font-size:32px;margin:10px 0}.malakor-mini-card p{font:13px/1.6 var(--mono);color:#aeb7c7}.malakor-eye-track{position:relative;height:24px;margin:28px 0;background:#180b10;border:1px solid #6e2639;overflow:hidden}.malakor-eye-core{position:absolute;left:43%;width:14%;height:100%;background:#ff314f;box-shadow:0 0 30px #ff204c}.malakor-eye-cursor{position:absolute;left:0;top:0;width:3px;height:100%;background:#fff;box-shadow:0 0 14px #fff}.malakor-eye-button{border:1px solid #ff4160;background:#210811;color:#fff;padding:13px 20px;font:11px var(--mono);letter-spacing:.1em;cursor:pointer}.malakor-eye-button:hover{box-shadow:0 0 25px #ff204c66}
+.rainbow-sword-slash{position:fixed;z-index:9991;left:50%;top:46%;width:78vw;height:14px;background:linear-gradient(90deg,#ff004c,#ff8a00,#fff000,#36ff6d,#00d9ff,#6c5cff,#ff00c8);box-shadow:0 0 15px #fff,0 0 35px #7cf,0 0 80px #f4f;transform:translate(-50%,-50%) rotate(-8deg);animation:rainbowSlash .85s cubic-bezier(.2,.8,.2,1) forwards;pointer-events:none}
+@keyframes rainbowSlash{0%{opacity:0;transform:translate(-50%,-50%) rotate(-8deg) scaleX(.05)}20%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) rotate(-8deg) scaleX(1.15)}}
+.rainbow-sword-broken{animation:rainbowBreak .7s ease forwards!important}
+@keyframes rainbowBreak{0%{opacity:1;transform:scale(1)}35%{opacity:1;transform:scale(1.06) rotate(-2deg)}100%{opacity:0;transform:scale(.7) rotate(8deg);filter:blur(4px)}}
+.attack-button.rainbow-sword-button{border-image:linear-gradient(90deg,#ff005d,#ffd400,#00ff88,#00c8ff,#a64cff,#ff00a8) 1!important;box-shadow:0 0 18px #ff00aa33,inset 0 0 22px #ffffff08}
+.attack-button.rainbow-sword-button::after{background:linear-gradient(90deg,#ff005d,#ffd400,#00ff88,#00c8ff,#a64cff,#ff00a8)!important;transform:scaleX(1)!important}
+
+/* CURVED CRYSTAL SCYTHE */
+.attack-button.jjs-sword-button{border-image:linear-gradient(90deg,#ff6600,#000000,#ff6600,#000000,#ff6600,#000000) 1!important;box-shadow:0 0 18px #ff00aa33,inset 0 0 22px #ffffff08}
+.attack-button.jjs-sword-button::after{background:linear-gradient(90deg,#ff6600,#000000,#ff6600,#000000,#ff6600,#000000)!important;transform:scaleX(1)!important}
+
+.battle-locked{position:relative!important;filter:grayscale(.55)!important;opacity:.58!important;cursor:not-allowed!important}
+.battle-locked::after{content:"🔒";position:absolute;right:9px;top:7px;font-size:14px;filter:grayscale(0)}
+.aethelgard-name-overlay,.aethelgard-card-game,.aethelgard-mini-game{position:fixed;inset:0;z-index:150;background:#010208ed;display:flex;align-items:center;justify-content:center;padding:20px;animation:aethelgardOverlayIn .35s ease both}
+@keyframes aethelgardOverlayIn{from{opacity:0}to{opacity:1}}
+.aethelgard-name-box,.aethelgard-card-box,.aethelgard-mini-card{width:min(680px,100%);border:1px solid #aab6ff88;background:linear-gradient(145deg,#10152a,#03050c);box-shadow:0 0 70px #8699ff25,0 30px 100px #000b;padding:32px}
+.aethelgard-name-box h2,.aethelgard-card-box h2,.aethelgard-mini-card h2{font:clamp(30px,5vw,52px) var(--display);margin:12px 0;color:#fff;text-shadow:0 0 22px #aebdff66}
+.aethelgard-name-box p,.aethelgard-card-box p,.aethelgard-mini-card p{font:12px/1.5 var(--mono);color:#8998b6}
+.aethelgard-name-input{width:100%;box-sizing:border-box;margin:14px 0;padding:17px;background:#050711;border:1px solid #6270a5;color:#fff;font:16px var(--mono);outline:none}
+.aethelgard-name-input:focus{border-color:#dce3ff;box-shadow:0 0 25px #9eafff22}
+.aethelgard-white-fade{position:fixed;inset:0;z-index:140;background:#fff;animation:aethelgardWhite .9s ease forwards;pointer-events:none}
+.aethelgard-white-fade.phase-change{animation-duration:1.1s}
+@keyframes aethelgardWhite{0%{opacity:0}35%{opacity:1}75%{opacity:1}100%{opacity:0}}
+.aethelgard-null{color:#dfe6ff!important;text-shadow:0 0 14px #9eafff,0 0 30px #fff!important}
+.aethelgard-mini-card{text-align:center}
+.aethelgard-moon-track{position:relative;height:40px;margin:28px 0;border:1px solid #566493;background:#080b18;overflow:hidden}
+.aethelgard-moon-target{position:absolute;left:42%;width:16%;height:100%;background:#fff;box-shadow:0 0 35px #cbd7ff}
+.aethelgard-moon-cursor{position:absolute;top:0;width:4px;height:100%;background:#9eb6ff;box-shadow:0 0 18px #fff}
+.aethelgard-card-box{text-align:center}
+.aethelgard-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:22px 0}
+.aethelgard-choice-card{height:170px;border:1px solid #5f6eaa;background:radial-gradient(circle at 50% 35%,#28335f,#080b16 65%);color:#fff;cursor:pointer;transition:.18s;box-shadow:inset 0 0 25px #9aaaff12}
+.aethelgard-choice-card:hover{transform:translateY(-6px);border-color:#fff;box-shadow:0 0 30px #aebcff35}
+.aethelgard-choice-card span{display:block;font:58px var(--display);text-shadow:0 0 25px #b8c5ff}
+.aethelgard-choice-card small{font:8px var(--mono);letter-spacing:.15em;color:#8796bd}
+.aethelgard-countdown{font:24px var(--mono);color:#fff;text-shadow:0 0 15px #b5c2ff}
+.aethelgard-galaxy-slash{position:fixed;z-index:170;left:50%;top:50%;width:110vw;height:8px;background:#fff;transform:translate(-50%,-50%) rotate(-18deg);box-shadow:0 0 10px #fff,0 0 30px #8f9dff,0 0 70px #633dff;animation:galaxySlash .65s ease-out forwards;pointer-events:none}
+@keyframes galaxySlash{from{opacity:0;transform:translate(-50%,-50%) rotate(-18deg) scaleX(.1)}35%{opacity:1}to{opacity:0;transform:translate(-50%,-50%) rotate(-18deg) scaleX(1.1)}}
+.aethelgard-rain-star{position:fixed;z-index:160;top:-40px;color:#fff;font-size:18px;text-shadow:0 0 8px #fff,0 0 20px #aabaff;pointer-events:none;animation:aethelStarFall 1.05s linear forwards}
+@keyframes aethelStarFall{to{top:110vh;transform:rotate(270deg) scale(.55);opacity:0}}
+.star-cursed{border-color:#fff!important;box-shadow:0 0 22px #aebdff55,inset 0 0 22px #aebdff18!important}
+@media(max-width:560px){.aethelgard-cards{gap:8px}.aethelgard-choice-card{height:130px}.aethelgard-name-box,.aethelgard-card-box,.aethelgard-mini-card{padding:22px}}
+
+/* ==========================================================
+   AMIAS + NEBULA // SHARED PROFILE FRAME CARDS
+   The frame is ornamental and intentionally sits outside the
+   normal boss-card box. Both bosses remain normal clickable cards.
+========================================================== */
+.profile-frame-card{
+  overflow:visible!important;
+  isolation:isolate;
+  z-index:1;
+  background:linear-gradient(145deg,#11152b,#070914)!important;
+  border-color:#6670a8!important;
+}
+.profile-frame-card:hover{z-index:5;border-color:#dfe5ff!important;box-shadow:0 20px 60px #8e9cff2b,0 0 38px #fff1!important}
+.profile-frame-card .boss-card-bg{opacity:.16!important;background:radial-gradient(circle at 50% 40%,#6d59ff33,transparent 55%),linear-gradient(145deg,#17122d,#050711)!important}
+.profile-frame-card::after{z-index:1!important;background:linear-gradient(180deg,transparent 25%,#050711dd 76%,#050711ff 100%)!important}
+.profile-frame-wrap{position:absolute;z-index:3;left:-5%;right:-5%;top:-10%;bottom:-10%;display:grid;place-items:center;pointer-events:none}
+.profile-card-frame{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 14px #a9b7ff55) drop-shadow(0 0 35px #8e9cff20)}
+.profile-card-character{z-index:4!important;left:50%!important;right:auto!important;top:46%!important;width:42%!important;height:255px!important;transform:translate(-50%,-50%)!important;object-fit:contain!important;filter:drop-shadow(0 0 20px #fff6) drop-shadow(0 0 40px #8e7cff44)!important}
+.profile-frame-card .boss-card-badge{z-index:7;background:#050711dd;color:#fff;border-color:#c9d1ff99}
+.profile-frame-card .boss-card-info{z-index:7;left:20px;right:20px;bottom:16px;text-align:center}
+.profile-frame-card .boss-card-info .stars{color:#fff;text-shadow:0 0 15px #aab7ff}
+.profile-frame-card .boss-card-info h2{color:#fff;text-shadow:0 0 22px #a79cff;letter-spacing:.14em}
+.profile-frame-card .boss-card-info p{color:#c4c9e6}
+.profile-frame-card:nth-child(even) .profile-card-frame{filter:drop-shadow(0 0 14px #d9d4ff55) drop-shadow(0 0 35px #b4a9ff22)}
+
+/* AMIAS combat VFX */
+.amias-slash-vfx{position:fixed;z-index:9990;left:50%;top:48%;width:105vw;height:12px;background:linear-gradient(90deg,transparent,#ff174f,#fff,#ff174f,transparent);box-shadow:0 0 20px #ff174f,0 0 70px #ff174f;transform:translate(-50%,-50%) rotate(-12deg);animation:amiasSlash .42s ease-out forwards;pointer-events:none}
+@keyframes amiasSlash{0%{opacity:0;transform:translate(-50%,-50%) rotate(-12deg) scaleX(.03)}20%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) rotate(-12deg) scaleX(1.15)}}
+.amias-parry-vfx{position:fixed;z-index:9991;left:50%;top:46%;width:130px;height:130px;border:4px solid #fff;border-radius:50%;box-shadow:0 0 20px #fff,0 0 50px #ff164f,0 0 100px #ff164f;transform:translate(-50%,-50%);animation:amiasParry .36s ease-out forwards;pointer-events:none}
+@keyframes amiasParry{0%{opacity:0;transform:translate(-50%,-50%) scale(.1)}35%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(2.8)}}
+.amias-crimson-slash{position:fixed;z-index:9989;left:50%;top:48%;width:75vw;height:9px;background:linear-gradient(90deg,transparent,#ff174f,#fff,#ff174f,transparent);box-shadow:0 0 16px #ff174f,0 0 45px #ff174f;transform:translate(-50%,-50%) rotate(calc(-28deg + var(--slash-index)*9deg));animation:amiasWaltz .1s ease-out forwards;pointer-events:none}
+@keyframes amiasWaltz{0%{opacity:0;transform:translate(-50%,-50%) rotate(calc(-28deg + var(--slash-index)*9deg)) scaleX(.05)}30%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) rotate(calc(-28deg + var(--slash-index)*9deg)) scaleX(1.1)}}
+.amias-blood-crown{position:fixed;z-index:9988;left:50%;top:43%;width:220px;height:220px;border-radius:50%;border:5px solid #ff174f;box-shadow:0 0 25px #ff174f,0 0 90px #ff174f88,inset 0 0 45px #ff174f44;transform:translate(-50%,-50%);animation:amiasCrown .75s ease-out forwards;pointer-events:none}
+@keyframes amiasCrown{0%{opacity:0;transform:translate(-50%,-50%) scale(.15)}40%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(2.3) rotate(45deg)}}
+.amias-heartseeker{position:fixed;z-index:9988;left:50%;top:50%;width:35vw;height:35vw;max-width:360px;max-height:360px;border-radius:50%;background:radial-gradient(circle,#fff0 40%,#ff174f55 42%,#ff174f00 64%);box-shadow:0 0 60px #ff174f;transform:translate(-50%,-50%);animation:amiasHeart .7s ease-out forwards;pointer-events:none}
+@keyframes amiasHeart{0%{opacity:0;transform:translate(-50%,-50%) scale(.2)}35%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(1.8)}}
+.amias-red-judgment{position:fixed;z-index:9987;inset:15%;border:2px solid #ff174f;box-shadow:inset 0 0 100px #ff174f33,0 0 60px #ff174f55;animation:amiasJudgment .7s ease-out forwards;pointer-events:none}
+@keyframes amiasJudgment{0%{opacity:0;transform:scale(.7)}30%{opacity:1}100%{opacity:0;transform:scale(1.15)}}
+.amias-parry-text{color:#ff718c!important;text-shadow:0 0 18px #ff174f!important}
+
+/* NEBULA combat VFX */
+.nebula-reflect-vfx{position:fixed;z-index:9991;inset:0;border:7px solid #a78bff;box-shadow:inset 0 0 100px #7d5cff66,0 0 70px #9d84ff88;animation:nebReflect .65s ease-out forwards;pointer-events:none}
+@keyframes nebReflect{0%{opacity:0;transform:scale(.8)}25%{opacity:1}100%{opacity:0;transform:scale(1.06)}}
+.nebula-null-vfx{position:fixed;z-index:9988;left:50%;top:45%;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,#fff,#a995ff 8%,#6d4dff22 45%,transparent 70%);transform:translate(-50%,-50%);animation:nebNull .55s ease-out forwards;pointer-events:none}
+@keyframes nebNull{0%{opacity:0;transform:translate(-50%,-50%) scale(.1)}40%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(1.7)}}
+.nebula-gravity-vfx{position:fixed;z-index:9988;left:50%;top:50%;width:180px;height:180px;border-radius:50%;background:#000;box-shadow:0 0 30px #fff,0 0 100px #684cff,0 0 180px #24146b;transform:translate(-50%,-50%);animation:nebGravity .75s ease-out forwards;pointer-events:none}
+@keyframes nebGravity{0%{opacity:0;transform:translate(-50%,-50%) scale(.05)}35%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(2.8)}}
+.nebula-devour-vfx{position:fixed;z-index:9988;left:50%;top:50%;width:45vw;height:45vw;max-width:520px;max-height:520px;border-radius:50%;background:conic-gradient(from 0deg,#fff,#7158ff,#08001d,#c3b7ff,#fff);box-shadow:0 0 80px #7c5cff;transform:translate(-50%,-50%);animation:nebDevour .8s ease-out forwards;pointer-events:none}
+@keyframes nebDevour{0%{opacity:0;transform:translate(-50%,-50%) scale(.1) rotate(0)}35%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(1.8) rotate(260deg)}}
+.nebula-star-impact{position:fixed;z-index:9989;left:calc(10% + var(--star-index)*9%);top:10%;width:24px;height:24px;background:#fff;clip-path:polygon(50% 0,61% 38%,100% 50%,61% 62%,50% 100%,39% 62%,0 50%,39% 38%);box-shadow:0 0 20px #fff,0 0 50px #8d70ff;animation:nebStar .12s ease-out forwards;pointer-events:none}
+@keyframes nebStar{0%{opacity:0;transform:scale(.1) translateY(-30px)}60%{opacity:1}100%{opacity:0;transform:scale(3) translateY(45vh)}}
+.nebula-horizon-vfx{position:fixed;z-index:9988;left:50%;top:50%;width:70vw;height:70vw;max-width:800px;max-height:800px;border-radius:50%;border:20px solid #4e2bff55;box-shadow:inset 0 0 100px #000,0 0 100px #6546ff;transform:translate(-50%,-50%);animation:nebHorizon .8s ease-out forwards;pointer-events:none}
+@keyframes nebHorizon{0%{opacity:0;transform:translate(-50%,-50%) scale(.1)}40%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(1.6)}}
+.nebula-null-text{color:#ddd5ff!important;text-shadow:0 0 18px #9277ff!important}
+.nebula-card-game{position:fixed;z-index:9999;inset:0;display:grid;place-items:center;background:#02000bdc;backdrop-filter:blur(7px)}
+.nebula-card-box{width:min(720px,92vw);padding:34px;border:1px solid #8c76ff;background:linear-gradient(145deg,#140d32,#03020b);box-shadow:0 0 100px #765cff35;text-align:center}
+.nebula-card-box h2{font-size:40px;margin:12px 0}.nebula-card-box p{color:#b9b1d4;font:12px/1.6 var(--mono)}
+.nebula-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:24px 0}.nebula-choice{height:190px;border:1px solid #8c76ff;background:radial-gradient(circle at 50% 35%,#35227a,#080313 68%);color:#fff;cursor:pointer;transition:.18s;box-shadow:inset 0 0 35px #9f88ff18}.nebula-choice:hover{transform:translateY(-8px) scale(1.03);border-color:#fff;box-shadow:0 0 40px #8b6dff66}.nebula-choice span{display:block;font-size:70px;text-shadow:0 0 30px #fff,0 0 60px #8d72ff}.nebula-choice small{font:9px var(--mono);letter-spacing:.15em;color:#bcb2e8}.nebula-card-timer{font:25px var(--mono);color:#fff;text-shadow:0 0 20px #9b84ff}
+@media(max-width:560px){.profile-frame-wrap{left:-8%;right:-8%}.profile-card-character{width:48%!important}.nebula-cards{gap:8px}.nebula-choice{height:145px}.nebula-card-box{padding:22px}}
+
+
+/* ==========================================================
+   SEA PREDATOR // SPECIAL ENDGAME PRESENTATION
+   ========================================================== */
+.sea-predator-battle .boss-panel{min-height:330px;border-color:#28e7ff66;background:linear-gradient(105deg,#061a28,#07111d 58%,#08233a);box-shadow:inset 0 0 90px #00d9ff12,0 0 40px #00d9ff0b}
+.sea-predator-battle .boss-panel-grid{background-image:linear-gradient(#4feaff20 1px,transparent 1px),linear-gradient(90deg,#4feaff20 1px,transparent 1px);background-size:26px 26px}
+.sea-predator-battle .boss-track{height:34px;border-color:#38e9ff;box-shadow:0 0 22px #00eaff33,inset 0 0 18px #00d9ff16}
+.sea-predator-battle .boss-fill{background:linear-gradient(90deg,#00a8c9,#35f4ff,#d9ffff)!important;box-shadow:0 0 22px #00eaff99!important}
+.sea-predator-battle .boss-hp-numbers,.sea-predator-battle .hp-title{font-size:1.05em}
+.sea-predator-battle .boss-name{color:#d9ffff;text-shadow:0 0 15px #00eaff,0 0 45px #007dff}
+.sea-predator-battle .battle-tag{border-color:#38e9ff;color:#8ff7ff;box-shadow:0 0 18px #00d9ff1c}
+.sea-predator-battle .attack-button{border-color:#176c7c;background:linear-gradient(145deg,#071d27,#071018)}
+.sea-predator-battle .attack-button:hover:not(:disabled){border-color:#42f5ff;box-shadow:0 8px 30px #00eaff20}
+
+/* Reward attack: image-led, glowing, and still a normal owned attack button. */
+.attack-button.trident-coop-button{border-color:#55f5ff!important;background:radial-gradient(circle at 50% 30%,#0d647588,#06131d 65%)!important;box-shadow:0 0 20px #00eaff55,inset 0 0 24px #00eaff18!important;display:flex;align-items:center;justify-content:center;gap:7px}
+.attack-button.trident-coop-button::after{background:#55f5ff!important;transform:scaleX(1)!important;box-shadow:0 0 12px #55f5ff}
+.attack-button-image{width:36px;height:48px;object-fit:contain;filter:drop-shadow(0 0 7px #55f5ff) drop-shadow(0 0 18px #008cff);flex:0 0 auto}
+.attack-button-label{position:relative;z-index:2}
+.trident-coop-vfx{position:fixed;z-index:9992;left:50%;top:50%;width:90px;height:280px;transform:translate(-50%,-50%) rotate(-8deg);background:linear-gradient(90deg,transparent,#fff,#55f5ff,#fff,transparent);clip-path:polygon(46% 0,54% 0,58% 78%,82% 70%,67% 88%,50% 100%,33% 88%,18% 70%,42% 78%);filter:drop-shadow(0 0 18px #55f5ff) drop-shadow(0 0 50px #007dff);animation:tridentCoop .95s ease-out forwards;pointer-events:none}
+@keyframes tridentCoop{0%{opacity:0;transform:translate(-50%,-50%) rotate(-8deg) scale(.2)}25%{opacity:1}70%{opacity:1;transform:translate(-50%,-50%) rotate(8deg) scale(1.25)}100%{opacity:0;transform:translate(-50%,-50%) rotate(22deg) scale(1.7)}}
+
+/* Sea Predator attack VFX */
+.sea-shell-null-vfx,.sea-shell-hit-vfx,.sea-trident-vfx,.sea-crash-vfx,.sea-shell-judgment-vfx,.sea-black-tide-vfx,.sea-devour-vfx,.sea-coop-vfx{position:fixed;z-index:9990;left:50%;top:48%;pointer-events:none}
+.sea-shell-null-vfx{width:330px;height:330px;border:8px double #8ffaff;border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 30px #00eaff,0 0 100px #006bff,inset 0 0 60px #00eaff;animation:seaNull .7s ease-out forwards}
+@keyframes seaNull{0%{opacity:0;transform:translate(-50%,-50%) scale(.2) rotate(0)}35%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(1.35) rotate(90deg)}}
+.sea-shell-hit-vfx{width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,transparent 34%,#b8ffff18 36%,transparent 57%),conic-gradient(#55f5ff55,#061a2c,#fff4,#55f5ff55);box-shadow:0 0 70px #00d9ff66;transform:translate(-50%,-50%);animation:seaHit .55s ease-out forwards}
+@keyframes seaHit{from{opacity:0;transform:translate(-50%,-50%) scale(.5)}to{opacity:1;transform:translate(-50%,-50%) scale(1.3) rotate(180deg);filter:brightness(1.8)}}
+.sea-trident-vfx{width:55px;height:300px;background:linear-gradient(90deg,transparent,#fff,#55f5ff,#008cff,transparent);clip-path:polygon(43% 0,57% 0,58% 74%,82% 68%,67% 88%,50% 100%,33% 88%,18% 68%,42% 74%);filter:drop-shadow(0 0 20px #55f5ff);animation:seaStrike .8s ease-out forwards}
+@keyframes seaStrike{0%{opacity:0;transform:translate(-50%,-50%) translateY(-200px) rotate(15deg)}35%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) translateY(120px) rotate(-15deg)}}
+.sea-crash-vfx{inset:20%;background:radial-gradient(circle,#fff 0,#55f5ff33 14%,transparent 60%);box-shadow:0 0 100px #00eaff,0 0 200px #0077ff;transform:scale(.2);animation:seaCrash .9s ease-out forwards}
+@keyframes seaCrash{0%{opacity:0;transform:scale(.2)}25%{opacity:1}100%{opacity:0;transform:scale(1.5)}}
+.sea-tidal-slash{position:fixed;z-index:9990;left:50%;top:50%;width:110vw;height:9px;background:linear-gradient(90deg,transparent,#fff,#55f5ff,#008cff,transparent);box-shadow:0 0 16px #55f5ff,0 0 60px #0077ff;transform:translate(-50%,-50%) rotate(calc(-30deg + var(--sea-index)*12deg));animation:seaTidal .18s ease-out forwards;pointer-events:none}
+@keyframes seaTidal{from{opacity:0;transform:translate(-50%,-50%) rotate(calc(-30deg + var(--sea-index)*12deg)) scaleX(.1)}to{opacity:0;transform:translate(-50%,-50%) rotate(calc(-30deg + var(--sea-index)*12deg)) scaleX(1.2)}}
+.sea-shell-judgment-vfx{width:320px;height:320px;border-radius:50%;border:14px solid #55f5ff;box-shadow:0 0 40px #00eaff,0 0 130px #006bff,inset 0 0 50px #00eaff;transform:translate(-50%,-50%);animation:seaJudgment .9s ease-out forwards}
+@keyframes seaJudgment{0%{opacity:0;transform:translate(-50%,-50%) scale(.1) rotate(0)}30%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(1.8) rotate(180deg)}}
+.sea-black-tide-vfx{left:0;top:35%;width:100vw;height:45vh;background:linear-gradient(180deg,transparent,#001b35cc,#000 100%);box-shadow:0 -40px 100px #006bff88;animation:seaTide .9s ease-out forwards}
+@keyframes seaTide{from{opacity:0;transform:translateY(100%)}35%{opacity:1}to{opacity:0;transform:translateY(-20%)}}
+.sea-devour-vfx{width:60vw;height:60vw;max-width:700px;max-height:700px;border-radius:50%;background:radial-gradient(circle,#000 20%,#001a2d 38%,transparent 67%);box-shadow:0 0 70px #00eaff,0 0 180px #004cff;transform:translate(-50%,-50%);animation:seaDevour .95s ease-out forwards}
+@keyframes seaDevour{from{opacity:0;transform:translate(-50%,-50%) scale(.1) rotate(0)}30%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(1.5) rotate(240deg)}}
+.sea-coop-vfx{width:80vw;height:80vh;background:radial-gradient(circle,#fff 0,#55f5ff33 10%,transparent 55%);box-shadow:0 0 80px #55f5ff,0 0 220px #006bff;transform:translate(-50%,-50%);animation:seaCoop .95s ease-out forwards}
+@keyframes seaCoop{from{opacity:0;transform:translate(-50%,-50%) scale(.1)}25%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(1.4)}}
+
+.reward-skill-card{position:absolute;z-index:6;bottom:112px;min-width:min(520px,86vw);padding:14px 22px;border:1px solid #55f5ff;background:#03141ce8;box-shadow:0 0 45px #00eaff33,inset 0 0 25px #00eaff0c;text-align:center;animation:rewardSkillIn .8s .45s ease-out both}
+.reward-skill-card span{display:block;color:#75eaff;font:8px var(--mono);letter-spacing:.2em}.reward-skill-card strong{display:block;margin-top:5px;color:#e8ffff;font:22px var(--mono);text-shadow:0 0 16px #55f5ff}.reward-skill-card small{display:block;margin-top:5px;color:#7595aa;font:7px var(--mono);letter-spacing:.08em}
+@keyframes rewardSkillIn{from{opacity:0;transform:translateY(20px) scale(.94)}to{opacity:1;transform:none}}
+
+/* User-supplied background URIs: replace these files without touching code. */
+.portal-screen#start-screen{background-image:linear-gradient(#03050a66,#03050af0),url("assets/start-background.png");background-size:cover;background-position:center}
+#lobby-screen{background-image:linear-gradient(#03050a55,#03050ae8),url("assets/lobby-background.png");background-size:cover;background-position:center}
+
+.skill-card.reward-only{border-color:#55f5ff;box-shadow:0 0 22px #00eaff18,inset 0 0 25px #00eaff08}.skill-card.reward-only .skill-price{color:#75eaff;text-shadow:0 0 10px #00eaff}
+
+/* SEA PREDATOR // shared profile-frame card treatment */
+.profile-frame-card.sea-predator-card .profile-frame-wrap{left:-5%;right:-5%;top:-10%;bottom:-10%;}
+.profile-frame-card.sea-predator-card .profile-card-character{width:43%!important;height:255px!important;top:46%!important;}
+
+/* Dedicated skill system: ordinary Merchant skills get their own neutral
+   enchanted treatment stays independent. */
+.configured-skill-vfx{position:fixed;z-index:9990;inset:0;pointer-events:none;display:grid;place-items:center;opacity:0;animation:configuredSkillImpact .9s ease-out forwards}
+.enchanted-skill-vfx{color:var(--rarity,#f6b4ff);background:radial-gradient(circle at 50% 50%,#f6b4ff33,transparent 42%);background:radial-gradient(circle at 50% 50%,color-mix(in srgb,var(--rarity,#f6b4ff) 28%,transparent),transparent 42%);filter:drop-shadow(0 0 20px var(--rarity,#f6b4ff))}
+.skill-catalog-status{margin:10px 0;color:#7f91a9;font:9px var(--mono);letter-spacing:.1em}
+#skill-load-more{display:block;margin:14px auto}
+@keyframes configuredSkillImpact{0%{opacity:0;transform:scale(.7)}25%{opacity:1}100%{opacity:0;transform:scale(1.12)}}
+.rivals-heal-vfx{position:fixed;z-index:10001;left:50%;top:42%;transform:translateX(-50%);padding:16px 24px;border:1px solid #6affc0;background:#032318eF;color:#a8ffcf;font:14px var(--mono);letter-spacing:.12em;box-shadow:0 0 35px #2bff9a66;pointer-events:none;animation:rivalsHealRise 1.2s ease-out forwards}
+@keyframes rivalsHealRise{0%{opacity:0;translate:0 20px}15%{opacity:1}100%{opacity:0;translate:0 -35px}}
+.attack-button.enchanted-skill::before{content:"✦";position:absolute;right:10px;top:7px;font-size:10px;opacity:.75;color:var(--rarity,#f6b4ff)}
+
+/* ==========================================================
+   VASE GATE EVENT // RANDOM KISHIN
+========================================================== */
+.vase-gate-card{overflow:visible!important;min-height:390px;border-color:#4ddfff!important;background:radial-gradient(circle at 50% 42%,#073047,#060b13 62%)!important;box-shadow:inset 0 0 80px #24dfff0c}
+.vase-gate-card:hover{border-color:#dffcff!important;box-shadow:0 20px 70px #18dfff28,0 0 55px #18dfff18!important}
+.vase-gate-card .boss-card-bg{opacity:.72!important;background-size:cover!important;filter:saturate(1.2)!important}
+.vase-gate-frame-wrap{position:absolute;inset:-7% -7%;z-index:3;pointer-events:none;display:grid;place-items:center}
+.vase-gate-frame-wrap img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 14px #3de6ff88) drop-shadow(0 0 55px #28dfff33);animation:vaseFramePulse 3s ease-in-out infinite}
+.vase-gate-core{position:absolute;z-index:4;left:50%;top:45%;transform:translate(-50%,-50%);text-align:center;width:75%;pointer-events:none}
+.vase-gate-symbol{font-size:76px;color:#eaffff;text-shadow:0 0 12px #fff,0 0 45px #26dfff,0 0 90px #0cbcff;animation:vaseSymbol 1.8s ease-in-out infinite}
+.vase-gate-label{font:24px var(--display);letter-spacing:.16em;color:#fff;text-shadow:0 0 18px #43eaff}
+.vase-gate-sub{margin-top:8px;font:8px var(--mono);letter-spacing:.16em;color:#83bdd0}
+.vase-gate-card .boss-card-info{z-index:7;text-align:center}
+.vase-gate-card .boss-card-info .stars{color:#8befff;text-shadow:0 0 14px #21dfff}
+.vase-gate-card .boss-card-info h2{font-size:25px;color:#fff;text-shadow:0 0 18px #26dfff}
+.vase-gate-card .boss-card-info p{color:#8eb9c8}
+@keyframes vaseFramePulse{50%{transform:scale(1.025);filter:drop-shadow(0 0 22px #75f1ff) drop-shadow(0 0 70px #28dfff44)}}
+@keyframes vaseSymbol{50%{transform:scale(1.08) rotate(180deg);opacity:.85}}
+
+.vase-gate-reveal{position:fixed;z-index:10000;inset:0;display:grid;place-items:center;background:radial-gradient(circle at center,#0b3044ee,#01050bf8 65%);backdrop-filter:blur(8px);color:#fff;text-align:center;pointer-events:none;overflow:hidden}
+.vase-gate-reveal-ring{position:absolute;width:48vw;height:48vw;border:2px solid #52eaff;border-radius:50%;box-shadow:0 0 35px #27dfff, inset 0 0 80px #27dfff33;animation:vaseRevealRing 2.2s linear infinite}
+.vase-gate-reveal-kicker,.vase-gate-reveal-title,.vase-gate-reveal-name,.vase-gate-reveal-sub{position:absolute;left:50%;transform:translateX(-50%);width:90%}
+.vase-gate-reveal-kicker{top:28%;font:9px var(--mono);letter-spacing:.28em;color:#75eaff}
+.vase-gate-reveal-title{top:34%;font:16px var(--mono);letter-spacing:.18em;color:#9fc2d0}
+.vase-gate-reveal-name{top:40%;font:clamp(34px,6vw,82px) var(--display);letter-spacing:.1em;text-shadow:0 0 25px #fff,0 0 70px #28dfff;opacity:0;transform:translateX(-50%) scale(.7)}
+.vase-gate-reveal-sub{top:53%;font:9px var(--mono);letter-spacing:.15em;color:#8cecff;opacity:0}
+.vase-gate-reveal.revealing .vase-gate-reveal-name{opacity:1;transform:translateX(-50%) scale(1);transition:1s cubic-bezier(.16,1,.3,1)}
+.vase-gate-reveal.revealing .vase-gate-reveal-sub{opacity:1;transition:1s .4s}
+.vase-gate-reveal.result-out{opacity:0;transition:.6s}
+@keyframes vaseRevealRing{to{transform:rotate(360deg)}}
+
+/* Rare Kishin combat VFX */
+.angelic-player-hit,.souls-player-hit{position:fixed;z-index:9991;inset:0;pointer-events:none;mix-blend-mode:screen}
+.angelic-player-hit{background:radial-gradient(circle,#fff8,transparent 30%);animation:angelicHitFlash .5s ease-out forwards}
+.souls-player-hit{background:radial-gradient(circle,#8d63ff44,transparent 38%);animation:soulHitFlash .55s ease-out forwards}
+@keyframes angelicHitFlash{0%{opacity:0;transform:scale(.7)}25%{opacity:1}100%{opacity:0;transform:scale(1.3)}}
+@keyframes soulHitFlash{0%{opacity:0;transform:scale(.5)}30%{opacity:1}100%{opacity:0;transform:scale(1.4)}}
+.angelic-vfx,.souls-vfx{position:fixed;z-index:9989;left:50%;top:48%;width:70vw;height:70vw;max-width:850px;max-height:850px;transform:translate(-50%,-50%);border-radius:50%;pointer-events:none;mix-blend-mode:screen}
+.angelic-vfx{background:conic-gradient(from 0deg,#fff,#b9e8ff,#fff,#a9b8ff,#fff);box-shadow:0 0 70px #fff,0 0 160px #8bdfff;animation:angelicBossVfx .9s ease-out forwards}
+.souls-vfx{background:conic-gradient(from 90deg,#05000d,#754cff,#05000d,#c3a7ff,#05000d);box-shadow:0 0 70px #764cff,0 0 150px #3513a8;animation:soulsBossVfx .95s ease-out forwards}
+.angelic-vfx.vfx-2{border:15px solid #fff}.angelic-vfx.vfx-3{box-shadow:0 0 100px #fff,0 0 220px #64dfff}.angelic-vfx.vfx-4{transform:translate(-50%,-50%) rotate(45deg)}.angelic-vfx.vfx-5{border:5px dashed #fff}.angelic-vfx.vfx-6{background:radial-gradient(circle,#fff,#b4dfff 20%,transparent 65%)}
+.souls-vfx.vfx-2{border:18px solid #8b63ff}.souls-vfx.vfx-3{box-shadow:0 0 100px #6b42ff,0 0 220px #2600a8}.souls-vfx.vfx-4{transform:translate(-50%,-50%) rotate(45deg)}.souls-vfx.vfx-5{border:6px dashed #a88aff}.souls-vfx.vfx-6{background:radial-gradient(circle,#d7c9ff,#6840ff 20%,transparent 65%)}
+@keyframes angelicBossVfx{0%{opacity:0;transform:translate(-50%,-50%) scale(.08) rotate(0)}25%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(1.55) rotate(260deg)}}
+@keyframes soulsBossVfx{0%{opacity:0;transform:translate(-50%,-50%) scale(.06) rotate(0)}25%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(1.65) rotate(-240deg)}}
+
+.rare-minigame{position:fixed;z-index:10001;inset:0;display:grid;place-items:center;background:#010208e8;backdrop-filter:blur(8px);padding:20px}
+.rare-game-box{width:min(760px,94vw);padding:34px;border:1px solid #8befff;background:linear-gradient(145deg,#081c2b,#04070d);box-shadow:0 0 100px #21dfff22;text-align:center}
+.rare-game-kicker{font:9px var(--mono);letter-spacing:.2em;color:#6cecff}.rare-game-box h2{font-size:34px;margin:12px 0}.rare-game-box p{font:11px/1.6 var(--mono);color:#9db4c4}.rare-game-timer{font:22px var(--mono);color:#fff;margin-top:16px;text-shadow:0 0 16px #53eaff}
+.halo-arena{height:280px;position:relative;border:1px solid #3cdfff44;background:radial-gradient(circle,#0a3145,#02070d);overflow:hidden;margin-top:18px}
+.halo-target{position:absolute;top:-50px;width:48px;height:48px;border:1px solid #fff;border-radius:50%;background:#cfffff;color:#08202b;font-size:24px;box-shadow:0 0 18px #fff,0 0 45px #4eeaff;animation:haloDrop .85s linear forwards;cursor:pointer}
+@keyframes haloDrop{to{top:300px;transform:rotate(180deg);opacity:.25}}
+.soul-sequence{display:flex;justify-content:center;gap:25px;margin:25px 0}.soul-sequence span{font-size:46px;color:#fff;text-shadow:0 0 22px #8e6aff}
+.soul-buttons{display:flex;justify-content:center;gap:12px}.soul-buttons button{width:86px;height:70px;border:1px solid #835dff;background:#0d0820;color:#fff;font-size:30px;cursor:pointer;box-shadow:0 0 20px #633dff22}.soul-buttons button:hover{border-color:#fff;box-shadow:0 0 30px #784cff66}
+
+/* ==========================================================
+   2026-10-24 // SPECIAL SKILL VFX PACK
+   ========================================================== */
+/* TRIDENT OF CO-OP — ocean-rift / abyssal impact */
+.trident-coop-vfx{position:fixed;inset:0;z-index:9992;pointer-events:none;overflow:hidden;background:radial-gradient(circle at 50% 52%,#dffcff12 0,#00d9ff0b 18%,transparent 50%);animation:coopArena .25s ease-out}
+.trident-coop-ocean{position:absolute;left:50%;top:52%;width:min(70vw,900px);height:min(70vw,900px);transform:translate(-50%,-50%);border-radius:50%;background:conic-gradient(from 0deg,#00eaff00,#00eaff55,#ffffffaa,#0077ff33,#00eaff00);filter:blur(2px);box-shadow:0 0 70px #00eaff88,0 0 180px #006dff55;animation:coopOcean 1.5s cubic-bezier(.12,.7,.25,1) forwards}
+.trident-coop-ring{position:absolute;left:50%;top:52%;border:3px solid #bfffff;border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 20px #55f5ff,0 0 70px #007dff,inset 0 0 30px #00eaff;opacity:0}
+.trident-coop-ring.ring-a{width:160px;height:160px;animation:coopRing .9s ease-out .1s forwards}
+.trident-coop-ring.ring-b{width:340px;height:340px;border-color:#668cff;animation:coopRing 1.15s ease-out .18s forwards}
+.trident-coop-lightning{position:absolute;inset:5% 18%;background:repeating-conic-gradient(from 10deg,transparent 0 11deg,#8fffff 12deg 12.7deg,transparent 14deg 24deg);filter:blur(1px);opacity:0;mix-blend-mode:screen;animation:coopLightning 1s ease-out .25s forwards}
+.trident-coop-spear{position:absolute;left:50%;top:47%;width:80px;height:330px;transform:translate(-50%,-50%) scale(.1) rotate(-8deg);clip-path:polygon(42% 0,58% 0,62% 72%,94% 62%,70% 82%,52% 100%,30% 82%,6% 62%,38% 72%);background:linear-gradient(90deg,#00aaff,#ffffff,#55f5ff,#ffffff,#007dff);filter:drop-shadow(0 0 12px #fff) drop-shadow(0 0 40px #00eaff) drop-shadow(0 0 90px #007dff);animation:coopSpear 1.15s cubic-bezier(.15,.8,.2,1) forwards}
+.trident-coop-spear i{position:absolute;display:block;top:3%;width:7px;height:75%;background:#fff;box-shadow:0 0 14px #fff,0 0 30px #00eaff;opacity:.8}.trident-coop-spear i:nth-child(1){left:17%;transform:rotate(-8deg)}.trident-coop-spear i:nth-child(2){left:47%;height:90%}.trident-coop-spear i:nth-child(3){right:17%;transform:rotate(8deg)}
+.trident-coop-beam{position:absolute;left:50%;top:50%;width:14px;height:115vh;transform:translate(-50%,-50%) scaleY(0);background:linear-gradient(180deg,transparent,#8fffff,#fff,#55f5ff,#008cff,transparent);box-shadow:0 0 25px #fff,0 0 80px #00eaff,0 0 170px #007dff;filter:blur(1px);animation:coopBeam .85s ease-out .38s forwards}
+.trident-coop-spray{position:absolute;left:50%;top:50%;width:100%;height:100%;transform:translate(-50%,-50%);background:radial-gradient(circle at 50% 50%,#fff8 0 1%,transparent 1.5%),radial-gradient(circle at 50% 50%,#55f5ff 0 1%,transparent 1.4%);background-size:37px 43px,61px 71px;animation:coopSpray 1.2s linear forwards;opacity:0}
+.trident-coop-impact .trident-coop-ocean{animation:coopImpact .7s ease-out forwards}.trident-coop-impact .trident-coop-beam{animation:coopBeamImpact .65s ease-out forwards}
+@keyframes coopArena{0%{filter:brightness(1)}35%{filter:brightness(2)}100%{filter:brightness(1)}}
+@keyframes coopOcean{0%{opacity:0;transform:translate(-50%,-50%) scale(.05) rotate(0)}25%{opacity:1}100%{opacity:.75;transform:translate(-50%,-50%) scale(2.2) rotate(180deg)}}
+@keyframes coopRing{0%{opacity:0;transform:translate(-50%,-50%) scale(.1) rotate(0)}25%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(3.2) rotate(180deg)}}
+@keyframes coopLightning{0%{opacity:0;transform:scale(.4) rotate(0)}35%{opacity:1}100%{opacity:0;transform:scale(1.3) rotate(30deg)}}
+@keyframes coopSpear{0%{opacity:0;transform:translate(-50%,-50%) scale(.08) rotate(-35deg)}24%{opacity:1}62%{transform:translate(-50%,-50%) scale(1.25) rotate(6deg)}100%{opacity:0;transform:translate(-50%,-50%) scale(2.1) rotate(18deg)}}
+@keyframes coopBeam{0%{opacity:0;transform:translate(-50%,-50%) scaleY(0)}30%{opacity:1}100%{opacity:.85;transform:translate(-50%,-50%) scaleY(1)}}
+@keyframes coopBeamImpact{0%{opacity:1;transform:translate(-50%,-50%) scaleY(1)}100%{opacity:0;transform:translate(-50%,-50%) scaleY(1.7)}}
+@keyframes coopSpray{0%{opacity:0;transform:translate(-50%,-50%) scale(.2)}25%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(2.5)}}
+@keyframes coopImpact{to{opacity:0;transform:translate(-50%,-50%) scale(3.2)}}
+
+/* DEATHSRINGER */
+.attack-button.deathsringer-button{border-color:#fff;background:linear-gradient(120deg,#ff174455,#fff2,#00eaff44,#ffef0055,#b000ff55);background-size:300% 300%;animation:deathButtonRainbow 1.1s linear infinite;box-shadow:0 0 18px #fff,0 0 45px #ff2cff88,inset 0 0 25px #fff4}
+.attack-button.deathsringer-button:hover:not(:disabled){filter:brightness(1.35);box-shadow:0 0 30px #fff,0 0 75px #00eaff,0 0 100px #ff00ff;transform:translateY(-4px) scale(1.03)}
+@keyframes deathButtonRainbow{0%{background-position:0 50%;filter:hue-rotate(0deg)}50%{background-position:100% 50%;filter:hue-rotate(120deg)}100%{background-position:0 50%;filter:hue-rotate(360deg)}}
+.deathsringer-lock{animation:deathLock .08s infinite alternate!important;filter:brightness(1.4) saturate(1.5)}
+@keyframes deathLock{from{transform:translate(-2px,1px) rotate(-1deg)}to{transform:translate(2px,-1px) rotate(1deg)}}
+.deathsringer-title{position:fixed;z-index:10001;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;gap:.04em;white-space:nowrap;font:clamp(35px,8vw,110px) var(--pixel);font-weight:900;letter-spacing:.08em;color:#fff;text-shadow:0 0 5px #fff,0 0 15px #ff005d,0 0 30px #00eaff,0 0 55px #7a00ff,0 0 90px #fff;filter:brightness(1.5);pointer-events:none}
+.deathsringer-title span{display:inline-block;animation:deathLetter .11s infinite alternate;animation-delay:calc(var(--i)*-.025s)}
+.deathsringer-title.deathsringer-fade{animation:deathTitleOut .7s ease-in forwards}
+@keyframes deathLetter{from{transform:translate(-3px,2px) rotate(-2deg);filter:hue-rotate(0deg)}to{transform:translate(3px,-2px) rotate(2deg);filter:hue-rotate(270deg)}}
+@keyframes deathTitleOut{to{opacity:0;transform:translate(-50%,-50%) scale(1.35);filter:blur(12px)}}
+.deathsringer-alert{position:fixed;z-index:10002;left:50%;top:-22vh;transform:translateX(-50%);text-align:center;pointer-events:none;color:#fff;text-shadow:0 0 10px #fff,0 0 25px #ff00e6,0 0 45px #00eaff,0 0 80px #8a2bff;animation:deathAlertFall 1.05s cubic-bezier(.1,.8,.25,1) forwards}
+.deathsringer-alert-symbol{font-size:clamp(70px,12vw,180px);line-height:.8;animation:deathAlertShake .06s infinite alternate}
+.deathsringer-alert-text{font:16px var(--mono);letter-spacing:.45em;margin-top:18px;color:#fff}
+@keyframes deathAlertFall{0%{top:-22vh;opacity:0;transform:translateX(-50%) scale(.2) rotate(-30deg)}25%{opacity:1}75%{transform:translateX(-50%) scale(1.25) rotate(4deg)}100%{top:47%;opacity:1;transform:translateX(-50%) scale(1) rotate(0)}}
+@keyframes deathAlertShake{from{transform:translateX(-4px) rotate(-2deg)}to{transform:translateX(4px) rotate(2deg)}}
+.deathsringer-beam{position:fixed;z-index:10000;left:50%;top:54%;width:100vw;height:28px;transform:translate(-50%,-50%) scaleX(.03);background:linear-gradient(90deg,transparent,#ff00d9,#fff,#00eaff,#fff,#ff00d9,transparent);box-shadow:0 0 15px #fff,0 0 45px #ff00e6,0 0 90px #00eaff,0 0 150px #7d2cff;filter:brightness(1.6);animation:deathBeamGrow 1.25s cubic-bezier(.1,.75,.2,1) forwards;pointer-events:none}
+.deathsringer-beam::after{content:"";position:absolute;inset:-45px 0;background:inherit;filter:blur(18px);opacity:.8}
+.deathsringer-beam.deathsringer-beam-out{animation:deathBeamOut .7s ease-in forwards}
+@keyframes deathBeamGrow{0%{opacity:0;transform:translate(-50%,-50%) scaleX(.01) scaleY(.3)}30%{opacity:1}72%{transform:translate(-50%,-50%) scaleX(1.1) scaleY(2)}100%{opacity:.9;transform:translate(-50%,-50%) scaleX(1.45) scaleY(5);filter:brightness(4)}}
+@keyframes deathBeamOut{to{opacity:0;transform:translate(-50%,-50%) scaleX(1.8) scaleY(9);filter:brightness(8) blur(4px)}}
+.deathsringer-doomed{animation:deathDoom 5s linear var(--death-delay,0ms) forwards!important;opacity:1!important;filter:brightness(1.8) saturate(2)!important}
+@keyframes deathDoom{0%{transform:translateX(0) rotate(0);opacity:1}10%{transform:translateX(-5px) rotate(-3deg)}20%{transform:translateX(5px) rotate(3deg)}80%{opacity:.8;filter:brightness(3) blur(0)}100%{transform:translateY(30px) scale(.2) rotate(18deg);opacity:0;filter:brightness(4) blur(8px)}}
+
+/* NO_SAKI */
+.nosaki-void{position:fixed;inset:0;z-index:10000;background:#000;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;animation:nosakiIn .65s ease-out forwards;pointer-events:none}
+.nosaki-line{font:clamp(24px,4vw,58px) var(--pixel);color:#8d0012;text-shadow:0 0 5px #ff001f,0 0 25px #5e000c;letter-spacing:.04em;opacity:0;animation:nosakiText 1.3s ease-out .55s forwards}
+.nosaki-phatatic{font:clamp(18px,2.5vw,34px) var(--pixel);color:#ff1732;text-shadow:0 0 12px #ff0026,0 0 30px #70000f;opacity:0;animation:nosakiText .8s ease-out 1s forwards}
+.nosaki-hit{animation:nosakiOut .7s ease-in forwards}
+@keyframes nosakiIn{from{opacity:0}to{opacity:1}} @keyframes nosakiText{from{opacity:0;transform:translateY(18px);filter:blur(8px)}to{opacity:1;transform:none;filter:none}} @keyframes nosakiOut{to{opacity:0;background:#050000;transform:scale(1.04)}}
+
+/* PERFECT_PARRY mini-game */
+.perfect-parry-overlay{position:fixed;inset:0;z-index:10003;background:#02070dcc;backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center}
+.perfect-parry-card{width:min(620px,88vw);padding:30px;background:linear-gradient(145deg,#07141a,#03070b);border:1px solid #74f7ff;box-shadow:0 0 25px #00eaff55,0 0 90px #007dff22;text-align:center}
+.perfect-parry-kicker{font:10px var(--mono);color:#74f7ff;letter-spacing:.18em}.perfect-parry-card h2{font:clamp(25px,5vw,45px) var(--pixel);margin:12px 0;color:#fff;text-shadow:0 0 18px #00eaff}.perfect-parry-card p{font:11px var(--mono);color:#9acbd1}.perfect-parry-bar{position:relative;height:38px;margin:28px 0;border:1px solid #285765;background:#030b10;overflow:hidden}.perfect-parry-zone{position:absolute;left:38%;width:24%;height:100%;background:#54ffff33;border-left:2px solid #54ffff;border-right:2px solid #54ffff;box-shadow:0 0 25px #00eaff55}.perfect-parry-cursor{position:absolute;top:2px;width:5px;height:34px;background:#fff;box-shadow:0 0 12px #fff,0 0 28px #00eaff;left:0}.perfect-parry-result{min-height:20px;font:12px var(--mono);letter-spacing:.1em}.perfect-parry-result.success{color:#8fffff;text-shadow:0 0 15px #00eaff}.perfect-parry-result.fail{color:#ff536d;text-shadow:0 0 15px #ff003c}
+
+
+/* TRIDENT OF CO-OP // FULL-SCREEN ABYSSAL VFX */
+.trident-coop-vfx{width:360px!important;height:360px!important;transform:translate(-50%,-50%)!important;background:none!important;clip-path:none!important;filter:none!important;animation:coopArenaPulse 1.7s ease-out forwards!important}
+.trident-coop-vfx::before{content:"";position:absolute;inset:-140px;border-radius:50%;background:conic-gradient(from 0deg,#00f5ff,#fff,#006eff,#ff00ff,#ffe600,#00ff9d,#00f5ff);filter:blur(12px);opacity:.8;animation:coopRainbowSpin .7s linear infinite}
+.trident-coop-vfx::after{content:"";position:absolute;inset:-70px;border:5px solid #fff;border-radius:50%;box-shadow:0 0 25px #00eaff,0 0 70px #7b00ff,0 0 120px #00ffea;animation:coopRingBlast 1.1s ease-out forwards}
+.trident-coop-rainbow{position:absolute;inset:-190px;border-radius:50%;background:repeating-conic-gradient(#ff004c 0 9deg,#ffea00 9deg 18deg,#00ff8c 18deg 27deg,#00c8ff 27deg 36deg,#8c00ff 36deg 45deg);filter:blur(18px);opacity:.35;animation:coopRainbowSpin .45s linear infinite}
+.trident-coop-shockwave{position:absolute;inset:-40px;border:3px solid #fff;border-radius:50%;box-shadow:0 0 40px #fff,0 0 90px #00eaff;animation:coopShock .8s ease-out forwards}
+@keyframes coopArenaPulse{0%{opacity:0;transform:translate(-50%,-50%) scale(.08)}18%{opacity:1;transform:translate(-50%,-50%) scale(.65)}60%{opacity:1;transform:translate(-50%,-50%) scale(1.25)}100%{opacity:0;transform:translate(-50%,-50%) scale(2.4)}}
+@keyframes coopRainbowSpin{to{transform:rotate(360deg)}}
+@keyframes coopRingBlast{0%{transform:scale(.1);opacity:0}25%{opacity:1}100%{transform:scale(2.7);opacity:0}}
+@keyframes coopShock{0%{transform:scale(.2);opacity:0}25%{opacity:1}100%{transform:scale(3.8);opacity:0}}
+
+
+/* DEATHSRINGER // TARGETED RAINBOW EXECUTION BEAM */
+.deathsringer-alert-impact{animation:deathAlertImpact .32s ease-in-out infinite alternate!important}
+.deathsringer-beam{position:fixed;z-index:10004;left:50%;top:50%;width:18px;height:120vh;transform-origin:50% 100%;background:linear-gradient(90deg,transparent,#ff00e6,#fff,#00eaff,#fff,#ffea00,transparent);box-shadow:0 0 18px #fff,0 0 50px #ff00e6,0 0 100px #00eaff;filter:brightness(2);pointer-events:none;transform:translate(-50%,-100%) rotate(0deg);animation:deathBeamFire .72s cubic-bezier(.2,.8,.2,1) forwards}
+.deathsringer-beam::before{content:"";position:absolute;inset:0;left:-100px;right:-100px;background:repeating-linear-gradient(90deg,transparent 0 18px,#fff 19px 21px,transparent 22px 40px);filter:blur(4px);opacity:.8}
+.deathsringer-beam-out{animation:deathBeamOut .55s ease-in forwards!important}
+@keyframes deathAlertImpact{to{transform:translateX(-50%) scale(1.18);filter:brightness(2)}}
+@keyframes deathBeamFire{0%{opacity:0;transform:translate(-50%,-100%) scaleY(.03)}35%{opacity:1}100%{opacity:1;transform:translate(-50%,-100%) scaleY(1)}}
+@keyframes deathBeamOut{to{opacity:0;transform:translate(-50%,-100%) scaleY(1.8);filter:brightness(4) blur(8px)}}
+
+/* ==========================================================
+   2026-10-28 // HELMET + PRIVATE KISHIN SHOP
+   ========================================================== */
+.helmet-lobby-card{border-color:#8b6b42!important;background:linear-gradient(145deg,#20170e,#080a0e)!important}
+.helmet-lobby-card:hover{border-color:#ffd27a!important;box-shadow:0 20px 65px #ffb84a22,0 0 35px #ffd27a18!important}
+.helmet-lobby-card .boss-card-bg{opacity:.3!important;filter:saturate(1.25) sepia(.15)}
+.helmet-lobby-card .boss-card-art{filter:drop-shadow(0 0 22px #ffc15b55)!important}
+.helmet-lobby-card .stars{color:#ffd27a!important;text-shadow:0 0 14px #ffb84a55}
+.helmet-lobby-card .boss-card-info h2{color:#fff2d2;text-shadow:0 0 20px #ffb84a33}
+.helmet-lobby-card .boss-card-badge{color:#ffe0a3;border-color:#a87c43}
+.helmet-wrap{display:grid;grid-template-columns:minmax(320px,.85fr) minmax(320px,1.15fr);gap:clamp(25px,5vw,75px);align-items:center;min-height:600px}
+.helmet-card-stage{position:relative;display:grid;place-items:center;min-height:560px}
+.helmet-card-stage .helmet-dialog-card{width:min(430px,100%);min-height:470px;transform:rotate(-1.5deg);cursor:default;overflow:hidden}
+.helmet-card-stage .helmet-dialog-card:hover{transform:rotate(-1.5deg) translateY(-3px)}
+.helmet-card-glow{position:absolute;width:330px;height:330px;border-radius:50%;background:radial-gradient(circle,#ffc45b55,transparent 70%);filter:blur(22px);animation:helmetGlow 2.2s ease-in-out infinite}
+.helmet-dialog-panel{border:1px solid #5c4730;background:linear-gradient(145deg,#15110df2,#07090df5);padding:clamp(28px,5vw,60px);min-height:460px;box-shadow:0 30px 100px #0008,inset 0 0 70px #ffb84a08;display:flex;flex-direction:column;justify-content:center}
+.helmet-dialog-line{font:clamp(35px,5vw,68px)/1.05 var(--pixel);color:#fff5df;text-shadow:0 0 24px #ffbf5a2f;margin:18px 0 10px}
+.helmet-dialog-sub{font:18px/1.5 var(--pixel);color:#b5a694;min-height:28px;max-width:680px}
+.helmet-dialog-progress{display:flex;justify-content:space-between;border-top:1px solid #3b3025;margin-top:32px;padding-top:12px;color:#806f5b;font:8px var(--mono);letter-spacing:.14em}
+.helmet-choice{margin-top:25px}.helmet-choice>p{font:13px/1.7 var(--mono);color:#d2c2ad;letter-spacing:.06em}.helmet-choice .choice-row{margin-top:16px}
+.helmet-shop-intro{max-width:700px;color:#8d9bb0;font:11px/1.55 var(--mono);letter-spacing:.04em;margin-top:12px}
+.kishin-shop-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:25px}
+.kishin-shop-card{position:relative;min-height:430px;border:1px solid #334258;background:linear-gradient(145deg,#101827,#070a11);overflow:hidden;cursor:default;transition:.2s;box-shadow:0 18px 45px #0004}
+.kishin-shop-card:hover{transform:translateY(-5px);border-color:var(--kishin-color);box-shadow:0 22px 65px #0008,0 0 32px color-mix(in srgb,var(--kishin-color) 18%,transparent)}
+.kishin-shop-card.owned{border-color:#66f5b0;background:linear-gradient(145deg,#102019,#070d0b)}
+.kishin-card-art-wrap{position:relative;height:235px;background:radial-gradient(circle at 50% 45%,color-mix(in srgb,var(--kishin-color) 20%,transparent),transparent 65%);overflow:hidden;border-bottom:1px solid #29374a}
+.kishin-card-art-wrap:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,#070a11 100%);pointer-events:none}
+.kishin-card-art-wrap img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 20px color-mix(in srgb,var(--kishin-color) 55%,transparent));transition:.2s}
+.kishin-shop-card:hover .kishin-card-art-wrap img{transform:scale(1.04);filter:drop-shadow(0 0 28px color-mix(in srgb,var(--kishin-color) 75%,transparent))}
+.kishin-card-top{position:absolute;z-index:3;top:12px;left:12px;right:12px;display:flex;justify-content:space-between;gap:10px;font:8px var(--mono);letter-spacing:.11em;color:var(--kishin-color);text-shadow:0 0 12px var(--kishin-color)}
+.kishin-card-body{padding:18px}.kishin-card-body h2{font-size:24px;margin:0 0 8px;letter-spacing:.04em}.kishin-card-body p{font:10px/1.5 var(--mono);color:#8291a8;min-height:76px;margin:0}.kishin-card-effect{font:8px var(--mono);letter-spacing:.08em;color:var(--kishin-color);padding:10px 0;border-top:1px solid #253247;border-bottom:1px solid #253247;margin-top:12px}
+.kishin-card-bottom{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:14px}.kishin-card-bottom strong{font:11px var(--mono);color:#fff;white-space:nowrap}.kishin-buy{border:1px solid var(--kishin-color);background:#0b111b;color:#fff;padding:10px 12px;font:8px var(--mono);letter-spacing:.08em;cursor:pointer;box-shadow:0 0 18px color-mix(in srgb,var(--kishin-color) 12%,transparent)}.kishin-buy:hover:not(:disabled){background:var(--kishin-color);color:#05070b;box-shadow:0 0 28px color-mix(in srgb,var(--kishin-color) 35%,transparent)}.kishin-buy:disabled{opacity:.45;cursor:not-allowed}
+.helmet-shop-note{font:8px var(--mono);letter-spacing:.12em;color:#6c7890}
+@keyframes helmetGlow{50%{transform:scale(1.1);opacity:.8}}
+
+/* Purchased Helmet Kishin skill buttons */
+.attack-button.helmet-kishin-button{position:relative;overflow:hidden;border-color:var(--rarity,#fff);box-shadow:0 0 22px color-mix(in srgb,var(--rarity,#fff) 15%,transparent),inset 0 0 24px color-mix(in srgb,var(--rarity,#fff) 7%,transparent)}
+.attack-button.japanhunter{color:#fff3dd;border-color:#ff7b32;background:linear-gradient(115deg,#270808,#15100f 48%,#3a1608);box-shadow:0 0 28px #ff4d1f55,inset 0 0 22px #ff7b3222;text-shadow:0 0 12px #ff6a32}
+.attack-button.helmet-kishin-button:hover:not(:disabled){transform:translateY(-2px);border-color:#fff;box-shadow:0 0 30px color-mix(in srgb,var(--rarity,#fff) 35%,transparent),inset 0 0 30px color-mix(in srgb,var(--rarity,#fff) 12%,transparent)}
+.japanhunter-vfx{position:fixed;inset:0;z-index:10005;overflow:hidden;pointer-events:none;opacity:0;background:radial-gradient(ellipse at 50% 45%,#7d130c55,transparent 58%);transition:opacity .2s}
+.japanhunter-vfx.japanhunter-strike{opacity:1}
+.japanhunter-sun{position:absolute;width:min(34vw,360px);aspect-ratio:1;left:50%;top:48%;border-radius:50%;transform:translate(-50%,-50%) scale(.12);opacity:0;background:radial-gradient(circle at 38% 36%,#fff5cf,#ffbb4b 24%,#f44320 55%,#7a0818 75%,transparent 76%);filter:drop-shadow(0 0 36px #ff4b21) drop-shadow(0 0 100px #f00);transition:transform .7s cubic-bezier(.15,.85,.25,1),opacity .3s}
+.japanhunter-rings{position:absolute;left:var(--japanhunter-x,50%);top:var(--japanhunter-y,48%);width:12vw;height:12vw;border:2px solid #fff3d4;border-radius:50%;transform:translate(-50%,-50%) scale(.1);box-shadow:0 0 35px #ff4b2b,inset 0 0 35px #ff4b2b;opacity:0}
+.japanhunter-kanji{position:absolute;left:50%;top:17%;transform:translateX(-50%) scale(.5);color:#fff0d6;font:clamp(34px,7vw,86px) serif;text-shadow:0 0 18px #ff2e1b,0 0 55px #ff4b21;opacity:0;transition:opacity .25s,transform .5s}
+.japanhunter-blade{position:absolute;left:var(--japanhunter-x,50%);top:var(--japanhunter-y,48%);width:150vw;height:clamp(8px,1.8vw,22px);background:linear-gradient(90deg,transparent,#ff4a26,#fff8dd,#fff,#ffb443,transparent);box-shadow:0 0 22px #ff4b21,0 0 70px #fff3c4;transform:translate(-50%,-50%) rotate(-24deg) scaleX(.01);transform-origin:center;opacity:0}
+.japanhunter-impact{position:absolute;inset:0;background:radial-gradient(circle at var(--japanhunter-x,50%) var(--japanhunter-y,48%),#fff8ddee,transparent 4%,#ff3b2088 18%,transparent 55%);opacity:0}
+.japanhunter-strike .japanhunter-sun{opacity:.9;transform:translate(-50%,-50%) scale(1)}
+.japanhunter-strike .japanhunter-kanji{opacity:1;transform:translateX(-50%) scale(1)}
+.japanhunter-strike .japanhunter-rings{animation:japanHunterRing .9s ease-out forwards}
+.japanhunter-strike .japanhunter-blade{animation:japanHunterSlash .42s .15s ease-out forwards}
+.japanhunter-vfx.japanhunter-impact .japanhunter-impact{animation:japanHunterFlash .65s ease-out forwards}
+@keyframes japanHunterRing{20%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(8)}}
+@keyframes japanHunterSlash{0%{opacity:0;transform:translate(-50%,-50%) rotate(-24deg) scaleX(.01)}25%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) rotate(-24deg) scaleX(1.2)}}
+@keyframes japanHunterFlash{15%{opacity:1}100%{opacity:0}}
+.attack-button.skill-spent{filter:grayscale(1);opacity:.35}
+
+/* Auralis & Nyxara */
+.auralis-nyxara-vfx{position:fixed;inset:0;z-index:9995;pointer-events:none;overflow:hidden;background:radial-gradient(circle,#ff8cf722,transparent 45%);animation:duoFlash .35s ease-out}
+.duo-ring{position:absolute;left:50%;top:48%;border-radius:50%;transform:translate(-50%,-50%);border:4px solid #fff;box-shadow:0 0 35px #ff5fe7,0 0 110px #4ceaff;opacity:0}.duo-a{width:170px;height:170px;border-color:#ff5fe7}.duo-b{width:310px;height:310px;border-color:#61f5ff}.duo-blade{position:absolute;left:50%;top:48%;width:24px;height:390px;background:linear-gradient(#fff,#ff4ee7,#fff,#4ceaff);box-shadow:0 0 25px #fff,0 0 75px #ff4ee7;opacity:0}.blade-a{transform:translate(-50%,-50%) rotate(38deg)}.blade-b{transform:translate(-50%,-50%) rotate(-38deg);box-shadow:0 0 25px #fff,0 0 75px #4ceaff}.duo-beam{position:absolute;left:50%;top:48%;width:22px;height:130vh;transform:translate(-50%,-50%) scaleY(0);background:linear-gradient(transparent,#fff,#ff5fe7,#61f5ff,#fff,transparent);box-shadow:0 0 35px #fff,0 0 100px #ff5fe7}.duo-burst{position:absolute;left:50%;top:48%;width:90px;height:90px;border-radius:50%;background:#fff;box-shadow:0 0 40px #fff,0 0 140px #ff4ee7,0 0 220px #4ceaff;transform:translate(-50%,-50%) scale(.1);opacity:0}.auralis-nyxara-vfx.hit .duo-a{animation:duoRing .9s ease-out forwards}.auralis-nyxara-vfx.hit .duo-b{animation:duoRing 1.1s .1s ease-out forwards}.auralis-nyxara-vfx.hit .duo-blade{animation:duoBlade .7s ease-out forwards}.auralis-nyxara-vfx.hit .duo-beam{animation:duoBeam .65s ease-out forwards}.auralis-nyxara-vfx.hit .duo-burst{animation:duoBurst .65s ease-out forwards}
+@keyframes duoFlash{35%{filter:brightness(2.2)}100%{filter:brightness(1)}}@keyframes duoRing{0%{opacity:0;transform:translate(-50%,-50%) scale(.1)}25%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(3.5)}}@keyframes duoBlade{0%{opacity:0;transform:translate(-50%,-50%) scale(.2) rotate(0)}35%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(1.6) rotate(90deg)}}@keyframes duoBeam{0%{opacity:0;transform:translate(-50%,-50%) scaleY(0)}30%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scaleY(1)}}@keyframes duoBurst{0%{opacity:0;transform:translate(-50%,-50%) scale(.1)}30%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(10)}}
+
+/* Fallen Samurai */
+.fallen-samurai-vfx{position:fixed;inset:0;z-index:9995;pointer-events:none;overflow:hidden;background:radial-gradient(circle at 50% 48%,#ff183722,transparent 45%)}.samurai-cross{position:absolute;left:50%;top:48%;width:420px;height:420px;border:2px solid #ff314c;transform:translate(-50%,-50%) rotate(45deg);box-shadow:0 0 40px #ff173b, inset 0 0 80px #ff173b;opacity:0}.samurai-slash{position:absolute;left:50%;top:48%;width:8px;height:95vh;background:linear-gradient(transparent,#fff,#ff173b,#fff,transparent);box-shadow:0 0 25px #fff,0 0 90px #ff173b;opacity:0}.slash-1{transform:translate(-50%,-50%) rotate(45deg)}.slash-2{transform:translate(-50%,-50%) rotate(-45deg)}.samurai-shock{position:absolute;left:50%;top:48%;width:80px;height:80px;border:5px solid #fff;border-radius:50%;transform:translate(-50%,-50%) scale(.1);box-shadow:0 0 50px #ff173b;opacity:0}.fallen-samurai-vfx.strike .samurai-cross{animation:samuraiCross .8s forwards}.fallen-samurai-vfx.strike .samurai-slash{animation:samuraiSlash .55s forwards}.fallen-samurai-vfx.strike .slash-2{animation-delay:.08s}.fallen-samurai-vfx.strike .samurai-shock{animation:samuraiShock .7s .2s forwards}
+@keyframes samuraiCross{0%{opacity:0;transform:translate(-50%,-50%) rotate(45deg) scale(.1)}35%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) rotate(225deg) scale(1.5)}}@keyframes samuraiSlash{0%{opacity:0;transform:translate(-50%,-50%) rotate(45deg) scaleY(0)}30%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) rotate(45deg) scaleY(1.3)}}@keyframes samuraiShock{100%{opacity:0;transform:translate(-50%,-50%) scale(8)}}
+
+/* Xenith-01 */
+.xenith-vfx{position:fixed;inset:0;z-index:9995;pointer-events:none;overflow:hidden;background:radial-gradient(circle at 50% 45%,#6cf6ff20,transparent 50%)}.world-grid{position:absolute;inset:0;background:linear-gradient(#6cf6ff12 1px,transparent 1px),linear-gradient(90deg,#6cf6ff12 1px,transparent 1px);background-size:45px 45px;transform:perspective(500px) rotateX(55deg) scale(1.8);transform-origin:center bottom;opacity:0}.world-orb{position:absolute;left:50%;top:46%;width:110px;height:110px;border-radius:50%;transform:translate(-50%,-50%) scale(.2);background:radial-gradient(circle,#fff,#6cf6ff 25%,#1d6dff 55%,transparent 70%);box-shadow:0 0 50px #fff,0 0 160px #6cf6ff,0 0 260px #1d6dff;opacity:0}.world-beam{position:absolute;left:50%;top:48%;width:42px;height:130vh;transform:translate(-50%,-50%) scaleY(0) rotate(0);background:linear-gradient(transparent,#fff,#6cf6ff,#fff,transparent);box-shadow:0 0 40px #fff,0 0 110px #6cf6ff,0 0 220px #1d6dff;opacity:0}.world-collapse{position:absolute;left:var(--tx,50%);top:var(--ty,48%);width:140px;height:140px;border-radius:50%;border:3px solid #fff;transform:translate(-50%,-50%) scale(.1);box-shadow:0 0 50px #6cf6ff;opacity:0}.xenith-vfx.fire .world-grid{animation:xenithGrid 1.3s forwards}.xenith-vfx.fire .world-orb{animation:xenithOrb 1.1s forwards}.xenith-vfx.fire .world-beam{animation:xenithBeam 1s .2s forwards}.xenith-vfx.fire .world-collapse{animation:xenithCollapse 1s .65s forwards}
+@keyframes xenithGrid{25%{opacity:1}100%{opacity:0;transform:perspective(500px) rotateX(55deg) scale(3)}}@keyframes xenithOrb{30%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-50%) scale(2.5)}}@keyframes xenithBeam{20%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scaleY(1)}}@keyframes xenithCollapse{30%{opacity:1;transform:translate(-50%,-50%) scale(.4)}100%{opacity:0;transform:translate(-50%,-50%) scale(8)}}
+
+/* Lord Zephyrus */
+.zephyrus-vfx{position:fixed;inset:0;z-index:9995;pointer-events:none;overflow:hidden;background:radial-gradient(circle,#fff8d51a,transparent 48%);filter:brightness(1)}.ivory-crown{position:absolute;left:50%;top:45%;width:270px;height:270px;border:7px double #fff7d1;border-radius:50%;transform:translate(-50%,-50%) scale(.1);box-shadow:0 0 45px #fff,0 0 150px #ffe6a0;opacity:0}.ivory-storm{position:absolute;inset:-20%;background:repeating-conic-gradient(from 0deg,transparent 0 8deg,#fff6c6 9deg 10deg,transparent 12deg 19deg);opacity:0;filter:blur(2px)}.ivory-lance{position:absolute;left:50%;top:48%;width:30px;height:120vh;background:linear-gradient(transparent,#fff,#fff1a8,#fff,transparent);box-shadow:0 0 35px #fff,0 0 110px #ffe18a;opacity:0}.lance-a{transform:translate(-50%,-50%) rotate(15deg)}.lance-b{transform:translate(-50%,-50%) rotate(-15deg)}.lance-c{transform:translate(-50%,-50%) rotate(0)}.ivory-core{position:absolute;left:50%;top:48%;width:100px;height:100px;border-radius:50%;background:#fff;box-shadow:0 0 60px #fff,0 0 180px #ffe5a1;transform:translate(-50%,-50%) scale(.1);opacity:0}.zephyrus-vfx.execution .ivory-crown{animation:zephCrown 1.2s forwards}.zephyrus-vfx.execution .ivory-storm{animation:zephStorm 1.4s forwards}.zephyrus-vfx.execution .ivory-lance{animation:zephLance .8s forwards}.zephyrus-vfx.execution .lance-b{animation-delay:.08s}.zephyrus-vfx.execution .lance-c{animation-delay:.16s}.zephyrus-vfx.execution .ivory-core{animation:zephCore 1s .35s forwards}
+@keyframes zephCrown{25%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-50%) scale(3)}}@keyframes zephStorm{20%{opacity:1}100%{opacity:0;transform:rotate(180deg) scale(1.5)}}@keyframes zephLance{20%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) rotate(15deg) scaleY(1.4)}}@keyframes zephCore{25%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-50%) scale(12)}}
+
+@media(max-width:850px){.helmet-wrap{grid-template-columns:1fr;min-height:auto}.helmet-card-stage{min-height:470px}.helmet-dialog-panel{min-height:420px}.kishin-shop-grid{grid-template-columns:1fr}}
+@media(max-width:560px){.helmet-dialog-line{font-size:42px}.helmet-dialog-panel{padding:22px}.helmet-card-stage{min-height:400px}.helmet-card-stage .helmet-dialog-card{min-height:400px}.kishin-card-bottom{align-items:stretch;flex-direction:column}.kishin-card-bottom strong{white-space:normal}.kishin-buy{width:100%}}
+.kishin-card-name-top{position:absolute;z-index:4;left:16px;right:16px;top:43px;font:700 16px var(--mono);letter-spacing:.04em;color:#fff;text-shadow:0 0 18px var(--kishin-color);pointer-events:none}
+.helmet-white-transition{position:fixed;inset:0;z-index:10050;background:#fff;pointer-events:none;animation:helmetWhiteIn .5s ease forwards}.helmet-white-transition.out{animation:helmetWhiteOut .4s ease forwards}@keyframes helmetWhiteIn{from{opacity:0}to{opacity:1}}@keyframes helmetWhiteOut{from{opacity:1}to{opacity:0}}
+
+
+/* =========================================================
+   K,Z,X // HELMET PRIVATE KISHIN
+   Rainbow-glitch card + dedicated battle slash VFX
+   ========================================================= */
+.kzx-kishin-card{
+  border-color:#ff38ff!important;
+  background:
+    radial-gradient(circle at 20% 15%,#ff38ff18,transparent 28%),
+    radial-gradient(circle at 85% 75%,#35f7ff18,transparent 30%),
+    linear-gradient(145deg,#130b1c,#05070e 70%)!important;
+  box-shadow:0 0 24px #ff38ff18,0 18px 55px #0008!important;
+}
+.kzx-kishin-card::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:repeating-linear-gradient(0deg,transparent 0 7px,#ff38ff09 8px 9px,#39f6ff08 10px 11px);
+  mix-blend-mode:screen;
+  animation:kzxCardStatic .12s steps(2) infinite;
+}
+.kzx-kishin-card:hover{
+  border-color:#fff!important;
+  box-shadow:0 0 18px #ff38ff55,0 0 55px #39f6ff22,0 22px 75px #000b!important;
+}
+.kzx-kishin-card .kishin-card-art-wrap{
+  background:
+    radial-gradient(circle at 50% 45%,#ff38ff30,transparent 45%),
+    linear-gradient(120deg,#ff00ff10,#00f6ff14,#fff0);
+}
+.kzx-kishin-card .kishin-card-art-wrap img{
+  filter:
+    drop-shadow(0 0 9px #fff)
+    drop-shadow(0 0 24px #ff38ff)
+    drop-shadow(0 0 42px #35f7ff);
+  animation:kzxCardFloat 2.1s ease-in-out infinite;
+}
+.kzx-kishin-card .kishin-card-top,
+.kzx-kishin-card .kishin-card-effect{
+  color:#fff!important;
+  text-shadow:0 0 10px #ff38ff,0 0 20px #35f7ff;
+}
+.kzx-kishin-card .kishin-card-name-top{
+  color:#fff;
+  text-shadow:2px 0 #ff28ff,-2px 0 #22efff;
+  animation:kzxTextGlitch .16s steps(2) infinite;
+}
+.kzx-kishin-card .kishin-buy{
+  border-color:#ff38ff;
+  background:linear-gradient(90deg,#190a22,#07151b);
+  box-shadow:0 0 14px #ff38ff33,0 0 28px #35f7ff18;
+}
+.kzx-kishin-card .kishin-buy:hover:not(:disabled){
+  color:#05070b;
+  background:linear-gradient(90deg,#ff38ff,#fff,#35f7ff);
+  box-shadow:0 0 30px #ff38ff77,0 0 55px #35f7ff55;
+}
+@keyframes kzxCardStatic{
+  0%{transform:translateY(0);opacity:.7}
+  50%{transform:translateY(2px);opacity:1}
+  100%{transform:translateY(-1px);opacity:.65}
+}
+
+/* Henmercy // golden crosses and four battle skills */
+.henmercy-kishin-card{
+  border-color:#ffd45a!important;
+  background:radial-gradient(circle at 50% 35%,#ffd45a20,transparent 42%),linear-gradient(145deg,#211b0d,#070a11 72%)!important;
+  box-shadow:0 0 30px #ffd45a22,0 18px 55px #0008!important;
+}
+.henmercy-kishin-card .kishin-card-art-wrap{
+  background:radial-gradient(circle at 50% 45%,#ffe89838,transparent 55%),linear-gradient(145deg,#291f0c,#080b12);
+}
+.henmercy-kishin-card .kishin-card-art-wrap img{
+  filter:drop-shadow(0 0 12px #fff3bd) drop-shadow(0 0 34px #ffc83d);
+  animation:henmercyFloat 2.4s ease-in-out infinite;
+}
+.henmercy-kishin-card .kishin-card-top,.henmercy-kishin-card .kishin-card-effect{
+  color:#ffe49a!important;text-shadow:0 0 12px #ffc83d99;
+}
+.henmercy-kishin-card::after{
+  content:"✝     ✝     ✝";
+  position:absolute;z-index:4;top:170px;left:0;right:0;
+  color:#fff1b7;text-align:center;font:26px Georgia,serif;
+  text-shadow:0 0 10px #fff,0 0 28px #ffc83d,0 0 52px #ffb300;
+  pointer-events:none;animation:henmercyCrosses 1.8s ease-in-out infinite;
+}
+.henmercy-kishin-card .kishin-buy{
+  border-color:#ffd45a;background:linear-gradient(110deg,#211906,#16100a);
+}
+.henmercy-kishin-card .kishin-buy:hover:not(:disabled){
+  color:#171004;background:#ffd45a;box-shadow:0 0 30px #ffc83d88;
+}
+.attack-button.henmercy-mercy,.attack-button.henmercy-cards-wish,
+.attack-button.henmercy-nornos-mask,.attack-button.henmercy-hell-arrived{
+  color:#fff1c1;border-color:#ffd45a;text-shadow:0 0 12px #ffc83d66;
+  background:linear-gradient(115deg,#251b08,#15110b 52%,#332509);
+}
+.henmercy-vfx{
+  position:fixed;inset:0;z-index:10020;overflow:hidden;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 48%,#ffdc7338,transparent 58%);
+  animation:henmercyFlash 1.7s ease-out forwards;
+}
+.henmercy-cross{
+  position:absolute;top:43%;color:#fff3bf;font:clamp(70px,13vw,160px) Georgia,serif;
+  text-shadow:0 0 14px #fff,0 0 35px #ffd45a,0 0 90px #ffad00;
+  opacity:0;transform:translate(-50%,-50%) scale(.1);
+  animation:henmercyCrossAppear 1.5s cubic-bezier(.15,.8,.2,1) forwards;
+}
+.henmercy-cross-one{left:23%;animation-delay:0s}
+.henmercy-cross-two{left:50%;animation-delay:.12s}
+.henmercy-cross-three{left:77%;animation-delay:.24s}
+.henmercy-gold-message{
+  position:absolute;left:8%;right:8%;top:67%;color:#fff0af;text-align:center;
+  font:700 clamp(17px,3vw,34px) var(--pixel);
+  text-shadow:0 0 12px #fff,0 0 32px #ffbf30,0 0 70px #ff9f00;
+  animation:henmercyText 1.55s ease-out forwards;
+}
+.henmercy-vfx.hell-arrived .henmercy-gold-message{top:48%;font-size:clamp(20px,4vw,48px)}
+.henmercy-card-picker{
+  position:fixed;inset:0;z-index:10030;display:grid;place-items:center;
+  padding:20px;background:#050609eF;backdrop-filter:blur(8px);
+}
+.henmercy-picker-panel{
+  width:min(600px,100%);padding:clamp(24px,5vw,44px);
+  border:1px solid #ffd45a;background:linear-gradient(145deg,#211a0d,#090b10);
+  box-shadow:0 0 70px #ffd45a33;text-align:center;
+}
+.henmercy-picker-panel h2{color:#fff0b5;margin:12px 0}
+.henmercy-picker-panel>p:not(.section-kicker){color:#a99b78;font:11px/1.6 var(--mono)}
+.henmercy-card-options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:26px 0}
+.henmercy-card-options button{
+  min-height:150px;border:1px solid #a9812c;color:#fff0b5;cursor:pointer;
+  background:radial-gradient(circle,#ffd45a26,transparent 60%),linear-gradient(145deg,#2c230e,#11100c);
+  box-shadow:inset 0 0 25px #ffd45a12;transition:.18s;
+}
+.henmercy-card-options button:hover{
+  transform:translateY(-5px);border-color:#fff2b0;
+  box-shadow:0 0 30px #ffd45a77,inset 0 0 35px #ffd45a2b;
+}
+.henmercy-card-options button span{display:block;font:52px Georgia,serif;text-shadow:0 0 18px #ffc83d}
+.henmercy-card-options button small{display:block;margin-top:8px;font:10px var(--mono);letter-spacing:.18em}
+.henmercy-picker-cancel{
+  padding:10px 18px;border:1px solid #70613e;background:transparent;
+  color:#b9aa86;font:9px var(--mono);letter-spacing:.14em;cursor:pointer;
+}
+@keyframes henmercyFloat{50%{transform:translateY(-7px) scale(1.02)}}
+@keyframes henmercyCrosses{50%{opacity:.55;transform:translateY(-5px)}}
+@keyframes henmercyFlash{18%{filter:brightness(1.8)}100%{opacity:0}}
+@keyframes henmercyCrossAppear{
+  20%{opacity:1;transform:translate(-50%,-50%) scale(1.1) rotate(12deg)}
+  75%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(-8deg)}
+  100%{opacity:0;transform:translate(-50%,-60%) scale(.7)}
+}
+@keyframes henmercyText{15%{opacity:1}70%{opacity:1}100%{opacity:0;transform:translateY(-20px)}}
+@media(max-width:500px){
+  .henmercy-cross-one{left:18%}.henmercy-cross-three{left:82%}
+  .henmercy-card-options{gap:7px}.henmercy-card-options button{min-height:120px}
+}
+
+.henmercy-boss-card{
+  border-color:#ffd45a!important;
+  background:radial-gradient(ellipse at 50% 30%,#ffd45a27,transparent 58%),linear-gradient(145deg,#251b08,#080a10 72%)!important;
+  box-shadow:0 0 34px #ffd45a29,0 18px 55px #0009!important;
+}
+.henmercy-boss-card:hover{border-color:#fff1b0!important;box-shadow:0 0 24px #fff0ae66,0 0 70px #ffc83d44!important}
+.henmercy-boss-card .boss-card-art{filter:drop-shadow(0 0 18px #fff4bf) drop-shadow(0 0 48px #ffc83d)!important}
+.henmercy-boss-card .boss-card-badge,.henmercy-boss-card .stars{color:#ffe49a!important;text-shadow:0 0 14px #ffc83d}
+.henmercy-boss-card .boss-card-info h2{color:#fff3c6;text-shadow:0 0 22px #ffc83d88}
+.henmercy-boss-card::after{
+  content:"✝  ✝  ✝";
+  position:absolute;z-index:3;top:48%;left:0;right:0;
+  color:#fff1b7;text-align:center;font:26px Georgia,serif;
+  text-shadow:0 0 12px #fff,0 0 32px #ffc83d;
+  pointer-events:none;animation:henmercyCrosses 1.8s ease-in-out infinite;
+}
+.starlylands-boss-card{
+  border-color:#63caff!important;
+  background:radial-gradient(ellipse at 50% 25%,#42baff30,transparent 55%),linear-gradient(145deg,#071d3b,#070a11 72%)!important;
+  box-shadow:0 0 36px #46baff30,0 18px 55px #0009!important;
+}
+.starlylands-boss-card:hover{border-color:#d5f8ff!important;box-shadow:0 0 24px #9becff77,0 0 70px #168cff55!important}
+.starlylands-boss-card .boss-card-art{filter:drop-shadow(0 0 18px #effcff) drop-shadow(0 0 46px #39aaff)!important;animation:starlyFloat 2.2s ease-in-out infinite}
+.starlylands-boss-card .boss-card-badge,.starlylands-boss-card .stars{color:#a5e6ff!important;text-shadow:0 0 14px #39aaff}
+.starlylands-boss-card .boss-card-info h2{color:#e4faff;text-shadow:0 0 22px #39aaffaa}
+
+.henmercy-boss-game{
+  position:fixed;inset:0;z-index:10040;display:grid;place-items:center;
+  padding:20px;background:#070605ed;backdrop-filter:blur(8px);
+}
+.henmercy-boss-game-panel{
+  width:min(600px,100%);padding:clamp(22px,5vw,42px);
+  border:1px solid #ffd45a;background:radial-gradient(circle at 50% 35%,#ffd45a18,transparent 55%),linear-gradient(145deg,#211a0d,#090b10);
+  box-shadow:0 0 70px #ffd45a44;text-align:center;
+}
+.henmercy-boss-game-panel h2{margin:12px 0;color:#fff0b5;font:clamp(18px,3vw,26px) var(--pixel)}
+.henmercy-boss-game-prompt{color:#c9bb98;font:11px/1.6 var(--mono)}
+.henmercy-game-sigil{margin:18px auto;width:68px;height:68px;display:grid;place-items:center;border:1px solid #ffd45a;border-radius:50%;color:#fff4c4;font:38px Georgia,serif;text-shadow:0 0 18px #ffc83d;box-shadow:0 0 24px #ffc83d33;transition:opacity .2s,transform .2s}
+.henmercy-boss-game:not(.ready) .henmercy-game-sigil{animation:henmercySigilFlash .9s ease-in-out 2}
+.henmercy-boss-game.ready .henmercy-game-sigil{opacity:.12;transform:scale(.8)}
+.henmercy-boss-game-options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.henmercy-boss-game-options button{min-height:72px;border:1px solid #a9812c;color:#fff0b5;background:linear-gradient(145deg,#2c230e,#11100c);font:32px Georgia,serif;cursor:pointer;transition:.18s}
+.henmercy-boss-game-options button:hover{transform:translateY(-3px);border-color:#fff2b0;box-shadow:0 0 28px #ffd45a66}
+.henmercy-boss-game-timer{margin-top:14px;color:#ffd45a;font:11px var(--mono);letter-spacing:.14em}
+.starlylands-battle .boss-name{color:#dffaff;text-shadow:0 0 14px #39aaff,0 0 40px #087eff}
+.henmercy-battle .boss-name{color:#fff0b5;text-shadow:0 0 14px #ffc83d,0 0 40px #ff9f00}
+@keyframes henmercySigilFlash{50%{filter:brightness(2);transform:scale(1.12);box-shadow:0 0 38px #fff0ae}}
+@media(max-width:500px){.henmercy-boss-game-options{gap:7px}.henmercy-boss-game-options button{min-height:58px}}
+
+/* StarlyLands // blue starfall and judgment */
+.starlylands-kishin-card{
+  border-color:#63caff!important;
+  background:radial-gradient(ellipse at 50% 25%,#42baff24,transparent 48%),linear-gradient(145deg,#091a32,#070a11 72%)!important;
+  box-shadow:0 0 34px #46baff25,0 18px 55px #0008!important;
+}
+.starlylands-kishin-card .kishin-card-art-wrap{
+  background:radial-gradient(circle at 50% 45%,#53caff3d,transparent 58%),linear-gradient(145deg,#071d3b,#080b12);
+}
+.starlylands-kishin-card .kishin-card-art-wrap img{
+  filter:drop-shadow(0 0 12px #fff) drop-shadow(0 0 38px #39aaff);
+  animation:starlyFloat 2.2s ease-in-out infinite;
+}
+.starlylands-kishin-card .kishin-card-top,.starlylands-kishin-card .kishin-card-effect{
+  color:#a5e6ff!important;text-shadow:0 0 14px #39aaffaa;
+}
+.starlylands-kishin-card .kishin-buy{border-color:#63caff;background:linear-gradient(110deg,#081c33,#101728)}
+.starlylands-kishin-card .kishin-buy:hover:not(:disabled){color:#06101c;background:#74d7ff;box-shadow:0 0 34px #36b9ff99}
+.unconscious-singer-kishin-card{
+  border-color:#ff5375!important;
+  background:radial-gradient(ellipse at 50% 30%,#ff315b2d,transparent 58%),linear-gradient(145deg,#280a14,#07090f 72%)!important;
+  box-shadow:0 0 34px #ff315b35,0 18px 55px #0008!important;
+}
+.unconscious-singer-kishin-card .kishin-card-art-wrap{background:radial-gradient(circle at 50% 45%,#ff53753d,transparent 58%),linear-gradient(145deg,#300b18,#080b12)}
+.unconscious-singer-kishin-card .kishin-card-art-wrap img{filter:drop-shadow(0 0 14px #ffe4ea) drop-shadow(0 0 38px #ff315b)}
+.unconscious-singer-kishin-card .kishin-card-top,.unconscious-singer-kishin-card .kishin-card-effect{color:#ffa0b2!important;text-shadow:0 0 12px #ff315b99}
+.unconscious-singer-kishin-card .kishin-buy{border-color:#ff5375;background:linear-gradient(110deg,#300b18,#161018)}
+.unconscious-singer-kishin-card .kishin-buy:hover:not(:disabled){color:#fff;background:#a6193a;box-shadow:0 0 30px #ff315b88}
+.attack-button.singer-guitar-strings,.attack-button.singer-feedback-howl,.attack-button.singer-dissonant-drop,
+.attack-button.singer-bone-rattle,.attack-button.singer-stolen-tempo,.attack-button.singer-phantom-note,
+.attack-button.singer-requiem-loop,.attack-button.singer-curtain-call{
+  border-color:#ff5375;color:#ffe5eb;text-shadow:0 0 10px #ff315b88;
+  background:linear-gradient(115deg,#310a18,#111019 56%,#280b18);
+  box-shadow:0 0 18px #ff315b22,inset 0 0 20px #ff315b12;
+}
+.unconscious-singer-vfx{position:fixed;inset:0;z-index:10040;pointer-events:none;overflow:hidden}
+.singer-note-layer{position:absolute;inset:0}
+.singer-note{position:absolute;left:var(--note-x);top:105%;color:#ffe8ee;font:clamp(22px,4vw,48px) Georgia,serif;text-shadow:0 0 12px #fff,0 0 30px #ff315b;animation:singerNoteRise 1.35s var(--note-delay) ease-out forwards}
+.singer-string-rain{position:absolute;inset:0}
+.singer-string{position:absolute;top:-105vh;left:var(--string-x);width:2px;height:110vh;background:linear-gradient(180deg,transparent,#fff,#ffb2c2 55%,#ff315b);box-shadow:0 0 12px #fff,0 0 28px #ff315b;animation:singerStringDrop 1.05s var(--string-delay) cubic-bezier(.15,.75,.25,1) forwards}
+.singer-string-cage{position:fixed;left:var(--target-left);top:var(--target-top);width:var(--target-width);height:var(--target-height);border:2px solid #fff0f4;border-radius:12px;box-shadow:inset 0 0 28px #ff315b99,0 0 28px #ff315b,0 0 75px #ff315b88;opacity:0;animation:singerCageClose 1.6s .45s ease-in-out forwards}
+.singer-string-cage::before,.singer-string-cage::after{content:"";position:absolute;inset:-10px;border:2px solid #ff6d8b;border-radius:18px;transform:rotate(8deg);box-shadow:0 0 16px #ff315b}
+.singer-string-cage::after{transform:rotate(-8deg)}
+.singer-impact{position:absolute;left:50%;top:48%;width:18vw;height:18vw;border:2px solid #fff;border-radius:50%;transform:translate(-50%,-50%) scale(.1);box-shadow:0 0 25px #fff,0 0 70px #ff315b;animation:singerImpact .9s ease-out forwards}
+.singer-feedback .singer-impact{border-width:5px;animation:singerFeedback .9s ease-out forwards}
+.singer-drop .singer-impact{width:50vw;height:50vh;border-radius:8px;animation:singerDrop .85s ease-in forwards}
+.singer-bones .singer-impact{border-style:dashed;border-color:#f5e8f4;animation:singerImpact .8s steps(5) forwards}
+.singer-tempo::after{content:"// // // // //";position:absolute;left:-100%;top:45%;width:300%;color:#fff;font:clamp(20px,5vw,56px) var(--mono);letter-spacing:.3em;text-shadow:0 0 18px #ff315b;animation:singerTempo .8s ease-out forwards}
+.singer-phantom .singer-impact{border-color:#d9a8ff;box-shadow:0 0 40px #d9a8ff;animation:singerPhantom 1.1s ease-out forwards}
+.singer-requiem .singer-impact{width:55vw;height:55vw;border-width:8px;animation:singerFeedback 1.1s ease-out forwards}
+.singer-curtain::before,.singer-curtain::after{content:"";position:absolute;top:0;bottom:0;width:50%;background:linear-gradient(90deg,#ff315b55,#11050b);animation:singerCurtain .8s ease-in forwards}
+.singer-curtain::before{left:-50%}.singer-curtain::after{right:-50%;transform:scaleX(-1)}
+@keyframes singerNoteRise{0%{opacity:0;transform:translateY(0) rotate(-18deg)}20%{opacity:1}100%{opacity:0;transform:translateY(-120vh) rotate(22deg)}}
+@keyframes singerStringDrop{0%{top:-105vh;opacity:0}20%{opacity:1}100%{top:-4vh;opacity:.9}}
+@keyframes singerCageClose{15%{opacity:1;transform:scale(1.08)}45%{opacity:1;transform:scale(.97)}100%{opacity:0;transform:scale(1.02)}}
+@keyframes singerImpact{to{opacity:0;transform:translate(-50%,-50%) scale(7)}}
+@keyframes singerFeedback{to{opacity:0;transform:translate(-50%,-50%) scale(9)}}
+@keyframes singerDrop{0%{opacity:0;transform:translate(-50%,-150%) scale(.2)}65%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(1.7)}}
+@keyframes singerPhantom{0%{opacity:0;transform:translate(-50%,-50%) scale(.1)}40%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(4) rotate(180deg)}}
+@keyframes singerTempo{to{left:0;opacity:0}}
+@keyframes singerCurtain{to{left:0;right:0;opacity:.85}}
+@media(prefers-reduced-motion:reduce){.unconscious-singer-vfx *,.unconscious-singer-vfx::before,.unconscious-singer-vfx::after{animation-duration:.01ms!important}}
+.sea-predator-kishin-card{
+  border-color:#3be7dc!important;
+  background:radial-gradient(ellipse at 50% 24%,#18d8d326,transparent 48%),linear-gradient(145deg,#06201f,#070a11 72%)!important;
+  box-shadow:0 0 30px #14c9c326,0 18px 55px #0008!important;
+}
+.sea-predator-kishin-card .kishin-card-art-wrap{background:radial-gradient(circle at 50% 45%,#35e7dc35,transparent 58%),linear-gradient(145deg,#062d2c,#080b12)}
+.sea-predator-kishin-card .kishin-card-art-wrap img{filter:drop-shadow(0 0 12px #b4fff5) drop-shadow(0 0 34px #12d6cc)}
+.sea-predator-kishin-card .kishin-card-top,.sea-predator-kishin-card .kishin-card-effect{color:#8dfcf1!important}
+.sea-predator-kishin-card .kishin-buy{border-color:#3be7dc}
+
+.starly-vfx{
+  position:fixed;inset:0;z-index:10020;overflow:hidden;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 50%,#117bdf26,transparent 68%);
+  animation:starlyScreenPulse 1.8s ease-out forwards;
+}
+.starly-vfx-stars{position:absolute;inset:0;overflow:hidden}
+.starly-vfx-stars i{
+  position:absolute;left:var(--star-x);top:-12%;
+  width:clamp(7px,1vw,14px);height:clamp(22px,3vw,42px);
+  background:linear-gradient(180deg,#fff,#a9f3ff 35%,#37aaff 75%,transparent);
+  box-shadow:0 0 10px #fff,0 0 26px #36b8ff,0 0 44px #168cff;
+  transform:rotate(24deg);opacity:0;
+  animation:starlyStarFall var(--star-duration) var(--star-delay) ease-in forwards;
+}
+.starly-vfx-stars i:nth-child(3n){width:18px;height:48px}
+.starly-vfx-stars i:nth-child(4n){transform:rotate(-24deg)}
+.starly-vfx-message{
+  position:absolute;left:7%;right:7%;top:46%;text-align:center;
+  color:#e4faff;font:700 clamp(17px,3.2vw,38px) var(--pixel);
+  text-shadow:0 0 12px #fff,0 0 30px #4ccaff,0 0 70px #087eff;
+  animation:starlyText 1.7s ease-out forwards;
+}
+.starly-vfx.mercy{background:radial-gradient(ellipse at 50% 50%,#49f4ff35,transparent 67%)}
+.starly-vfx.mercy .starly-vfx-stars i{animation-duration:1.2s}
+.starly-mercy-picker{
+  position:fixed;inset:0;z-index:10030;display:grid;place-items:center;
+  padding:20px;background:#030812eF;backdrop-filter:blur(8px);
+}
+.starly-picker-panel{
+  width:min(600px,100%);padding:clamp(24px,5vw,44px);
+  border:1px solid #63caff;background:linear-gradient(145deg,#0d2340,#080c16);
+  box-shadow:0 0 70px #279dff44;text-align:center;
+}
+.starly-picker-panel h2{color:#d8f6ff;margin:12px 0}
+.starly-picker-panel>p:not(.section-kicker){color:#91adc0;font:11px/1.6 var(--mono)}
+.starly-picker-options{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:26px 0}
+.starly-picker-options button{
+  min-height:80px;border:1px solid #399cce;color:#e5faff;cursor:pointer;
+  background:linear-gradient(145deg,#102b49,#0a1424);font:10px var(--mono);letter-spacing:.14em;
+  box-shadow:inset 0 0 25px #35bfff12;
+}
+.starly-picker-options button:hover{border-color:#c5f5ff;box-shadow:0 0 28px #40c9ff77}
+.starly-picker-cancel{
+  padding:10px 18px;border:1px solid #42546a;background:transparent;
+  color:#91a9bd;font:9px var(--mono);letter-spacing:.14em;cursor:pointer;
+}
+.sea-kishin-vfx{
+  position:fixed;inset:0;z-index:10020;overflow:hidden;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 80%,#13e5df35,transparent 58%);
+}
+.sea-kishin-wave{
+  position:absolute;left:-15%;right:-15%;bottom:-45%;height:100%;
+  border:5px solid #9dfff6;border-radius:50% 50% 0 0;
+  background:linear-gradient(0deg,#04c8d666,#18e2df22 45%,transparent);
+  box-shadow:0 0 35px #43fff0,0 0 100px #04c9e8;
+  animation:seaKishinWave .9s ease-out forwards;
+}
+.sea-kishin-impact{
+  position:absolute;left:50%;top:48%;width:30px;height:30px;border:3px solid #eaffff;border-radius:50%;
+  transform:translate(-50%,-50%);box-shadow:0 0 35px #fff,0 0 90px #26fff0;
+  animation:seaKishinImpact .8s .2s ease-out forwards;
+}
+.sea-kishin-title{
+  position:absolute;left:7%;right:7%;top:44%;text-align:center;
+  color:#eaffff;font:700 clamp(16px,3vw,34px) var(--pixel);
+  text-shadow:0 0 12px #fff,0 0 30px #21fff0,0 0 70px #009ee4;
+  animation:starlyText 1.4s ease-out forwards;
+}
+@keyframes starlyFloat{50%{transform:translateY(-8px) scale(1.025)}}
+@keyframes starlyScreenPulse{18%{filter:brightness(1.8)}100%{opacity:0}}
+@keyframes starlyStarFall{0%{opacity:0;transform:translate(0,0) rotate(24deg)}15%{opacity:1}100%{opacity:0;transform:translate(-18vw,125vh) rotate(24deg)}}
+@keyframes starlyText{15%{opacity:1}72%{opacity:1}100%{opacity:0;transform:scale(1.14)}}
+@keyframes seaKishinWave{20%{opacity:.9}100%{opacity:0;transform:translateY(-100%) scale(1.15)}}
+@keyframes seaKishinImpact{20%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(22)}}
+@media(max-width:500px){.starly-picker-options{grid-template-columns:1fr}.starly-picker-options button{min-height:60px}}
+@keyframes kzxCardFloat{
+  0%,100%{transform:translateY(0) scale(1)}
+  50%{transform:translateY(-6px) scale(1.015)}
+}
+@keyframes kzxTextGlitch{
+  0%{transform:translate(0)}
+  50%{transform:translate(2px,-1px)}
+  100%{transform:translate(-2px,1px)}
+}
+
+/* K,Z,X attack button */
+.attack-button.k-z-x{
+  border-color:#fff!important;
+  background:
+    linear-gradient(120deg,#ff00c8,#25082f 30%,#062b35 68%,#00eaff)!important;
+  box-shadow:
+    0 0 16px #ff00dd66,
+    0 0 32px #00eaff44,
+    inset 0 0 25px #ffffff12!important;
+  animation:kzxButtonGlitch .22s steps(2) infinite;
+}
+.attack-button.k-z-x::before{
+  background:linear-gradient(110deg,transparent 8%,#fff 24%,#ff22df 34%,transparent 45%,#00f6ff 63%,#fff 72%,transparent 86%);
+  opacity:.7;
+  animation:kzxButtonSweep .45s linear infinite!important;
+}
+.attack-button.k-z-x::after{
+  height:3px!important;
+  transform:scaleX(1)!important;
+  background:linear-gradient(90deg,#ff00dd,#fff,#00eaff)!important;
+  box-shadow:0 0 14px #fff,0 0 30px #ff00dd;
+}
+.attack-button.k-z-x:hover:not(:disabled){
+  transform:translateY(-4px) skewX(-1deg)!important;
+  filter:brightness(1.25)!important;
+  box-shadow:0 0 28px #ff00ddaa,0 0 55px #00eaff66,inset 0 0 30px #fff2!important;
+}
+@keyframes kzxButtonGlitch{
+  0%,100%{filter:hue-rotate(0deg) brightness(1)}
+  25%{filter:hue-rotate(45deg) brightness(1.18)}
+  50%{filter:hue-rotate(-55deg) brightness(1.05)}
+  75%{filter:hue-rotate(90deg) brightness(1.22)}
+}
+@keyframes kzxButtonSweep{
+  from{transform:translateX(-120%)}
+  to{transform:translateX(120%)}
+}
+
+/* K,Z,X battle VFX */
+.kzx-vfx{
+  --kzx-x:50vw;
+  --kzx-y:48vh;
+  position:fixed;
+  inset:0;
+  z-index:10020;
+  pointer-events:none;
+  overflow:hidden;
+}
+.kzx-static{
+  position:absolute;
+  inset:0;
+  opacity:.12;
+  background:
+    repeating-linear-gradient(0deg,transparent 0 2px,#fff 3px 4px),
+    repeating-linear-gradient(90deg,#ff00c80a 0 3px,#00eaff0a 4px 7px);
+  mix-blend-mode:screen;
+  animation:kzxStaticMove .07s steps(2) infinite;
+}
+.kzx-glitch-frame{
+  position:absolute;
+  left:var(--kzx-x);
+  top:var(--kzx-y);
+  width:clamp(180px,24vw,430px);
+  height:clamp(180px,24vw,430px);
+  transform:translate(-50%,-50%);
+  border:2px solid #fff;
+  box-shadow:
+    0 0 12px #fff,
+    0 0 35px #ff00dd,
+    0 0 75px #00eaff;
+  opacity:0;
+}
+.kzx-target-ring{
+  position:absolute;
+  left:var(--kzx-x);
+  top:var(--kzx-y);
+  width:210px;
+  height:210px;
+  border-radius:50%;
+  transform:translate(-50%,-50%) scale(.1);
+  border:3px solid #fff;
+  background:conic-gradient(#ff00dd,#ff8a00,#fff000,#00ff85,#00eaff,#8b5cff,#ff00dd);
+  -webkit-mask:radial-gradient(circle,transparent 62%,#000 64%,#000 69%,transparent 71%);
+  mask:radial-gradient(circle,transparent 62%,#000 64%,#000 69%,transparent 71%);
+  opacity:0;
+}
+.kzx-slash{
+  position:absolute;
+  left:var(--kzx-x);
+  top:var(--kzx-y);
+  width:min(80vw,1000px);
+  height:clamp(8px,1.2vw,18px);
+  transform-origin:center;
+  background:linear-gradient(90deg,transparent 0%,#ff00dd 18%,#ff7b00 34%,#fff 48%,#00f6ff 65%,#765cff 82%,transparent 100%);
+  box-shadow:
+    0 0 8px #fff,
+    0 0 24px #ff00dd,
+    0 0 48px #00eaff;
+  opacity:0;
+  filter:saturate(1.7);
+}
+.kzx-slash::after{
+  content:"";
+  position:absolute;
+  inset:-8px 0;
+  background:inherit;
+  filter:blur(9px);
+  opacity:.8;
+}
+.kzx-slash-a{transform:translate(-50%,-50%) rotate(-31deg)}
+.kzx-slash-b{transform:translate(-50%,-50%) rotate(27deg) scaleX(.8)}
+.kzx-slash-c{transform:translate(-50%,-50%) rotate(-4deg) scaleX(.65);height:4px}
+.kzx-rainbow-core{
+  position:absolute;
+  left:var(--kzx-x);
+  top:var(--kzx-y);
+  width:70px;
+  height:70px;
+  border-radius:50%;
+  transform:translate(-50%,-50%) scale(.1);
+  background:radial-gradient(circle,#fff 0 12%,#ff00dd 24%,#00eaff 42%,transparent 70%);
+  box-shadow:0 0 40px #fff,0 0 100px #ff00dd,0 0 150px #00eaff;
+  opacity:0;
+}
+.kzx-pixel-burst{
+  position:absolute;
+  left:var(--kzx-x);
+  top:var(--kzx-y);
+  width:12px;
+  height:12px;
+  background:#fff;
+  box-shadow:
+    85px -65px #ff00dd,-95px 45px #00eaff,130px 70px #fff,
+    -140px -55px #7b5cff,70px 115px #ff7b00,-65px -100px #00ff85;
+  transform:translate(-50%,-50%) scale(.1);
+  opacity:0;
+}
+.kzx-scanline{
+  position:absolute;
+  left:0;
+  right:0;
+  top:var(--kzx-y);
+  height:4px;
+  background:linear-gradient(90deg,transparent,#fff,#ff00dd,#00eaff,#fff,transparent);
+  box-shadow:0 0 20px #fff,0 0 50px #00eaff;
+  transform:scaleX(.05);
+  opacity:0;
+}
+.kzx-strike .kzx-glitch-frame{animation:kzxFrame .75s steps(3) forwards}
+.kzx-strike .kzx-target-ring{animation:kzxRing .7s cubic-bezier(.15,.8,.2,1) forwards}
+.kzx-strike .kzx-slash-a{animation:kzxSlashA .42s cubic-bezier(.1,.7,.2,1) forwards}
+.kzx-strike .kzx-slash-b{animation:kzxSlashB .48s .06s cubic-bezier(.1,.7,.2,1) forwards}
+.kzx-strike .kzx-slash-c{animation:kzxSlashC .55s .1s ease-out forwards}
+.kzx-strike .kzx-rainbow-core{animation:kzxCore .55s ease-out forwards}
+.kzx-strike .kzx-pixel-burst{animation:kzxPixels .8s steps(3) forwards}
+.kzx-strike .kzx-scanline{animation:kzxScan .35s steps(2) forwards}
+.kzx-fade{animation:kzxFade .45s ease-out forwards}
+.kzx-variant-2 .kzx-slash-a{transform:translate(-50%,-50%) rotate(42deg)}
+.kzx-variant-2 .kzx-slash-b{transform:translate(-50%,-50%) rotate(-19deg)}
+.kzx-variant-3 .kzx-slash-a{transform:translate(-50%,-50%) rotate(-7deg) scaleX(1.12)}
+.kzx-variant-3 .kzx-slash-b{transform:translate(-50%,-50%) rotate(57deg) scaleX(.72)}
+@keyframes kzxStaticMove{
+  0%{transform:translate(0,0);filter:hue-rotate(0deg)}
+  50%{transform:translate(-2px,3px);filter:hue-rotate(90deg)}
+  100%{transform:translate(3px,-2px);filter:hue-rotate(-90deg)}
+}
+@keyframes kzxFrame{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(.35) skew(20deg)}
+  25%{opacity:1;transform:translate(-48%,-53%) scale(1.15) skew(-14deg)}
+  55%{opacity:.75;transform:translate(-52%,-47%) scale(.9) skew(8deg)}
+  100%{opacity:0;transform:translate(-50%,-50%) scale(1.4) skew(0)}
+}
+@keyframes kzxRing{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(.1) rotate(0)}
+  25%{opacity:1}
+  100%{opacity:0;transform:translate(-50%,-50%) scale(2.5) rotate(250deg)}
+}
+@keyframes kzxSlashA{
+  0%{opacity:0;transform:translate(-50%,-50%) rotate(-31deg) scaleX(.05)}
+  18%{opacity:1}
+  55%{opacity:1;filter:brightness(2.5)}
+  100%{opacity:0;transform:translate(-50%,-50%) rotate(-31deg) scaleX(1.35)}
+}
+@keyframes kzxSlashB{
+  0%{opacity:0;transform:translate(-50%,-50%) rotate(27deg) scaleX(.03)}
+  20%{opacity:.95}
+  100%{opacity:0;transform:translate(-50%,-50%) rotate(27deg) scaleX(1.2)}
+}
+@keyframes kzxSlashC{
+  0%{opacity:0;transform:translate(-50%,-50%) rotate(-4deg) scaleX(.1)}
+  30%{opacity:1}
+  100%{opacity:0;transform:translate(-50%,-50%) rotate(-4deg) scaleX(1.6)}
+}
+@keyframes kzxCore{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(.1)}
+  35%{opacity:1}
+  100%{opacity:0;transform:translate(-50%,-50%) scale(2.8)}
+}
+@keyframes kzxPixels{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(.1)}
+  20%{opacity:1}
+  100%{opacity:0;transform:translate(-50%,-50%) scale(9)}
+}
+@keyframes kzxScan{
+  0%{opacity:0;transform:scaleX(.05)}
+  30%{opacity:1}
+  100%{opacity:0;transform:scaleX(1.3)}
+}
+@keyframes kzxFade{
+  to{opacity:0;filter:brightness(2) saturate(0)}
+}
+.kzx-heal-burst{
+  position:fixed;
+  left:50%;
+  top:58%;
+  z-index:10030;
+  pointer-events:none;
+  transform:translate(-50%,-50%);
+  font:14px var(--mono);
+  letter-spacing:.1em;
+  color:#fff;
+  text-shadow:0 0 10px #fff,0 0 24px #00ffbf,0 0 50px #00eaff;
+  animation:kzxHeal .95s ease-out forwards;
+}
+@keyframes kzxHeal{
+  0%{opacity:0;transform:translate(-50%,-20%) scale(.7)}
+  20%{opacity:1}
+  100%{opacity:0;transform:translate(-50%,-170%) scale(1.2)}
+}
+
+/* PUBLIC RIVALS // standalone matchmaking UI */
+.rivals-launch{position:absolute;right:clamp(16px,4vw,56px);top:clamp(88px,10vh,120px);z-index:5;display:flex;align-items:center;gap:13px;padding:13px 17px;background:linear-gradient(115deg,#190b13,#090d17);border:1px solid #ff355c88;color:#fff;box-shadow:0 0 26px #ff174422;cursor:pointer;text-align:left}.rivals-launch b{display:block;font:11px var(--mono);letter-spacing:.16em}.rivals-launch small{display:block;color:#9c8490;font:8px var(--mono);margin-top:5px}.rivals-launch i{font-style:normal;color:#ff496b;font-size:22px}.rivals-live-dot{width:8px;height:8px;border-radius:50%;background:#ff3158;box-shadow:0 0 14px #ff3158;animation:rivalsPulse 1s infinite}.rivals-screen{max-width:1100px;margin:auto}.rivals-hero{position:relative;overflow:hidden;padding:45px 30px 38px;border:1px solid #492333;background:linear-gradient(120deg,#170b14,#080b13 65%);margin-bottom:20px}.rivals-hero h1{position:relative;z-index:1;font:clamp(38px,7vw,76px)/.95 var(--pixel);letter-spacing:.03em;margin:15px 0}.rivals-hero h1 span{color:#ff3158;text-shadow:0 0 24px #ff174477}.rivals-hero>p:not(.section-kicker){position:relative;z-index:1;color:#b7a7b0;max-width:600px;line-height:1.7}.rivals-hero-glow{position:absolute;width:380px;height:260px;right:-60px;top:-100px;background:radial-gradient(circle,#ff174433,transparent 70%);filter:blur(12px)}.rivals-panel{border:1px solid #29394d;background:linear-gradient(145deg,#0d1420,#080b12);padding:clamp(18px,3vw,30px);box-shadow:0 22px 65px #0005}.rivals-action-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}.rivals-action{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:8px;min-height:94px;padding:18px;background:#101a28;border:1px solid #34475f;color:#fff;cursor:pointer;text-align:left}.rivals-action.primary{background:linear-gradient(120deg,#3a1020,#17101b);border-color:#ff4268}.rivals-action b{font:13px var(--mono);letter-spacing:.12em}.rivals-action small,.rivals-muted{font:9px var(--mono);color:#8492a6}.rivals-join{display:grid;gap:8px}.rivals-join label{font:9px var(--mono);color:#ff7890}.rivals-join input{min-height:43px;background:#070b12;border:1px solid #33435a;color:#fff;padding:10px;letter-spacing:.2em}.rivals-room-head{display:flex;align-items:center;justify-content:space-between;gap:12px}.rivals-room-head strong{font:clamp(26px,5vw,42px) var(--mono);letter-spacing:.2em;color:#ff5979;text-shadow:0 0 18px #ff315866}.rivals-panel h2{font:15px var(--mono);letter-spacing:.12em;margin:28px 0 8px}.rivals-player-list{display:flex;gap:12px;flex-wrap:wrap;margin:18px 0}.rivals-player-chip{padding:10px 14px;border:1px solid #34445b;background:#111a27;font:10px var(--mono)}.rivals-kishin-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:15px 0 20px}.rivals-kishin-option{border:1px solid #34435a;background:#080d15;color:#fff;padding:10px;cursor:pointer;text-align:left}.rivals-kishin-option.selected{border-color:#ff3e68;box-shadow:0 0 22px #ff174433}.rivals-kishin-option img{width:100%;height:120px;object-fit:contain}.rivals-kishin-option b{display:block;font:10px var(--mono);margin-top:7px}.rivals-kishin-option small{display:block;color:#91a0b5;font:8px var(--mono);margin-top:5px}.rivals-vs{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:16px}.rivals-fighter{min-height:190px;border:1px solid #38445a;background:linear-gradient(145deg,#131c2b,#080b12);padding:12px;text-align:center}.rivals-fighter img{height:125px;max-width:100%;object-fit:contain}.rivals-fighter b{display:block;font:10px var(--mono)}.rivals-vs-mark{font:26px var(--pixel);color:#ff496d;text-shadow:0 0 20px #ff3155}.rivals-hp-row{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:18px 0}.rivals-hp-row span,.rivals-hp-row b{display:block;font:9px var(--mono);margin:5px 0}.rivals-hp{height:10px;background:#252b36;overflow:hidden}.rivals-hp i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#ff3159,#ff9c64);transition:width .3s}.rivals-battle-status{text-align:center;color:#ff8198;font:11px var(--mono);padding:12px}.rivals-attack-buttons{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.rivals-attack-buttons button{min-height:58px;background:#17101a;border:1px solid #a83250;color:#fff;font:10px var(--mono);cursor:pointer}.rivals-attack-buttons button:disabled{opacity:.35;cursor:not-allowed}.off-sale{border-color:#8c243b!important}.off-sale .kishin-card-top{color:#ff4968}.jorkaprime-card{--kishin-color:#ff263d!important;background:linear-gradient(145deg,#1b090e,#07090e)!important}.jorkaprime-card .kishin-card-art-wrap{background:radial-gradient(circle,#ff243d33,transparent 70%)}@keyframes rivalsPulse{50%{opacity:.35;box-shadow:0 0 3px #ff3158}}
+@media(max-width:700px){.rivals-launch{position:relative;top:auto;right:auto;margin:0 0 16px;width:max-content}.rivals-action-grid,.rivals-kishin-grid{grid-template-columns:1fr 1fr}.rivals-vs{gap:7px}.rivals-fighter{padding:7px;min-height:150px}.rivals-fighter img{height:95px}.rivals-attack-buttons{grid-template-columns:1fr}.rivals-hero{padding:30px 18px}}
+
+/* JorkaPrime // dedicated boss-battle VFX */
+.jorka-vfx{position:fixed;inset:0;z-index:10000;pointer-events:none;overflow:hidden;background:radial-gradient(ellipse at 70% 48%,#8b0c2444,transparent 58%);opacity:0;transition:opacity .16s}.jorka-vfx.jorka-strike{opacity:1}.jorka-red-scan{position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0 5px,#ff244b18 6px 7px);animation:jorkaScan .12s steps(2) infinite}.jorka-blade{position:absolute;left:-20%;top:45%;width:145%;height:13px;background:linear-gradient(90deg,transparent,#ff263e,#fff,#ff6a36,transparent);box-shadow:0 0 18px #ff173f,0 0 55px #ff173f;transform:rotate(-18deg) scaleX(0);transform-origin:left;transition:transform .3s}.jorka-strike .jorka-blade{transform:rotate(-18deg) scaleX(1)}.jorka-impact{position:absolute;left:68%;top:44%;width:20vw;height:20vw;border:4px solid #ff3156;border-radius:50%;box-shadow:0 0 35px #ff3156,inset 0 0 35px #ff3156;transform:scale(.1);opacity:0}.jorka-strike .jorka-impact{animation:jorkaImpact .7s ease-out forwards}.jorka-runes{position:absolute;left:50%;top:20%;transform:translateX(-50%);font:clamp(24px,5vw,60px) var(--pixel);color:#fff;text-shadow:0 0 12px #ff244b,0 0 35px #ff244b;letter-spacing:.2em}.jorka-horizon .jorka-blade{height:25px;filter:hue-rotate(15deg)}.jorka-execution .jorka-blade{height:42px;box-shadow:0 0 35px #ff1744,0 0 90px #ff1744}.jorka-out{opacity:0;transition:opacity .35s}@keyframes jorkaScan{to{transform:translateY(7px)}}@keyframes jorkaImpact{to{transform:scale(2.8);opacity:0}}
+
+/* Rivals matches reuse the regular boss-fight presentation. */
+.rivals-battle-view{flex:1;padding:30px 0 40px}
+.rivals-screen.rivals-in-match .rivals-hero,.rivals-screen.rivals-in-match>.sub-actions{display:none}
+.rivals-duel-panel{display:block;min-height:0;padding:16px 22px}
+.rivals-duel-grid{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:22px;width:100%}
+.rivals-fighter{position:relative;z-index:1;min-width:0;min-height:0;padding:0;border:0;background:transparent;text-align:left}
+.rivals-fighter-art{height:190px;display:grid;place-items:center}
+.rivals-fighter-art img{width:min(100%,280px);height:185px;object-fit:contain;filter:drop-shadow(0 0 20px #168bff44)}
+.rivals-fighter-info{position:relative;z-index:1;padding:0 8px}
+.rivals-fighter-info h2{margin:6px 0;font-size:clamp(18px,2.4vw,27px);letter-spacing:.06em;overflow-wrap:anywhere}
+.rivals-fighter-info>p{margin:0 0 16px;color:#7f93af;font:9px var(--mono);letter-spacing:.1em}
+.rivals-fighter-info .hp-title{margin:0 0 8px;font-size:9px}
+.rivals-fighter-info .hp-track{height:14px}
+.rivals-vs-mark{position:relative;z-index:1;font:32px var(--pixel);color:#ff496d;text-shadow:0 0 20px #ff3155}
+.rivals-battle-view .battle-log{min-height:76px;margin-bottom:20px}
+.rivals-battle-view .battle-log p{font:16px/1.5 var(--mono);overflow-wrap:anywhere}
+.rivals-attack-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.rivals-attack-grid .attack-button{min-height:60px}
+.rivals-battle-view .player-panel .text-button{align-self:start;margin-top:18px}
+.rivals-battle-view .player-status-row{overflow-wrap:anywhere}
+@media(max-width:700px){
+ .rivals-battle-view{padding-top:22px}
+ .rivals-duel-panel{padding:14px 10px}
+ .rivals-duel-grid{grid-template-columns:minmax(0,1fr) 28px minmax(0,1fr);gap:7px}
+ .rivals-fighter-art{height:130px}
+ .rivals-fighter-art img{height:125px}
+ .rivals-fighter-info{padding:0 3px}
+ .rivals-fighter-info h2{font-size:clamp(14px,4vw,20px)}
+ .rivals-fighter-info>p{font-size:7px}
+ .rivals-fighter-info .hp-title{font-size:7px;letter-spacing:0}
+ .rivals-vs-mark{font-size:24px}
+ .rivals-attack-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:420px){.rivals-attack-grid{grid-template-columns:1fr}}
