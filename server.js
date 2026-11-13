@@ -22,6 +22,7 @@ const KISHINS={
  'k-z-x':{hp:12000000},
  'jorkaprime':{hp:50000000},
  'henmercy':{hp:200000000},
+ 'creation-of-suntour':{hp:5000000000},
  'starlylands':{hp:1000000000},
  'sea-predator-kishin':{hp:2500000000},
  'unconscious-singer':{hp:30000000},
@@ -248,6 +249,16 @@ io.on('connection',socket=>{
     damage=skill.hits?skill.damagePerHit*skill.hits:Math.floor(Math.random()*(skill.bossMax-skill.bossMin+1))+skill.bossMin;
     effects.damage=damage;
    }
+   if(skill?.id==='suntour-creation-trial'){
+    const score=data?.trialScore;
+    if(!Number.isInteger(score)||score<0||score>4)return socket.emit('battle:action-rejected',"Complete Creation of Suntour's trial before attacking.");
+    effects.trialScore=score;
+    damage=3000000+score*3000000;
+    if(score===4){
+     target.skipTurns=Math.max(target.skipTurns||0,1);
+     effects.trialPerfect=true;
+    }
+   }
    if(skill?.id==='henmercy-mercy'){
     effects.heal=player.maxHp-player.hp;
     player.hp=player.maxHp;
@@ -290,8 +301,16 @@ io.on('connection',socket=>{
    if(effects.heal>0&&skill?.id!=='henmercy-mercy'&&skill?.effect!=='mercy')player.hp+=effects.heal;
    if(skill?.nonlethal)damage=Math.min(damage,Math.max(0,target.hp-1));
    if(skill?.skipTurns)target.skipTurns=Math.max(target.skipTurns||0,skill.skipTurns);
+   if(damage>0&&target.kishin==='creation-of-suntour'&&Math.random()<0.4){
+    damage=0;
+    player.skipTurns=Math.max(player.skipTurns||0,1);
+    effects.creationParried=true;
+    effects.parryMessage=`Creation of Suntour parried ${action.name} and seized the next turn.`;
+   }
    target.hp=Math.max(0,target.hp-damage);
-   message=skill?.id==='perfect-parry'
+   message=effects.creationParried
+    ?`${target.username}'s Creation of Suntour parried ${action.name}. ${player.username}'s next turn is skipped.`
+    :skill?.id==='perfect-parry'
     ?effects.parryWon?`${player.username} landed a PERFECT PARRY. ${target.username} loses the next 8 turns.`:`${player.username} missed the Perfect Parry timing trial.`
     :skill?.id==='henmercy-cards-wish'
     ?effects.cardCorrect?`${player.username} won Cards Wish. ${target.username} takes 10,000,000 damage.`:`${player.username} lost Cards Wish, takes 4,000,000 damage, and gains two turns.`

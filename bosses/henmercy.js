@@ -10,7 +10,7 @@ const HENMERCY_BOSS_MOVES = [
   {name:"NORNOS DECREE",damage:[1550000,1900000]},
   {name:"FINAL MERCY",damage:[1850000,2250000]},
   {name:"HALO OF SILENCE",damage:[900000,1200000]},
-  {name:"MERCY UNENDING",heal:90000000},
+  {name:"MERCY UNENDING",heal:350000000},
   {name:"CARDS WISH",game:"cards",damage:[1000000,1350000]},
   {name:"CROSS TRIAL",game:"cross",damage:[1100000,1450000]},
   {name:"HALO SEQUENCE",game:"halo",damage:[1200000,1550000]},
@@ -25,9 +25,9 @@ const HENMERCY_GAMES = {
 };
 
 const HENMERCY_PHASES = [
-  {threshold:0.75,damageMultiplier:1.5,name:"THE CURSE AWAKENS",message:"PHASE TWO // THE CURSE AWAKENS. HENMERCY'S attacks grow stronger."},
-  {threshold:0.5,damageMultiplier:2.5,name:"THE HALO BREAKS",message:"PHASE THREE // THE HALO BREAKS. HENMERCY's power surges again."},
-  {threshold:0.25,damageMultiplier:5,name:"FIVEFOLD ABOMINATION",message:"PHASE FOUR // FIVEFOLD ABOMINATION. HENMERCY unleashes the full curse."}
+  {threshold:0.75,damageMultiplier:2,name:"THE CURSE AWAKENS",message:"PHASE TWO // THE CURSE AWAKENS. HENMERCY'S attacks double in force."},
+  {threshold:0.5,damageMultiplier:4,name:"THE HALO BREAKS",message:"PHASE THREE // THE HALO BREAKS. HENMERCY's power doubles again."},
+  {threshold:0.25,damageMultiplier:8,name:"EIGHTFOLD ABOMINATION",message:"PHASE FOUR // EIGHTFOLD ABOMINATION. HENMERCY unleashes the full curse."}
 ];
 
 function henmercyDamage(ctx,damage){
@@ -47,9 +47,10 @@ function henmercyGame(ctx,type){
   return new Promise(resolve=>{
     const game=HENMERCY_GAMES[type];
     const target=Math.floor(Math.random()*game.symbols.length);
+    const duration=[7000,5500,4000,3000][Math.min(3,ctx.state.stage-1)];
     const overlay=document.createElement("div");
-    overlay.className="henmercy-boss-game";
-    overlay.innerHTML=`<div class="henmercy-boss-game-panel"><p class="section-kicker">HENMERCY // HOLY SKILL CHECK</p><h2>${game.title}</h2><p class="henmercy-boss-game-prompt">${game.prompt}</p><div class="henmercy-game-sigil">${game.symbols[target]}</div><div class="henmercy-boss-game-options"></div><div class="henmercy-boss-game-timer">7.0</div></div>`;
+    overlay.className=`henmercy-boss-game stage-${ctx.state.stage}`;
+    overlay.innerHTML=`<div class="henmercy-boss-game-panel"><p class="section-kicker">HENMERCY // HOLY SKILL CHECK // STAGE ${ctx.state.stage}</p><h2>${game.title}</h2><p class="henmercy-boss-game-prompt">${game.prompt}</p><div class="henmercy-game-sigil">${game.symbols[target]}</div><div class="henmercy-boss-game-options"></div><div class="henmercy-boss-game-timer">${(duration/1000).toFixed(1)}</div></div>`;
     const options=overlay.querySelector(".henmercy-boss-game-options");
     game.symbols.forEach((symbol,index)=>{
       const button=document.createElement("button");
@@ -62,10 +63,10 @@ function henmercyGame(ctx,type){
     document.body.appendChild(overlay);
 
     let done=false;
-    const deadline=Date.now()+7000;
+    const deadline=Date.now()+duration;
     const timer=window.setInterval(()=>{
       const left=Math.max(0,deadline-Date.now());
-      overlay.querySelector(".henmercy-boss-game-timer").textContent=(left/1000).toFixed(1);
+      overlay.querySelector(".henmercy-boss-game-timer").textContent=`${(left/1000).toFixed(1)} SECONDS`;
       if(left<=0)finish(false);
     },50);
     const finish=success=>{
@@ -85,8 +86,8 @@ window.YEN_BOSSES.henmercy = {
   stars:700000000,
   title:"THE GOLDEN KISHIN // FOUR CURSE STAGES",
   battleTitle:"THE HEAVENLY COURT HAS CHOSEN YOU",
-  maxHP:2000000000,
-  playerMaxHP:3800000,
+  maxHP:8000000000,
+  playerMaxHP:28000000,
   reward:250000000000,
   cardImage:"assets/Henmercy.png",
   idle:"assets/Henmercy.png",
@@ -126,7 +127,7 @@ window.YEN_BOSSES.henmercy = {
         ctx.setMessage(`HENMERCY // ${move.name}. THE HOLY TRIAL BEGINS.`);
         const passed=await henmercyGame(ctx,move.game);
         if(passed){
-          const opening=25000000;
+          const opening=100000000*ctx.state.stage;
           ctx.applyBossDamage(opening);
           ctx.updateHP();
           ctx.setMessage(`HOLY TRIAL CLEARED // ${ctx.fmt(opening)} DAMAGE. HENMERCY LOSES THIS TURN.`);
@@ -139,7 +140,8 @@ window.YEN_BOSSES.henmercy = {
         return;
       }
       if(move.heal){
-        const healed=Math.min(move.heal,ctx.boss.maxHP-ctx.bossHP);
+        const stageMultiplier=[1,2,4,8][Math.min(3,ctx.state.stage-1)];
+        const healed=Math.min(move.heal*stageMultiplier,ctx.boss.maxHP-ctx.bossHP);
         ctx.bossHP+=healed;
         showHenmercyBossVfx("MERCY UNENDING // THE GOLDEN WINGS REFORM","mercy");
         ctx.updateHP();

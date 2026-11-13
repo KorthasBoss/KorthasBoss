@@ -930,6 +930,23 @@ body.azael-domain .status-dot{background:#ff4263;box-shadow:0 0 12px #ff4263}
 .henmercy-battle .boss-name{color:#fff0b5;text-shadow:0 0 14px #ffc83d,0 0 40px #ff9f00}
 @keyframes henmercySigilFlash{50%{filter:brightness(2);transform:scale(1.12);box-shadow:0 0 38px #fff0ae}}
 @media(max-width:500px){.henmercy-boss-game-options{gap:7px}.henmercy-boss-game-options button{min-height:58px}}
+.suntour-trial,.suntour-vfx{position:fixed;inset:0;z-index:10020;display:grid;place-items:center;background:#02050de8;backdrop-filter:blur(8px)}
+.suntour-trial-panel{width:min(560px,calc(100% - 28px));padding:clamp(20px,5vw,36px);border:1px solid #79e7a9;background:linear-gradient(145deg,#10251d,#080d12);box-shadow:0 0 70px #47e99233;text-align:center}
+.suntour-trial-panel h2{margin:12px 0;color:#d9ffe6;font:clamp(18px,4vw,27px) var(--pixel)}
+.suntour-trial-prompt{color:#a7c8b3;font:11px/1.6 var(--mono)}
+.suntour-trial-sequence{display:flex;justify-content:center;gap:14px;min-height:54px;margin:20px 0;color:#bdffd3;font-size:34px;text-shadow:0 0 20px #4ee994}
+.suntour-trial-sequence.concealed{color:transparent;text-shadow:none}
+.suntour-trial-progress{min-height:18px;margin:12px;color:#90f3b2;font:10px var(--mono);letter-spacing:.15em}
+.suntour-trial-options{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.suntour-trial-options button{min-height:58px;border:1px solid #4d9d6d;color:#d9ffe6;background:#0b1711;font-size:24px}
+.suntour-trial-options button:hover:not(:disabled){border-color:#baffd0;box-shadow:0 0 22px #4ee99466}
+.suntour-trial-options button:disabled{opacity:.35}
+.suntour-trial-timer{margin-top:16px;color:#a6f5c2;font:11px var(--mono);letter-spacing:.14em}
+.suntour-vfx{inset:auto;left:50%;top:48%;width:min(90vw,540px);min-height:120px;padding:24px;transform:translate(-50%,-50%);border:1px solid #a6f5c2;background:linear-gradient(120deg,#0b2819f2,#050911f2);box-shadow:0 0 60px #54f39b66;animation:suntourEffect 1.8s ease-out forwards}
+.suntour-vfx-message{color:#d9ffe6;font:clamp(14px,3vw,24px) var(--mono);letter-spacing:.08em;text-align:center}
+.suntour-vfx.parry{border-color:#d7fff1;box-shadow:0 0 75px #a4ffdd99}
+@keyframes suntourEffect{0%{opacity:0;scale:.7}15%{opacity:1;scale:1.04}75%{opacity:1;scale:1}100%{opacity:0;scale:1.1}}
+@media(max-width:500px){.suntour-trial-options{gap:5px}.suntour-trial-options button{min-height:50px;font-size:20px}}
 
 /* StarlyLands // blue starfall and judgment */
 .starlylands-kishin-card{

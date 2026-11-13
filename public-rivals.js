@@ -10,6 +10,7 @@
   "k-z-x":{hp:12000000},
   "jorkaprime":{hp:50000000},
   "henmercy":{hp:200000000},
+  "creation-of-suntour":{hp:5000000000},
   "starlylands":{hp:1000000000},
   "sea-predator-kishin":{hp:2500000000},
   "unconscious-singer":{hp:30000000},
@@ -136,6 +137,9 @@
   renderAttackButtons(mine.actions||[],g.turn!==me||g.over);
   if(g.lastMove&&g.lastMove.actionId!==lastEffectAction){
    lastEffectAction=g.lastMove.actionId;
+   if(g.lastMove.effects?.creationParried){
+    window.YEN_SHOW_SUNTOUR_PARRY?.(g.lastMove.effects.parryMessage);
+   }
    const attacker=g.players.find(player=>player.username===g.lastMove.username);
    const target=g.players.find(player=>player.username!==g.lastMove.username);
    const action=attacker?.actions.find(owned=>owned.actionId===g.lastMove.moveId);
@@ -181,7 +185,7 @@
    button.onclick=async()=>{
     if(!room||button.disabled)return;
     button.disabled=true;
-    let parryWon=false,cardPick,mercyTarget;
+    let parryWon=false,cardPick,mercyTarget,trialScore;
     if(action.id==='henmercy-cards-wish'){
      try{
       cardPick=await window.YEN_CHOOSE_HENMERCY_CARD?.();
@@ -192,6 +196,17 @@
       return;
      }
      if(cardPick==null){button.disabled=false;return;}
+    }
+    if(action.id==='suntour-creation-trial'){
+     try{
+      trialScore=await window.YEN_CHOOSE_SUNTOUR_TRIAL?.();
+     }catch(error){
+      console.error("Could not open Creation of Suntour's trial:",error);
+      $('rivals-battle-status').textContent="Creation's trial could not open. Try again.";
+      button.disabled=false;
+      return;
+     }
+     if(trialScore==null){button.disabled=false;return;}
     }
     if(action.id==='starly-mercy'){
      try{
@@ -221,7 +236,7 @@
       }
     }
     if(!room||!socket?.connected){preplayedParry=null;return;}
-    socket.emit('battle:attack',{code:room.code,actionId:action.actionId,parryWon,cardPick,mercyTarget});
+    socket.emit('battle:attack',{code:room.code,actionId:action.actionId,parryWon,cardPick,mercyTarget,trialScore});
    };
    grid.appendChild(button);
   });
