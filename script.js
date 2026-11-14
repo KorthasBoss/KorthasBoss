@@ -219,7 +219,8 @@ function renderLobby() {
   });
   const merchant = document.createElement("article");
   merchant.className = "boss-card merchant-lobby-card";
-  merchant.innerHTML = `<div class="boss-card-bg" style="background-image:url('${CONFIG.merchant.background}')"></div><div class="boss-card-badge">MERCHANT // SAFE</div><img class="boss-card-art" src="${CONFIG.merchant.image}" alt="Merchant"><div class="boss-card-info"><div class="stars">10 ULTRA-ENDGAME SKILLS IN STOCK</div><h2>MERCHANT</h2><p>NO THREAT // CUSTOM DIALOGUE // SKILL VAULT</p></div>`;
+  const swordCount=Array.isArray(CONFIG.merchant.skills)?CONFIG.merchant.skills.filter(skill=>skill.sword).length:0;
+  merchant.innerHTML = `<div class="boss-card-bg" style="background-image:url('${CONFIG.merchant.background}')"></div><div class="boss-card-badge">MERCHANT // SAFE</div><img class="boss-card-art" src="${CONFIG.merchant.image}" alt="Merchant"><div class="boss-card-info"><div class="stars">${swordCount} TANK-BREAKING SWORDS IN STOCK</div><h2>MERCHANT</h2><p>NO THREAT // CUSTOM DIALOGUE // SKILL VAULT</p></div>`;
   merchant.addEventListener("click", async () => { await transition(() => showScreen("merchant-screen")); openMerchant(); });
   list.appendChild(merchant);
 
@@ -458,7 +459,7 @@ $("merchant-next").addEventListener("click", () => {
   merchantIndex = (merchantIndex + 1) % CONFIG.merchant.lines.length;
   $("merchant-line").textContent = CONFIG.merchant.lines[merchantIndex];
   $("merchant-dialog-count").textContent = `${String(merchantIndex+1).padStart(2,"0")} / 50`;
-  $("merchant-subline").textContent = merchantIndex===49 ? "That's all fifty. The vault is yours. Pick your weapon." : merchantIndex%3===0 ? "The vault is still open. Pick something brutal." : "I've got 10 ways to make a boss regret meeting you.";
+  $("merchant-subline").textContent = merchantIndex===49 ? "That's all fifty. The vault is yours. Pick your weapon." : merchantIndex%3===0 ? "The vault is still open. Pick something brutal." : "I've got 100 blades that'll make a boss regret meeting you.";
   if (merchantIndex===49) { buildSkillCatalog(); $("skill-shop").classList.remove("hidden"); renderSkills(); }
 });
 $("open-shop").addEventListener("click", () => { buildSkillCatalog(); $("skill-shop").classList.remove("hidden"); renderSkills(); });
@@ -481,7 +482,7 @@ function renderSkillsStatus(){
 }
 function createSkillCard(skill) {
   const owned=isSkillOwned(skill),el=document.createElement("article");
-  el.className=`skill-card ${skill.enchanted?"enchanted":""} ${owned?"owned":""} ${skill.rewardOnly?"reward-only":""}`;
+  el.className=`skill-card ${skill.enchanted?"enchanted":""} ${skill.sword?"sword-stock":""} ${owned?"owned":""} ${skill.rewardOnly?"reward-only":""}`;
   el.style.setProperty("--rarity",skill.color);
   el.innerHTML=`<div class="skill-rarity">${skill.rarity}${skill.enchanted?" // ✦ ENCHANTED":""}</div>${owned?'<span class="owned-tag">OWNED</span>':skill.rewardOnly?'<span class="owned-tag">BOSS REWARD</span>':''}<h3>${skill.name}</h3><p>${skill.description}</p><div class="skill-price">${owned?"ALREADY OWNED":skill.rewardOnly?"DEFEAT SEA PREDATOR":fmtDox(skill.cost)+" DOX"}</div>`;
   el.addEventListener("click",()=>openSkillDetail(skill));
@@ -509,7 +510,7 @@ function openSkillDetail(skill, shop="main") {
   const owned = isSkillOwned(skill);
   const cost = BigInt(skill.cost);
   const unavailable=Boolean(skill.rewardOnly);
-  wrap.innerHTML = `<div class="skill-detail-card ${skill.enchanted?"enchanted":""}"><div class="skill-rarity" style="--rarity:${skill.color}">${skill.rarity}${skill.enchanted?" // ✦ ENCHANTED":""}</div><h2>${skill.name}</h2><p>${skill.description}</p><div class="detail-price">${owned?"OWNED":unavailable?"BOSS REWARD ONLY":"COST: "+fmtDox(cost)+" DOX"}</div><div class="skill-detail-actions"><button class="menu-button primary" id="skill-buy" ${owned||unavailable||account.dox<cost?"disabled":""}>${owned?"OWNED":unavailable?"BOSS REWARD":account.dox<cost?"NOT ENOUGH DOX":"BUY SKILL"}</button><button class="menu-button" id="skill-close">CLOSE</button></div></div>`;
+  wrap.innerHTML = `<div class="skill-detail-card ${skill.enchanted?"enchanted":""} ${skill.sword?"sword-stock":""}"><div class="skill-rarity" style="--rarity:${skill.color}">${skill.rarity}${skill.enchanted?" // ✦ ENCHANTED":""}</div><h2>${skill.name}</h2><p>${skill.description}</p><div class="detail-price">${owned?"OWNED":unavailable?"BOSS REWARD ONLY":"COST: "+fmtDox(cost)+" DOX"}</div><div class="skill-detail-actions"><button class="menu-button primary" id="skill-buy" ${owned||unavailable||account.dox<cost?"disabled":""}>${owned?"OWNED":unavailable?"BOSS REWARD":account.dox<cost?"NOT ENOUGH DOX":"BUY SKILL"}</button><button class="menu-button" id="skill-close">CLOSE</button></div></div>`;
   document.body.appendChild(wrap);
   $("skill-close").onclick = () => wrap.remove();
   if (!owned && !unavailable && account.dox >= cost) {
@@ -997,7 +998,7 @@ function showGameOver() {
   $("result-lobby").onclick=async()=>{overlay.remove();await transition(()=>{showScreen("lobby-screen");renderLobby();});};
 }
 
-function usePotion(id) {
+async function usePotion(id) {
   if (busy || playerHP<=0 || battleFinished) return;
   const potion=POTIONS.find(x=>x.id===id);
   if (!potion || Number(account?.potions?.[id]||0)<=0) return;
@@ -1010,12 +1011,18 @@ function usePotion(id) {
   buildAttackButtons();
   setMessage(`${potion.name} restores ${fmt(playerHP-before)} HP.`);
   showFlash();
-  wait(650).then(()=>{
+  try {
+    await wait(650);
     if(playerHP>0&&!battleFinished){
-      setMessage(`${potion.name} settles. The boss waits for your next battle skill.`);
+      await bossTurn();
     }
+  } catch(error) {
+    console.error(`Boss turn failed after using ${potion.name}:`,error);
+    setMessage(`${potion.name} was used, but the boss turn could not complete.`);
+    updateHP();
+  } finally {
     busy=false;
-  });
+  }
 }
 
 async function playParryEffect(src) {

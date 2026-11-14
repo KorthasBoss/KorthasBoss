@@ -31,8 +31,7 @@ window.YEN_MERCHANT = {
 (() => {
   const M=window.YEN_MERCHANT;
   /*
-     THE OLD RANDOM 8,000-SKILL VAULT IS REPLACED WITH A SMALLER
-     ENDGAME-ONLY STOCK. These are intentionally absurdly expensive.
+     These endgame attacks are intentionally absurdly expensive.
   */
   M.skills.push(
     {id:"void-king-execution",name:"VOID KING // EXECUTION",rarity:"KISHIN",color:"#b45cff",enchanted:true,cost:"5000000000",power:6500000,description:"A forbidden execution that tears through ancient bosses."},
@@ -46,4 +45,40 @@ window.YEN_MERCHANT = {
     {id:"zero-hour-obliteration",name:"ZERO HOUR // OBLITERATION",rarity:"KISHIN",color:"#54ffff",enchanted:true,cost:"35000000000",power:30000000,description:"An endgame strike reserved for hunters with absurd wealth."},
     {id:"merchant-forbidden-deal",name:"THE MERCHANT'S FORBIDDEN DEAL",rarity:"???",color:"#ffea5c",enchanted:true,cost:"50000000000",power:50000000,description:"The Merchant refuses to explain where this came from."}
   );
+
+  const swordFamilies=[
+    {name:"VOIDFORGED",color:"#b45cff"},
+    {name:"SOLARIS",color:"#ffca57"},
+    {name:"FROSTFALL",color:"#71e6ff"},
+    {name:"ABYSSAL",color:"#5274ff"},
+    {name:"INFERNO",color:"#ff573d"},
+    {name:"STORMCALLER",color:"#fff071"},
+    {name:"VERDANT",color:"#70ff9e"},
+    {name:"BLOODMOON",color:"#ff315d"},
+    {name:"CELESTIAL",color:"#fff5ff"},
+    {name:"CHRONO",color:"#f38cff"}
+  ];
+  const swordTitles=[
+    "STARBREAKER","TITAN EDGE","CROWN CLEAVER","NIGHTFALL","WORLD RENDER",
+    "SOUL REAVER","DOOMBRINGER","ECLIPSE FANG","REALITY SPLITTER","FINAL HORIZON"
+  ];
+
+  swordFamilies.forEach((family,familyIndex)=>{
+    swordTitles.forEach((title,titleIndex)=>{
+      const index=familyIndex*swordTitles.length+titleIndex;
+      const power=25000000+index*9750000;
+      M.skills.push({
+        id:`merchant-sword-${String(index+1).padStart(3,"0")}`,
+        name:`${family.name} // ${title}`,
+        rarity:`${family.name} SWORD`,
+        color:family.color,
+        enchanted:true,
+        sword:true,
+        vfxClass:"merchant-sword-vfx",
+        cost:String(1000000000+index*1500000000),
+        power,
+        description:`A ${family.name.toLowerCase()} greatsword that cleaves through the arena in a burst of light. Deals ${power.toLocaleString("en-US")} base damage.`
+      });
+    });
+  });
 })();

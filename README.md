@@ -57,8 +57,9 @@ The shared `script.js` is only the battle/UI engine. Boss-specific behavior belo
 
 ## Merchant
 
-- 8,000 skills total.
-- 4,000 are Enchanted endgame skills with huge power and expensive DOX costs.
+- The core vault includes 10 endgame attacks and 100 themed swords.
+- Sword attacks deal 25,000,000–990,250,000 base damage and use color-tinted slash VFX.
+- Sword prices range from 1,000,000,000 to 149,500,000,000 DOX.
 - Healing potions are available in the vault.
 - Owned skills from `accounts.js` automatically become battle buttons.
 - Custom account attacks from `accounts.js` automatically become battle buttons.
