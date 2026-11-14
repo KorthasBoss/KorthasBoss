@@ -26,6 +26,7 @@ const KISHINS={
  'starlylands':{hp:1000000000},
  'sea-predator-kishin':{hp:2500000000},
  'unconscious-singer':{hp:30000000},
+ 'king-and-hell':{hp:12000000000},
  'hunter':{hp:5000000}
 };
 
@@ -58,6 +59,8 @@ function loadBattleSkills(){
    vfxClass:skill.vfxClass||"",
    nonlethal:Boolean(skill.nonlethal),
    skipTurns:Number(skill.skipTurns)||0,
+   skipTurnChance:Number(skill.skipTurnChance)||0,
+   healPercent:Number(skill.healPercent)||0,
    usesPerBattle:Number(skill.usesPerBattle)||0,
    killEffect:Boolean(skill.killEffect)
   }]));
@@ -298,14 +301,30 @@ io.on('connection',socket=>{
    if(skill?.id==='xenith-01-world-weaver'&&Math.random()<0.45){
     effects.heal=Math.min(player.maxHp-player.hp,650000);
    }
+   if(skill?.healPercent){
+    effects.heal=Math.min(player.maxHp-player.hp,Math.round(player.maxHp*skill.healPercent));
+   }
    if(effects.heal>0&&skill?.id!=='henmercy-mercy'&&skill?.effect!=='mercy')player.hp+=effects.heal;
    if(skill?.nonlethal)damage=Math.min(damage,Math.max(0,target.hp-1));
-   if(skill?.skipTurns)target.skipTurns=Math.max(target.skipTurns||0,skill.skipTurns);
+   if(skill?.skipTurns&&(!skill.skipTurnChance||Math.random()<skill.skipTurnChance)){
+    target.skipTurns=Math.max(target.skipTurns||0,skill.skipTurns);
+    effects.skipTurns=skill.skipTurns;
+   }
    if(damage>0&&target.kishin==='creation-of-suntour'&&Math.random()<0.4){
     damage=0;
     player.skipTurns=Math.max(player.skipTurns||0,1);
     effects.creationParried=true;
     effects.parryMessage=`Creation of Suntour parried ${action.name} and seized the next turn.`;
+   }
+   if(damage>0&&target.kishin==='king-and-hell'){
+    const reduced=Math.ceil(damage*.3);
+    damage=Math.max(0,damage-reduced);
+    effects.kingHellReduced=reduced;
+    effects.damage=damage;
+    if(Math.random()<.3){
+     effects.kingHellBite=Math.min(player.hp,1250000);
+     player.hp-=effects.kingHellBite;
+    }
    }
    target.hp=Math.max(0,target.hp-damage);
    message=effects.creationParried
@@ -322,7 +341,7 @@ io.on('connection',socket=>{
     ?`${player.username}: "You're hell arriveed.." // 200,000 damage.`
     :skill?.effect==='mercy'
     ?`${player.username} used StarlyLands Mercy. ${effects.healTarget==='self'?player.username:target.username} was restored to full HP.`
-    :`${player.username} used ${action.name} for ${damage.toLocaleString()} damage.${effects.heal?` Restored ${effects.heal.toLocaleString()} HP.`:''}`;
+    :`${player.username} used ${action.name} for ${damage.toLocaleString()} damage.${effects.heal?` Restored ${effects.heal.toLocaleString()} HP.`:''}${effects.kingHellReduced?` King&Hell's hide absorbed ${effects.kingHellReduced.toLocaleString()} damage.`:''}${effects.kingHellBite?` King&Hell bit back for ${effects.kingHellBite.toLocaleString()} damage.`:''}`;
   }
   room.lastMove={actionId:++room.actionCount,username:player.username,moveId:action.actionId,
    skillId:action.type==='skill'?action.id:null,targetHpBefore,attackerHpBefore,effects};

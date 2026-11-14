@@ -1,6 +1,8 @@
 (()=>{
  const $=id=>document.getElementById(id);
  let socket=null,room=null,selected=null,me=null,game=null,lastEffectAction=null,preplayedParry=null;
+ let tadesLobbyActive=false;
+ const tadesUsername='a-shen-tades';
  const stats={
   "japanhunter":{hp:1000000000000000},
   "auralis-nyxara":{hp:5000000},
@@ -14,6 +16,7 @@
   "starlylands":{hp:1000000000},
   "sea-predator-kishin":{hp:2500000000},
   "unconscious-singer":{hp:30000000},
+  "king-and-hell":{hp:12000000000},
   "hunter":{hp:5000000}
  };
  const defaultTarget={id:"hunter",name:"HUNTER",image:"assets/menu-idle.png"};
@@ -30,6 +33,37 @@
  };
  const ownedBattleSkills=()=>configuredSkills().filter(owns);
  function show(id){document.querySelectorAll('.portal-screen,.portal-subscreen,main > .battle-screen').forEach(x=>x.classList.add('hidden'));$(id)?.classList.remove('hidden');}
+ function updateTadesMusicButton(){
+  const button=$('tades-music-toggle'),audio=$('tades-lobby-music');
+  if(!button||!audio)return;
+  const enabled=$('setting-music')?.checked!==false;
+  button.disabled=!enabled;
+  button.setAttribute('aria-pressed',String(!audio.paused));
+  button.textContent=!enabled?'MUSIC DISABLED IN SETTINGS':audio.paused?'♪ PLAY TADES THEME':'♫ PAUSE TADES THEME';
+ }
+ function setTadesLobby(active){
+  const screen=$('public-rivals-screen'),banner=$('tades-lobby-banner');
+  const audio=$('tades-lobby-music');
+  if(!screen||!banner||!audio)return;
+  const wasActive=tadesLobbyActive;
+  tadesLobbyActive=active;
+  screen.classList.toggle('tades-lobby',active);
+  banner.classList.toggle('hidden',!active);
+  $('rivals-pick-heading').textContent=active?'CHOOSE YOUR KISHIN':'CHOOSE YOUR FIGHTER';
+  $('rivals-pick-intro').textContent=active
+   ?"Select a Kishin to enter Tades' arena. Your chosen fighter and owned moves are shared with your rival."
+   :'Choose a Kishin you own, or fight as the default Hunter. Rivals lets you use any configured skill owned by your account.';
+  if(!active){
+   audio.pause();
+   audio.currentTime=0;
+  }else if(!wasActive&&$('setting-music')?.checked!==false){
+   audio.play().catch(()=>{
+    $('tades-music-toggle').textContent='♪ PLAY TADES THEME';
+    $('tades-music-toggle').setAttribute('aria-pressed','false');
+   });
+  }
+  updateTadesMusicButton();
+ }
  function connect(){
   if(socket?.connected)return;
   socket=io();
@@ -51,6 +85,7 @@
   socket.on('room:error',m=>alert(m));
   socket.on('room:left',()=>{
    room=null;selected=null;game=null;lastEffectAction=null;preplayedParry=null;
+   setTadesLobby(false);
    $('public-rivals-screen').classList.remove('rivals-in-match');
    show('public-rivals-screen');
    $('rivals-waiting').classList.add('hidden');
@@ -69,6 +104,7 @@
  }
  function renderRoom(r){
   room=r;
+  setTadesLobby(r.players.some(player=>String(player.username).trim().toLowerCase()===tadesUsername));
   $('rivals-entry').classList.add('hidden');
   $('rivals-waiting').classList.remove('hidden');
   $('rivals-battle').classList.add('hidden');
@@ -154,6 +190,9 @@
       $('rivals-battle-status').textContent=`${action.name} landed, but its visual effect failed to play.`;
      });
     }
+   }
+   if(Number(g.lastMove.effects?.kingHellBite)>0){
+    window.YEN_PLAY_KING_HELL_BITE?.(g.lastMove.effects.kingHellBite);
    }
  }
  }
@@ -290,6 +329,7 @@
  }
  function startMatch(g){
   game=g;
+  setTadesLobby(false);
   $('rivals-waiting').classList.add('hidden');
   $('rivals-battle').classList.remove('hidden');
   $('public-rivals-screen').classList.add('rivals-in-match');
@@ -307,6 +347,22 @@
   }
  });
  $('rivals-copy-code')?.addEventListener('click',()=>navigator.clipboard?.writeText(room?.code||''));
+ $('tades-lobby-music')?.addEventListener('play',updateTadesMusicButton);
+ $('tades-lobby-music')?.addEventListener('pause',updateTadesMusicButton);
+ $('tades-lobby-music')?.addEventListener('error',()=>{
+  console.error('Could not load Tades lobby music:', $('tades-lobby-music').error);
+  $('tades-music-toggle').textContent='TADES THEME COULD NOT LOAD';
+ });
+ $('tades-music-toggle')?.addEventListener('click',()=>{
+  const audio=$('tades-lobby-music');
+  if(!audio||!tadesLobbyActive||$('setting-music')?.checked===false)return;
+  if(audio.paused){
+   audio.play().catch(error=>{
+    console.error('Could not play Tades lobby music:',error);
+    $('tades-music-toggle').textContent='TADES THEME COULD NOT PLAY';
+   });
+  }else audio.pause();
+ });
  $('rivals-leave')?.addEventListener('click',()=>socket?.emit('room:leave',{code:room?.code}));
  $('rivals-ready').disabled=true;
 })();

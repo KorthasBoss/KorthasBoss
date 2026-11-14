@@ -1350,6 +1350,42 @@ body.azael-domain .status-dot{background:#ff4263;box-shadow:0 0 12px #ff4263}
 .rivals-fighter{position:relative;z-index:1;min-width:0;min-height:0;padding:0;border:0;background:transparent;text-align:left}
 .rivals-fighter-art{height:190px;display:grid;place-items:center}
 .rivals-fighter-art img{width:min(100%,280px);height:185px;object-fit:contain;filter:drop-shadow(0 0 20px #168bff44)}
+
+/* Tades' room is recognizable to everyone who joins her code. */
+.rivals-screen.tades-lobby{position:relative;isolation:isolate;max-width:none;margin:0 calc(clamp(18px,4vw,48px) * -1);padding:clamp(22px,4vw,48px);background:linear-gradient(180deg,#100b1dd9,#080912f2 78%),url("assets/tades_lobby_background.gif") center/cover fixed;border:1px solid #d88aff55;box-shadow:inset 0 0 100px #bc62ff18,0 0 45px #a84eff18}
+.rivals-screen.tades-lobby .rivals-hero{border-color:#d080ff66;background:linear-gradient(120deg,#241333e8,#100b19e8 65%),url("assets/tades_lobby_background.gif") center/cover}
+.rivals-screen.tades-lobby .rivals-hero h1 span{color:#e4a4ff;text-shadow:0 0 28px #bd54ff99}
+.rivals-screen.tades-lobby .rivals-hero-glow{background:radial-gradient(circle,#c44dff55,transparent 70%)}
+.rivals-screen.tades-lobby #rivals-waiting{position:relative;overflow:hidden;border:1px solid #bd71ef99;background:linear-gradient(145deg,#160f22ef,#090a13f2);box-shadow:0 25px 80px #05020b99,inset 0 0 55px #a741ff10}
+.rivals-screen.tades-lobby #rivals-waiting::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.24;background:linear-gradient(120deg,transparent 25%,#dfb5ff18 50%,transparent 75%);background-size:220% 100%;animation:tadesLightSweep 8s linear infinite}
+.tades-lobby-banner{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:20px;margin:-4px 0 22px;padding:18px 20px;border:1px solid #bd71ef77;background:linear-gradient(100deg,#401d55aa,#100c19dd 70%);box-shadow:inset 0 0 34px #ca6bff12}
+.tades-lobby-banner .section-kicker{color:#d39af4}
+.tades-lobby-banner h2{margin:8px 0 3px!important;color:#fff;font:clamp(23px,4vw,38px)/1 var(--pixel)!important;letter-spacing:.08em!important;text-shadow:0 0 22px #b94bff66}
+.tades-lobby-banner>div>p:last-child{margin:0;color:#d2c2df;font:10px var(--mono);letter-spacing:.06em}
+.tades-music-toggle{flex:0 0 auto;padding:12px 14px;border:1px solid #d28cff88;background:#28133a;color:#f4dfff;font:9px var(--mono);letter-spacing:.07em;box-shadow:0 0 20px #bd54ff18;transition:background .2s,box-shadow .2s,transform .2s}
+.tades-music-toggle:hover:not(:disabled),.tades-music-toggle:focus-visible{outline:none;background:#48215e;box-shadow:0 0 26px #bd54ff55;transform:translateY(-2px)}
+.tades-music-toggle:disabled{opacity:.55;cursor:not-allowed}
+.rivals-screen.tades-lobby .rivals-room-head{position:relative;z-index:1;padding-bottom:14px;border-bottom:1px solid #b872e944}
+.rivals-screen.tades-lobby .rivals-room-head strong{color:#e5adff;text-shadow:0 0 20px #bd54ff88}
+.rivals-screen.tades-lobby #rivals-status,.rivals-screen.tades-lobby .rivals-player-list,.rivals-screen.tades-lobby #rivals-pick-heading,.rivals-screen.tades-lobby #rivals-pick-intro,.rivals-screen.tades-lobby #rivals-kishin-grid,.rivals-screen.tades-lobby #rivals-ready{position:relative;z-index:1}
+.rivals-screen.tades-lobby #rivals-pick-heading{margin-top:32px;font:clamp(20px,3vw,30px) var(--pixel);letter-spacing:.09em;color:#eac8ff;text-shadow:0 0 17px #bb56ff55}
+.rivals-screen.tades-lobby #rivals-pick-intro{max-width:660px;color:#c5b5d3;line-height:1.7}
+.rivals-screen.tades-lobby .rivals-kishin-grid{grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:15px;margin:20px 0 24px}
+.rivals-screen.tades-lobby .rivals-kishin-option{position:relative;min-width:0;overflow:hidden;padding:0 0 14px;border:1px solid #76518c;background:linear-gradient(160deg,#20142ddd,#0b0b13f5);box-shadow:inset 0 0 28px #a84eff0b;transition:transform .2s,border-color .2s,box-shadow .2s}
+.rivals-screen.tades-lobby .rivals-kishin-option::before{content:"";position:absolute;z-index:0;inset:0 0 auto;height:3px;background:linear-gradient(90deg,transparent,#e1a1ff,transparent);opacity:.6}
+.rivals-screen.tades-lobby .rivals-kishin-option:hover,.rivals-screen.tades-lobby .rivals-kishin-option:focus-visible{outline:none;transform:translateY(-5px);border-color:#e6b5ff;box-shadow:0 13px 30px #a43ee833,inset 0 0 36px #a84eff1a}
+.rivals-screen.tades-lobby .rivals-kishin-option.selected{border-color:#f0c5ff;box-shadow:0 0 0 1px #e4a4ff66,0 0 28px #b64eff55,inset 0 0 35px #a84eff22}
+.rivals-screen.tades-lobby .rivals-kishin-option img{position:relative;z-index:1;height:150px;padding:8px;background:radial-gradient(ellipse at 50% 70%,#af5be52a,transparent 68%);filter:drop-shadow(0 8px 13px #b94bff24)}
+.rivals-screen.tades-lobby .rivals-kishin-option b,.rivals-screen.tades-lobby .rivals-kishin-option small{position:relative;z-index:1;padding:0 12px}
+.rivals-screen.tades-lobby .rivals-kishin-option b{font-size:11px;color:#f2dfff;letter-spacing:.05em}
+.rivals-screen.tades-lobby .rivals-kishin-option small{color:#ba9bca;line-height:1.5}
+.rivals-screen.tades-lobby #rivals-ready{border-color:#d18aff;background:linear-gradient(110deg,#662e85,#351b50);box-shadow:0 0 24px #a449e933}
+.rivals-screen.tades-lobby #rivals-ready:not(:disabled):hover{filter:brightness(1.2);box-shadow:0 0 32px #c165ff66}
+@keyframes tadesLightSweep{to{background-position:-220% 0}}
+@media(max-width:700px){.rivals-screen.tades-lobby{margin:0 -18px;padding:18px 14px}.tades-lobby-banner{align-items:flex-start;flex-direction:column}.rivals-screen.tades-lobby .rivals-kishin-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:420px){.rivals-screen.tades-lobby .rivals-kishin-grid{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.rivals-screen.tades-lobby #rivals-waiting::before{animation:none}}
+.reduced-motion .rivals-screen.tades-lobby #rivals-waiting::before{animation:none}
 .rivals-fighter-info{position:relative;z-index:1;padding:0 8px}
 .rivals-fighter-info h2{margin:6px 0;font-size:clamp(18px,2.4vw,27px);letter-spacing:.06em;overflow-wrap:anywhere}
 .rivals-fighter-info>p{margin:0 0 16px;color:#7f93af;font:9px var(--mono);letter-spacing:.1em}
@@ -1376,3 +1412,77 @@ body.azael-domain .status-dot{background:#ff4263;box-shadow:0 0 12px #ff4263}
  .rivals-attack-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media(max-width:420px){.rivals-attack-grid{grid-template-columns:1fr}}
+
+/* King&Hell // nineteen signature attack visuals and the reactive bite. */
+.king-hell-vfx{--king-hell-color:#ffb347;position:fixed;inset:0;z-index:10001;display:grid;place-items:center;overflow:hidden;pointer-events:none;background:radial-gradient(ellipse at 68% 52%,color-mix(in srgb,var(--king-hell-color) 20%,transparent),transparent 58%),linear-gradient(90deg,#09060ccc,#09060c44 55%,#09060ccc);animation:kingHellBackdrop .24s steps(2) infinite}
+.king-hell-portrait{position:absolute;left:8%;bottom:-8%;width:min(43vw,520px);height:min(78vh,650px);object-fit:contain;filter:drop-shadow(0 0 25px var(--king-hell-color)) drop-shadow(0 0 70px color-mix(in srgb,var(--king-hell-color) 45%,transparent));animation:kingHellPortrait .65s cubic-bezier(.15,.8,.2,1) both}
+.king-hell-impact{position:absolute;right:13%;top:19%;width:min(48vw,560px);aspect-ratio:1;border:5px solid var(--king-hell-color);border-radius:50%;box-shadow:0 0 30px var(--king-hell-color),inset 0 0 35px var(--king-hell-color);opacity:0;animation:kingHellImpact .85s ease-out .12s both}
+.king-hell-impact::before,.king-hell-impact::after{content:"";position:absolute;inset:12%;border:2px dashed var(--king-hell-color);border-radius:50%;box-shadow:0 0 20px var(--king-hell-color)}
+.king-hell-impact::after{inset:27%;border-style:solid}
+.king-hell-mark{position:absolute;right:22%;top:25%;display:grid;place-items:center;width:clamp(90px,18vw,220px);aspect-ratio:1;color:#fff4d6;font:clamp(56px,12vw,150px)/1 var(--pixel);text-shadow:0 0 10px var(--king-hell-color),0 0 36px var(--king-hell-color),0 0 72px #ff321e;animation:kingHellMark .8s cubic-bezier(.16,.84,.3,1) both}
+.king-hell-move-title{position:absolute;left:50%;bottom:9%;width:min(90%,900px);transform:translateX(-50%);padding:10px 18px;border-block:1px solid var(--king-hell-color);background:#08050bd9;color:#fff3dd;text-align:center;font:clamp(15px,3vw,26px) var(--mono);letter-spacing:.15em;text-shadow:0 0 18px var(--king-hell-color);animation:kingHellTitle .65s ease-out both}
+.kh-fangs .king-hell-mark,.kh-blood .king-hell-mark,.kh-pack .king-hell-mark{letter-spacing:-.3em}
+.kh-fire .king-hell-impact,.kh-gate .king-hell-impact{border-radius:12%;transform:rotate(45deg)}
+.kh-throne .king-hell-mark,.kh-crown .king-hell-mark{top:12%;font-size:clamp(70px,16vw,190px)}
+.kh-chain .king-hell-impact,.kh-coffin .king-hell-impact,.kh-guard .king-hell-impact{border-radius:8%;transform:rotate(45deg)}
+.kh-venom{filter:hue-rotate(70deg)}
+.kh-pounce .king-hell-portrait,.kh-shadow-pounce .king-hell-portrait{left:-8%;animation:kingHellPounce .55s cubic-bezier(.2,.8,.2,1) both}
+.kh-iron .king-hell-impact,.kh-guard .king-hell-impact{border-width:12px}
+.kh-feast .king-hell-impact,.kh-moon .king-hell-impact{border-radius:50%;box-shadow:0 0 75px var(--king-hell-color),inset 0 0 85px var(--king-hell-color)}
+.kh-wheel .king-hell-impact,.kh-bone-wheel .king-hell-impact{border-style:dotted;border-width:13px}
+.kh-end .king-hell-impact{width:min(90vw,950px);border-width:14px}
+.king-hell-bite-vfx{position:fixed;right:clamp(12px,4vw,48px);bottom:clamp(12px,4vw,48px);z-index:10002;display:grid;grid-template-columns:88px minmax(0,1fr);align-items:center;gap:4px 14px;width:min(410px,calc(100vw - 24px));padding:12px 16px;border:1px solid #ff6a3d;background:linear-gradient(110deg,#240b0bed,#09060bf2);box-shadow:0 0 32px #ff3c2699,inset 0 0 28px #ff3c2622;color:#fff2df;animation:kingHellBite .24s steps(2) 5}
+.king-hell-bite-vfx img{grid-row:span 2;width:88px;height:80px;object-fit:contain;filter:drop-shadow(0 0 16px #ff532a)}
+.king-hell-bite-vfx strong{font:11px var(--mono);letter-spacing:.08em;color:#ffad67}
+.king-hell-bite-vfx span{font:17px var(--mono);color:#fff}
+@keyframes kingHellBackdrop{50%{filter:contrast(1.25) saturate(1.4)}}
+@keyframes kingHellPortrait{from{transform:translateX(-40px) scale(.65);opacity:0}to{transform:translateX(0) scale(1);opacity:1}}
+@keyframes kingHellImpact{0%{transform:scale(.08) rotate(-35deg);opacity:1}75%{opacity:.9}100%{transform:scale(1.25) rotate(25deg);opacity:0}}
+@keyframes kingHellMark{from{transform:scale(.1) rotate(-60deg);opacity:0}to{transform:scale(1) rotate(0);opacity:1}}
+@keyframes kingHellTitle{from{opacity:0;letter-spacing:.7em}to{opacity:1;letter-spacing:.15em}}
+@keyframes kingHellPounce{from{transform:translate(18vw,12vh) scale(.35);opacity:0}to{transform:translate(0,0) scale(1.2);opacity:1}}
+@keyframes kingHellBite{50%{transform:translateX(-8px);filter:brightness(1.8)}}
+.kh-maw .king-hell-mark{animation:kingHellMaw .75s cubic-bezier(.2,.8,.2,1) both}
+.kh-fangs .king-hell-impact{animation:kingHellFangs .75s ease-out both}
+.kh-fire .king-hell-mark{animation:kingHellFire .7s ease-out both}
+.kh-throne .king-hell-portrait{animation:kingHellThrone .7s cubic-bezier(.2,.8,.2,1) both}
+.kh-chain .king-hell-impact{animation:kingHellChain .9s ease-out both}
+.kh-venom .king-hell-impact{animation:kingHellVenom .9s ease-out both}
+.kh-howl .king-hell-impact{animation:kingHellHowl .9s ease-out both}
+.kh-pounce .king-hell-impact{animation:kingHellPounceRing .8s ease-out both}
+.kh-iron .king-hell-impact{animation:kingHellIron .9s ease-out both}
+.kh-feast .king-hell-mark{animation:kingHellFeast .9s ease-in-out both}
+.kh-blood .king-hell-impact{animation:kingHellBlood .8s ease-out both}
+.kh-coffin .king-hell-impact{animation:kingHellCoffin .8s ease-in both}
+.kh-moon .king-hell-mark{animation:kingHellMoon 1s ease-in-out both}
+.kh-wheel .king-hell-impact{animation:kingHellWheel .9s linear both}
+.kh-crown .king-hell-mark{animation:kingHellCrown .8s ease-out both}
+.kh-gate .king-hell-impact{animation:kingHellGate .9s cubic-bezier(.2,.8,.2,1) both}
+.kh-guard .king-hell-impact{animation:kingHellGuard .7s steps(4) both}
+.kh-pack .king-hell-mark{animation:kingHellPack .65s ease-out both}
+.kh-end .king-hell-impact{animation:kingHellEnd .95s cubic-bezier(.2,.8,.2,1) both}
+@keyframes kingHellMaw{0%{transform:scaleX(2.4) scaleY(.1);opacity:0}55%{transform:scaleX(.65) scaleY(1.3);opacity:1}100%{transform:scale(1);opacity:1}}
+@keyframes kingHellFangs{from{transform:translateX(80vw) rotate(0);opacity:1}to{transform:translateX(-10vw) rotate(260deg);opacity:0}}
+@keyframes kingHellFire{from{transform:translateY(45vh) scale(.1);opacity:0}to{transform:translateY(-8vh) scale(1.4);opacity:1}}
+@keyframes kingHellThrone{from{transform:translateY(-65vh) scale(.7);opacity:0}to{transform:translateY(0) scale(1);opacity:1}}
+@keyframes kingHellChain{from{transform:rotate(-60deg) scaleX(.1);opacity:1}to{transform:rotate(30deg) scaleX(1.5);opacity:0}}
+@keyframes kingHellVenom{0%{transform:scale(.1);filter:hue-rotate(0);opacity:0}45%{filter:hue-rotate(65deg);opacity:1}100%{transform:scale(1.5);filter:hue-rotate(100deg);opacity:0}}
+@keyframes kingHellHowl{from{transform:scale(.1);opacity:1}to{transform:scale(1.8);opacity:0}}
+@keyframes kingHellPounceRing{from{transform:scale(.2) rotate(0);opacity:1}to{transform:scale(1.3) rotate(180deg);opacity:0}}
+@keyframes kingHellIron{0%,100%{transform:scale(.8);opacity:.2}50%{transform:scale(1.15);opacity:1}}
+@keyframes kingHellFeast{0%{transform:scale(1.5) rotate(0);opacity:0}50%{transform:scale(.3) rotate(180deg);opacity:1}100%{transform:scale(1) rotate(360deg);opacity:1}}
+@keyframes kingHellBlood{from{transform:scaleX(.1) rotate(-40deg);opacity:1}to{transform:scaleX(1.8) rotate(40deg);opacity:0}}
+@keyframes kingHellCoffin{from{transform:rotateX(90deg) scale(.5);opacity:0}to{transform:rotateX(0) scale(1);opacity:1}}
+@keyframes kingHellMoon{from{transform:translateX(45vw) rotate(180deg);opacity:0}to{transform:translateX(0) rotate(0);opacity:1}}
+@keyframes kingHellWheel{from{transform:rotate(0) scale(.15);opacity:1}to{transform:rotate(900deg) scale(1.4);opacity:0}}
+@keyframes kingHellCrown{from{transform:translateY(-35vh) scale(.2);opacity:0}to{transform:translateY(0) scale(1);opacity:1}}
+@keyframes kingHellGate{0%{transform:rotate(45deg) scale(.1);opacity:0}60%{transform:rotate(45deg) scale(1.4);opacity:1}100%{transform:rotate(45deg) scale(1);opacity:1}}
+@keyframes kingHellGuard{0%,100%{transform:translateX(0)}25%{transform:translateX(-20px)}75%{transform:translateX(20px)}}
+@keyframes kingHellPack{from{transform:scaleX(2.5) translateX(-8vw);opacity:0}to{transform:scaleX(1) translateX(0);opacity:1}}
+@keyframes kingHellEnd{from{transform:scale(.02);opacity:1}to{transform:scale(1.5);opacity:0}}
+@media(prefers-reduced-motion:reduce){.king-hell-vfx,.king-hell-vfx *,.king-hell-bite-vfx{animation-duration:.01ms!important;animation-iteration-count:1!important}}
+.reduced-motion .king-hell-vfx,.reduced-motion .king-hell-vfx *,.reduced-motion .king-hell-bite-vfx{animation-duration:.01ms!important;animation-iteration-count:1!important}
+.king-and-hell-kishin-card{--kishin-color:#ffb347!important;background:linear-gradient(145deg,#281107,#09070a)!important;border-color:#ff8b38!important;box-shadow:inset 0 0 42px #ff5b1922,0 0 26px #ff4b1e22!important}
+.king-and-hell-kishin-card .kishin-card-art-wrap{background:radial-gradient(ellipse at 50% 65%,#ff7b3444,transparent 70%)}
+.king-and-hell-kishin-card .kishin-card-name-top,.king-and-hell-kishin-card .kishin-card-top{color:#ffd18a}
+.king-and-hell-kishin-card .kishin-card-effect{border-color:#ff8b38;color:#ffca91}
