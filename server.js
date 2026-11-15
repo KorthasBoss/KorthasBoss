@@ -27,6 +27,7 @@ const KISHINS={
  'sea-predator-kishin':{hp:2500000000},
  'unconscious-singer':{hp:30000000},
  'king-and-hell':{hp:12000000000},
+ 'oculumbra':{hp:2000000000000000},
  'hunter':{hp:5000000}
 };
 
@@ -326,9 +327,19 @@ io.on('connection',socket=>{
      player.hp-=effects.kingHellBite;
     }
    }
+   if(damage>0&&target.kishin==='oculumbra'&&Math.random()<.45){
+    const reflected=Math.min(Math.max(0,player.hp-1),damage*2);
+    player.hp-=reflected;
+    effects.oculumbraParried=true;
+    effects.oculumbraReflected=reflected;
+    damage=0;
+   }
+   if(skill)effects.damage=damage;
    target.hp=Math.max(0,target.hp-damage);
    message=effects.creationParried
     ?`${target.username}'s Creation of Suntour parried ${action.name}. ${player.username}'s next turn is skipped.`
+    :effects.oculumbraParried
+    ?`${target.username}'s Oculumbra parried ${action.name} and reflected ${effects.oculumbraReflected.toLocaleString()} damage back at ${player.username}.`
     :skill?.id==='perfect-parry'
     ?effects.parryWon?`${player.username} landed a PERFECT PARRY. ${target.username} loses the next 8 turns.`:`${player.username} missed the Perfect Parry timing trial.`
     :skill?.id==='henmercy-cards-wish'

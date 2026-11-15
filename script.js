@@ -30,6 +30,26 @@ const $ = id => document.getElementById(id);
 const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 const pick = a => a[Math.floor(Math.random() * a.length)];
 const randomInt = (a,b) => Math.floor(Math.random() * (b-a+1)) + a;
+const VERSION_KEY = "yen_version";
+const NEW_BACKGROUND = "assets/yen background.gif";
+let gameVersion = ["og","new"].includes(localStorage.getItem(VERSION_KEY)) ? localStorage.getItem(VERSION_KEY) : null;
+
+function playUiSound(id) {
+  const audio = $(id);
+  if (!audio) return;
+  audio.currentTime = 0;
+  audio.play().catch(() => {});
+}
+function setGameVersion(version) {
+  if (version !== "og" && version !== "new") return;
+  gameVersion = version;
+  localStorage.setItem(VERSION_KEY, version);
+  document.body.classList.toggle("new-version", version === "new");
+  $("version-setting-og").classList.toggle("active", version === "og");
+  $("version-setting-new").classList.toggle("active", version === "new");
+  $("version-screen").classList.add("hidden");
+  setBackground(version === "new" ? NEW_BACKGROUND : CONFIG.background);
+}
 
 function toDox(value) {
   try {
@@ -127,7 +147,8 @@ function playAudio(src, volume=.7, restart=true, waitForEnd=false) {
   });
 }
 
-function showSaveWarning(message) {
+function showSaveWarning(message, isError=true) {
+  if (isError) playUiSound("notification-sound");
   let toast = $("yen-save-warning");
   if (!toast) {
     toast = document.createElement("div");
@@ -158,8 +179,7 @@ function showScreen(id) {
   document.querySelectorAll(".portal-screen,.portal-subscreen,.battle-screen").forEach(x => x.classList.add("hidden"));
   $(id)?.classList.remove("hidden");
   setPhaseLabel(id === "lobby-screen" ? "HUNTER LOBBY" : id === "merchant-screen" ? "MERCHANT // OPEN" : id === "helmet-screen" ? "HELMET // PRIVATE DEALER" : id === "helmet-shop-screen" ? "HELMET // KISHIN INVENTORY" : id === "start-screen" ? "WELCOME" : "YEN! // READY");
-  if(id === "start-screen") setBackground(CONFIG.background);
-  if(id === "lobby-screen") setBackground(CONFIG.background);
+  if(id === "start-screen" || id === "lobby-screen") setBackground(gameVersion === "new" ? NEW_BACKGROUND : CONFIG.background);
 }
 
 function updateWallet() {
@@ -188,12 +208,12 @@ function bossCard(boss) {
       <div class="profile-frame-wrap" aria-hidden="true"><img class="profile-card-frame" src="${boss.profileFrame}" alt=""></div>
       <div class="boss-card-badge">BOSS // ${String(boss.stars).padStart(2,"0")} ★</div>
       <img class="boss-card-art profile-card-character" src="${boss.idle}" alt="${boss.name} idle">
-      <div class="boss-card-info"><div class="stars">${"★".repeat(8)} ${boss.stars} STARS</div><h2>${boss.name}</h2><p>${boss.title} // REWARD ${fmtDox(boss.reward)} DOX</p></div>`;
+      <div class="boss-card-info"><div class="stars">${"★".repeat(8)} ${boss.stars} STARS</div><h2>${boss.name}</h2><p>${boss.title} // REWARD ${fmtDox(boss.reward)} DOX</p><div class="target-details"><span><i>VITALITY</i><b>${fmtDox(boss.maxHP)} HP</b></span><span><i>STATUS</i><b>READY TO FIGHT</b></span></div></div>`;
   } else {
     el.innerHTML = `<div class="boss-card-bg"></div>
       <div class="boss-card-badge">BOSS // ${String(boss.stars).padStart(2,"0")} ★</div>
       <img class="boss-card-art" src="${boss.idle}" alt="${boss.name} idle">
-      <div class="boss-card-info"><div class="stars">${"★".repeat(Math.min(8,Math.ceil(boss.stars/10)))} ${boss.stars} STARS</div><h2>${boss.name}</h2><p>${boss.title} // REWARD ${fmtDox(boss.reward)} DOX</p></div>`;
+      <div class="boss-card-info"><div class="stars">${"★".repeat(Math.min(8,Math.ceil(boss.stars/10)))} ${boss.stars} STARS</div><h2>${boss.name}</h2><p>${boss.title} // REWARD ${fmtDox(boss.reward)} DOX</p><div class="target-details"><span><i>VITALITY</i><b>${fmtDox(boss.maxHP)} HP</b></span><span><i>STATUS</i><b>READY TO FIGHT</b></span></div></div>`;
   }
 
   el.addEventListener("click", async () => {
@@ -240,6 +260,7 @@ function askBoss(boss) {
   $("confirm-title").textContent = `FIGHT ${boss.name}?`;
   $("confirm-copy").textContent = `Are you sure you want to fight ${boss.name}? It has ${boss.stars} stars.`;
   $("confirm-screen").classList.remove("hidden");
+  playUiSound("notification-sound");
 }
 
 async function startVaseGateEvent() {
@@ -278,6 +299,7 @@ async function registerOrLogin() {
 
   if (!found) {
     $("auth-status").textContent = accounts.length ? "That username or password is incorrect." : "No accounts are configured yet. Add an account in accounts.js first.";
+    playUiSound("notification-sound");
     return;
   }
 
@@ -324,6 +346,15 @@ document.querySelectorAll("[data-screen]").forEach(button => button.addEventList
   if (id === "lobby-screen") renderLobby();
 }));
 
+document.querySelectorAll("[data-version]").forEach(button => button.addEventListener("click", () => {
+  setGameVersion(button.dataset.version);
+}));
+document.addEventListener("click", event => {
+  if (event.target instanceof Element && event.target.closest("button:not(:disabled),[role='button'],.boss-card,.kishin-shop-card,.skill-card,.potion-card")) {
+    playUiSound("click-sound");
+  }
+}, true);
+
 $("brand-home").addEventListener("click", async e => {
   e.preventDefault();
   if (account) { await transition(() => showScreen("lobby-screen")); renderLobby(); }
@@ -362,7 +393,7 @@ function renderHelmetShop(){
     const owned=isSkillOwned(skill);
     const offSale=Boolean(skill.offSale);
     const card=document.createElement("article");
-    card.className=`kishin-shop-card ${owned?"owned":""} ${offSale?"off-sale":""} ${skill.id==="k-z-x"?"kzx-kishin-card":""} ${skill.id==="jorkaprime"?"jorkaprime-card":""} ${skill.id==="henmercy"?"henmercy-kishin-card":""} ${skill.id==="starlylands"?"starlylands-kishin-card":""} ${skill.id==="sea-predator-kishin"?"sea-predator-kishin-card":""} ${skill.id==="unconscious-singer"?"unconscious-singer-kishin-card":""} ${skill.id==="king-and-hell"?"king-and-hell-kishin-card":""}`;
+    card.className=`kishin-shop-card ${owned?"owned":""} ${offSale?"off-sale":""} ${skill.id==="k-z-x"?"kzx-kishin-card":""} ${skill.id==="jorkaprime"?"jorkaprime-card":""} ${skill.id==="henmercy"?"henmercy-kishin-card":""} ${skill.id==="starlylands"?"starlylands-kishin-card":""} ${skill.id==="sea-predator-kishin"?"sea-predator-kishin-card":""} ${skill.id==="unconscious-singer"?"unconscious-singer-kishin-card":""} ${skill.id==="king-and-hell"?"king-and-hell-kishin-card":""} ${skill.id==="oculumbra"?"oculumbra-kishin-card":""}`;
     card.style.setProperty("--kishin-color", skill.color || "#fff");
     card.innerHTML=`<div class="kishin-card-art-wrap"><img src="${skill.image}" alt="${skill.name}"></div><div class="kishin-card-top"><span>${skill.rarity}</span><span>${owned?"OWNED":offSale?"OFF-SALE":"KISHIN"}</span></div><div class="kishin-card-name-top">${skill.name}</div><div class="kishin-card-body"><h2>${skill.name}</h2><p>${skill.bio}</p><div class="kishin-card-effect">${skill.shopEffect}</div><div class="kishin-card-bottom"><strong>${owned?"ALREADY OWNED":offSale?"NOT CURRENTLY SOLD":fmtDox(skill.cost)+" DOX"}</strong><button class="kishin-buy" ${owned||offSale||account.dox<toDox(skill.cost)?"disabled":""}>${owned?"OWNED":offSale?"OFF-SALE":account.dox<toDox(skill.cost)?"NOT ENOUGH DOX":"BUY KISHIN"}</button></div></div>`;
     card.querySelector(".kishin-buy").onclick=async(e)=>{
@@ -381,7 +412,7 @@ function renderHelmetShop(){
         if(!account.ownedSkills.some(v=>String(v)===String(id))) account.ownedSkills.push(id);
       });
       await saveAccount(); updateWallet(); $("helmet-wallet-dox").textContent=fmtDox(account.dox); renderHelmetShop();
-      showSaveWarning(`${skill.name} ADDED TO YOUR SKILLS.`);
+      showSaveWarning(`${skill.name} ADDED TO YOUR SKILLS.`, false);
     };
     grid.appendChild(card);
   });
@@ -905,6 +936,7 @@ async function usePlayerAttack(attack) {
     if(maxUses>0)skillUses.set(String(sourceSkill.id),usesBefore);
     console.error(`Battle action failed for ${attack.name}:`,error);
     setMessage(`${attack.name} could not complete. The battle is ready for another action.`);
+    playUiSound("notification-sound");
     updateHP();
   } finally {
     busy=false;
@@ -1019,6 +1051,7 @@ async function usePotion(id) {
   } catch(error) {
     console.error(`Boss turn failed after using ${potion.name}:`,error);
     setMessage(`${potion.name} was used, but the boss turn could not complete.`);
+    playUiSound("notification-sound");
     updateHP();
   } finally {
     busy=false;
@@ -1070,7 +1103,9 @@ setInterval(updateCooldowns,250);
 
 /* ------------------------- BOOT ------------------------- */
 async function boot() {
-  setBackground(CONFIG.startBackground);
+  if (gameVersion) setGameVersion(gameVersion);
+  else setBackground(CONFIG.background);
   showScreen("start-screen");
+  if (!gameVersion) $("version-screen").classList.remove("hidden");
 }
 boot();

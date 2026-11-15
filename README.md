@@ -6,6 +6,10 @@ This version does **not** use Render, a mini-server, SQLite, or `game-server/`.
 
 The site is a static GitHub Pages project. Accounts are defined manually in `accounts.js`.
 
+## Game versions and UI sounds
+
+On first visit, choose **OG Version** to keep the original interface or **New Version** for the redesigned menu, target select, battle UI, animations, and yen background. The choice is saved in browser storage and can be changed from Settings. The new UI uses `assets/ClickSound.wav` for interface actions and `assets/Notification.wav` for confirmations and errors.
+
 ## Account editing
 
 Open `accounts.js` and add/edit objects inside `window.YEN_ACCOUNTS`.
@@ -100,9 +104,10 @@ This update adds Socket.IO room matchmaking while keeping the existing `accounts
 - Kishin HP becomes the fighter's HP; only that Kishin's attacks are available.
 - Four-second countdown, alternating turns, and server-broadcast damage.
 - JorkaPrime has three separate attacks; its supplied voice lines play with their respective attacks.
-- JorkaPrime and K,Z,X are marked OFF-SALE in Helmet's shop.
+- JorkaPrime, K,Z,X, and Oculumbra are marked OFF-SALE in Helmet's shop.
+- Oculumbra is an A-SHEN-TADES-owned, two-quadrillion-HP Kishin with six horror attacks. Her screams are nonlethal, and Rivals attacks against her have a 45% chance to be parried and reflected nonlethally.
 
 For local testing: `npm install` then `npm start`, then open `http://localhost:3000` in two browser windows.
 
 
-A-SHEN-TADES ownership: when an existing `accounts.js` entry signs in with username `A-SHEN-TADES`, the client automatically adds `jorkaprime` to that session account. The supplied `accounts.js` in this ZIP did not contain an A-SHEN-TADES entry, so add that account using your existing private credentials if it is not already in your live repository; this update does not invent a password or create a new account.
+A-SHEN-TADES owns Oculumbra through the existing `accounts.js` account entry. The browser automatically adds the Kishin's configured moves to the signed-in account.

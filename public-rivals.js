@@ -17,6 +17,7 @@
   "sea-predator-kishin":{hp:2500000000},
   "unconscious-singer":{hp:30000000},
   "king-and-hell":{hp:12000000000},
+  "oculumbra":{hp:2000000000000000},
   "hunter":{hp:5000000}
  };
  const defaultTarget={id:"hunter",name:"HUNTER",image:"assets/menu-idle.png"};
@@ -175,6 +176,9 @@
    lastEffectAction=g.lastMove.actionId;
    if(g.lastMove.effects?.creationParried){
     window.YEN_SHOW_SUNTOUR_PARRY?.(g.lastMove.effects.parryMessage);
+   }
+   if(g.lastMove.effects?.oculumbraParried){
+    window.YEN_SHOW_OCULUMBRA_PARRY?.(g.lastMove.effects.oculumbraReflected);
    }
    const attacker=g.players.find(player=>player.username===g.lastMove.username);
    const target=g.players.find(player=>player.username!==g.lastMove.username);
